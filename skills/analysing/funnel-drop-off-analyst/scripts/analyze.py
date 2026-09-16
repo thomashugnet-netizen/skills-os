@@ -26,6 +26,7 @@ import csv
 import json
 import math
 import os
+import re
 import sys
 from collections import Counter, defaultdict
 from datetime import date
@@ -42,6 +43,22 @@ STAGE_IX = {s: i for i, s in enumerate(STAGES)}
 MECHANISMS = SCHEMA["exit_reason_mechanisms"]
 REASON_MECHANISM = {r: m for m, rs in MECHANISMS.items() for r in rs}
 TH = SCHEMA["thresholds"]
+
+
+def _skill_version():
+    """The version of the skill that produced this report. An installed copy
+    never updates itself, so a report that cannot say what produced it is a
+    report nobody can reproduce."""
+    try:
+        with open(os.path.join(SKILL_DIR, "SKILL.md"), encoding="utf-8") as fh:
+            head = fh.read(2000)
+        found = re.search(r"^version:\s*(.+)$", head, re.M)
+        return found.group(1).strip() if found else "unknown"
+    except OSError:
+        return "unknown"
+
+
+SKILL_VERSION = _skill_version()
 
 MIN_ROWS = TH["min_rows_total"]
 MIN_AT_STAGE = TH["min_rows_at_stage"]
@@ -824,6 +841,7 @@ def analyse(path):
 
     return {
         "meta": {
+            "skill_version": SKILL_VERSION,
             "schema_version": SCHEMA["schema_version"],
             "rows_analysed": len(rows),
             "rows_excluded": dropped,
@@ -973,6 +991,7 @@ def run_tests():
     if not os.path.exists(SAMPLE):
         print(f"sample dataset not found at {SAMPLE}")
         return 1
+    print(f"funnel-drop-off-analyst v{SKILL_VERSION}")
     print(f"Regression suite against {os.path.basename(SAMPLE)}")
     print("Ground truth is the P1-P8 patterns documented in data/generate.py.\n")
     r = analyse(SAMPLE)
@@ -1130,7 +1149,8 @@ def main():
     if args.out:
         with open(args.out, "w", encoding="utf-8") as fh:
             fh.write(text)
-        print(f"report written to {args.out}  ({report['meta']['rows_analysed']:,} rows)")
+        print(f"report written to {args.out}  ({report['meta']['rows_analysed']:,} rows, "
+              f"skill v{SKILL_VERSION})")
     else:
         print(text)
     return 0

@@ -116,6 +116,14 @@ def check(path):
         fail.append(f"{path}: frontmatter name must be '{slug}'")
     if "description:" not in t.split("---")[1]:
         fail.append(f"{path}: frontmatter missing description")
+    # Optional today, but if it is declared it has to be usable: a reader who
+    # reports a problem can only be helped if the version they ran is legible.
+    declared = re.search(r"^version:\s*(.+)$", t.split("---")[1], re.M)
+    if declared and not re.fullmatch(r"\d+\.\d+\.\d+", declared.group(1).strip()):
+        fail.append(f"{path}: version must be MAJOR.MINOR.PATCH, got "
+                    f"'{declared.group(1).strip()}'")
+    if os.path.isdir(os.path.join(os.path.dirname(path), "scripts")) and not declared:
+        warn.append(f"{path}: ships an engine but declares no version")
     if "## Where this stops" not in t:
         fail.append(f"{path}: missing '## Where this stops'")
     if "## What this does" not in t:

@@ -47,12 +47,48 @@ def run(label, *cmd):
     return proc.returncode == 0
 
 
+def newest(*paths):
+    """Most recent mtime under these files or trees. 0 if none exist."""
+    latest = 0.0
+    for path in paths:
+        if os.path.isfile(path):
+            latest = max(latest, os.path.getmtime(path))
+        elif os.path.isdir(path):
+            for dirpath, dirs, names in os.walk(path):
+                dirs[:] = [d for d in dirs if d != "__pycache__"]
+                for name in names:
+                    if name.startswith("."):
+                        continue
+                    try:
+                        latest = max(latest, os.path.getmtime(os.path.join(dirpath, name)))
+                    except OSError:
+                        pass
+    return latest
+
+
 def ensure_built():
+    """Build anything missing OR stale.
+
+    Staleness matters more than it sounds: after a git pull into a running
+    Repl, the skills on disk are new and the built output is not. Without
+    this check the server keeps serving the previous packages and the new
+    skills are invisible to download, silently.
+    """
     force = os.environ.get("BUILD") == "always"
+    sources = os.path.join(ROOT, "skills")
+    data = os.path.join(ROOT, "data")
+
+    pages_source = newest(sources, os.path.join(ROOT, "site", "build.py"))
     if force or not os.path.isdir(OUT) or not os.listdir(OUT):
         run("pages", "site/build.py")
+    elif pages_source > newest(OUT):
+        run("pages (sources changed)", "site/build.py")
+
+    packages_source = newest(sources, data, os.path.join(ROOT, "tools", "package.py"))
     if force or not os.path.isdir(DIST) or not os.listdir(DIST):
         run("packages", "tools/package.py")
+    elif packages_source > newest(DIST):
+        run("packages (sources changed)", "tools/package.py")
 
 
 # ----------------------------------------------------------------- catalogue
@@ -70,9 +106,11 @@ def catalogue():
                 if os.path.basename(path) == "SKILL.md" else rel[-1][:-3])
         text = open(path, encoding="utf-8").read()
         match = re.search(r"^description:\s*(.+)$", text, re.M)
+        version = re.search(r"^version:\s*(.+)$", text, re.M)
         items.append({
             "slug": slug,
             "category": category,
+            "version": version.group(1).strip() if version else None,
             "description": match.group(1).strip() if match else "",
             "page": os.path.exists(os.path.join(OUT, slug + ".html")),
             "zip": os.path.exists(os.path.join(DIST, slug + ".zip")),
@@ -146,6 +184,8 @@ def index():
             label = (f'<a href="/claude-skills/{name}">{name}</a>'
                      if item["page"] else f"<b>{name}</b>")
             tag = '<span class="tag">tested engine</span>' if item["engine"] else ""
+            if item["version"]:
+                tag += f'<span class="tag">v{esc(item["version"])}</span>' 
             get = (f'<a class="get" href="/download/{name}.zip">Download &darr;</a>'
                    if item["zip"] else '<span class="get">&mdash;</span>')
             rows.append(
@@ -242,6 +282,7 @@ def healthz():
         "skills": len(items),
         "pages": sum(1 for i in items if i["page"]),
         "packages": sum(1 for i in items if i["zip"]),
+        "versioned": {i["slug"]: i["version"] for i in items if i["version"]},
     }
 
 

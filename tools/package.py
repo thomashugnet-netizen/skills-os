@@ -43,6 +43,13 @@ def discover():
     return found
 
 
+def version_of(skill_md):
+    import re
+    found = re.search(r"^version:\s*(.+)$",
+                      open(skill_md, encoding="utf-8").read(), re.M)
+    return found.group(1).strip() if found else None
+
+
 def files_for(slug, skill_md, folder):
     """(archive_path, source_path) pairs. Archive paths are rooted at <slug>/."""
     out = [(f"{slug}/SKILL.md", skill_md)]
@@ -125,7 +132,9 @@ def main():
         built.append(out)
         size = os.path.getsize(out) / 1024
         note = f"  [{detail}]" if detail and "no test suite" not in detail else ""
-        print(f"ok    {slug}.zip  {size:>7.0f} KB{note}")
+        version = version_of(skill_md)
+        stamp = f"  v{version}" if version else ""
+        print(f"ok    {slug}.zip{stamp}  {size:>7.0f} KB{note}")
 
     if built:
         bundle = os.path.join(DIST, "frontline-hiring-pack.zip")

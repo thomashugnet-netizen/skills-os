@@ -67,6 +67,40 @@ run the audit, run `tools/package.py`. A new category also needs adding to `ORDE
 `TITLES` in `gen_readme.py` — it refuses to run otherwise rather than silently dropping
 your skills, which is a bug it used to have.
 
+## Shipping a change
+
+**Adding or editing a skill.** Edit it, then:
+
+```bash
+python3 tools/audit.py          # the release gate — must pass
+python3 tools/gen_readme.py     # if you changed a frontmatter description
+python3 tools/package.py <slug> # rebuild that archive
+git add -A && git commit && git push
+```
+
+Then `git pull` in the Repl's Shell. **The server rebuilds by itself** — it compares the
+mtime of everything under `skills/` and `data/` against the built output, and regenerates
+the pages and packages when the sources are newer. You will see
+`[build] packages (sources changed)` in the console. A restart with nothing changed skips
+the build entirely.
+
+A brand-new skill appears on `/claude-skills` with no code change, because the index
+reads the folder at request time. What it does **not** get automatically is a detailed
+marketing page — those are hand-written entries in the `SKILLS` list in `site/build.py`.
+A new category also has to be added to `ORDER` and `TITLES` in `gen_readme.py`, which
+refuses to run otherwise rather than dropping your skills silently.
+
+**Versions matter more here than in most projects.** A skill installed in someone's
+Claude never updates itself — their copy is frozen at whatever they uploaded. So bump
+`version` in the skill's frontmatter and add a `CHANGELOG.md` entry whenever behaviour
+changes. The version shows on the index, in `/healthz`, and at the top of every report
+the engine produces, which is the only way to know what someone was running when they
+report a problem.
+
+Two consequences worth designing around: the email list on `/pack` is your only channel
+for telling people to re-download, and an organisation-wide install is far better than
+individual ones, because an admin re-uploads once for everybody.
+
 ## Two things to know before this carries real traffic
 
 **The server is Flask's development server.** Fine for a prototype and for sharing a link

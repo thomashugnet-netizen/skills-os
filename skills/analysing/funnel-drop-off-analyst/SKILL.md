@@ -1,6 +1,7 @@
 ---
 name: funnel-drop-off-analyst
 description: Finds where candidates leave your hiring funnel, separates correlation from cause, and ranks the fixes by how many hires they would recover.
+version: 1.0.0
 ---
 
 # Funnel Drop-off Analyst
