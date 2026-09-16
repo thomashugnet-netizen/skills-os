@@ -6,7 +6,7 @@ entrypoint = "main.py"
 channel = "stable-24_05"
 
 [deployment]
-run = ["python3", "main.py"]
+run = ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT:-8080} -w 2 --timeout 120 main:app"]
 deploymentTarget = "autoscale"
 build = ["sh", "-c", "python3 site/build.py && python3 tools/package.py"]
 

@@ -220,6 +220,20 @@ def sitemap():
     return send_file(path, mimetype="application/xml")
 
 
+FAVICON = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
+    '<rect width="32" height="32" rx="7" fill="#4f46e5"/>'
+    '<path d="M8 9h16l-6 7v7l-4 2v-9z" fill="#fff"/></svg>'
+)
+
+
+@app.get("/favicon.ico")
+@app.get("/favicon.svg")
+def favicon():
+    return Response(FAVICON, mimetype="image/svg+xml",
+                    headers={"Cache-Control": "public, max-age=86400"})
+
+
 @app.get("/healthz")
 def healthz():
     items = catalogue()
