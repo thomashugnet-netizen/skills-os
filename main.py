@@ -183,9 +183,11 @@ def index():
             name = esc(item["slug"])
             label = (f'<a href="/claude-skills/{name}">{name}</a>'
                      if item["page"] else f"<b>{name}</b>")
+            # The version stays out of the browse page on purpose: "tested engine"
+            # means something to a hiring manager, "v1.0.0" does not. It is kept
+            # in the frontmatter, /healthz and the report metadata, where it is
+            # retrievable when someone reports a problem.
             tag = '<span class="tag">tested engine</span>' if item["engine"] else ""
-            if item["version"]:
-                tag += f'<span class="tag">v{esc(item["version"])}</span>' 
             get = (f'<a class="get" href="/download/{name}.zip">Download &darr;</a>'
                    if item["zip"] else '<span class="get">&mdash;</span>')
             rows.append(
