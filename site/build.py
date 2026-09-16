@@ -12,7 +12,7 @@ import json, os, re, html
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 BASE = "https://www.fountain.com/claude-skills"
-REPO = "https://github.com/fountain/claude-skills-hr-ops"
+REPO = "https://github.com/thomashugnet-netizen/skills-os"
 # Where the download button points. Defaults to the local server's route so the
 # site works standalone; set DOWNLOAD_BASE to a CDN or the repo when publishing.
 DOWNLOAD_BASE = os.environ.get("DOWNLOAD_BASE", "/download")

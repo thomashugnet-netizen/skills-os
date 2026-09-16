@@ -5,8 +5,11 @@ and the email gate for the full pack.
 
 ## Import
 
-1. New Repl → **Import from upload** → drop `claude-skills-hr-ops.zip`.
+1. New Repl → **Import from GitHub** → `thomashugnet-netizen/skills-os`.
 2. Press **Run**. Replit installs Flask from `requirements.txt` and starts `main.py`.
+
+Import from GitHub rather than from a zip, so that what runs here and what is versioned
+stay the same thing. Commit from Replit and the history lands in the repo.
 
 First boot builds what is missing — the 9 skill pages and the 43 packages — and prints
 what it did. Packaging runs each skill's own test suite inside a scratch copy before

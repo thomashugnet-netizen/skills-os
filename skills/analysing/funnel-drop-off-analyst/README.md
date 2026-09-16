@@ -29,8 +29,8 @@ The second is confounding. Sites that hire mostly drivers look different from si
 **In Claude Code, Cursor, Codex and other agents:**
 
 ```bash
-git clone https://github.com/fountain/claude-skills-hr-ops.git
-cp -r claude-skills-hr-ops/skills/analysing/funnel-drop-off-analyst ~/.claude/skills/
+git clone https://github.com/thomashugnet-netizen/skills-os.git
+cp -r skills-os/skills/analysing/funnel-drop-off-analyst ~/.claude/skills/
 ```
 
 Then ask: *"Here's our pipeline export for the last six months — where are we losing people?"*
