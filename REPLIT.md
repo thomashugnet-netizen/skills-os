@@ -78,11 +78,17 @@ python3 tools/package.py <slug> # rebuild that archive
 git add -A && git commit && git push
 ```
 
-Then `git pull` in the Repl's Shell. **The server rebuilds by itself** — it compares the
-mtime of everything under `skills/` and `data/` against the built output, and regenerates
-the pages and packages when the sources are newer. You will see
-`[build] packages (sources changed)` in the console. A restart with nothing changed skips
-the build entirely.
+Then `git pull` in the Repl's Shell **and press Run again**. On start-up the server
+compares the mtime of everything under `skills/` and `data/` against the built output and
+regenerates whatever is stale — you will see `[build] packages (sources changed)` in the
+console. A restart with nothing changed skips the build entirely, so this costs nothing
+when there is nothing to do. It will not rebuild under a running process, so the restart
+is the part to remember.
+
+The browse page shows **when each skill was last updated**, taken from git history rather
+than file dates — a pull rewrites every file's mtime, which would otherwise report all 43
+skills as changed today. That date is the only signal someone has that the copy they
+installed is out of date, so it is worth it being right.
 
 A brand-new skill appears on `/claude-skills` with no code change, because the index
 reads the folder at request time. What it does **not** get automatically is a detailed

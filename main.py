@@ -91,6 +91,67 @@ def ensure_built():
         run("packages (sources changed)", "tools/package.py")
 
 
+# ----------------------------------------------------------------- last updated
+
+_UPDATED = None
+
+
+def last_updated_map():
+    """When each path was last actually changed, from git history.
+
+    File mtimes are useless here: a git clone or pull stamps every file with
+    the moment it was fetched, so a freshly pulled Repl would report all 43
+    skills as updated today. The commit date is the real answer, and it
+    travels with the repository.
+    """
+    global _UPDATED
+    if _UPDATED is not None:
+        return _UPDATED
+
+    _UPDATED = {}
+    try:
+        proc = subprocess.run(
+            ["git", "log", "--pretty=format:%x00%cI", "--name-only", "--no-merges"],
+            cwd=ROOT, capture_output=True, text=True, timeout=60)
+        if proc.returncode:
+            return _UPDATED
+        stamp = None
+        for line in proc.stdout.splitlines():
+            if line.startswith("\x00"):
+                stamp = line[1:].strip()
+            elif line.strip() and stamp:
+                _UPDATED.setdefault(line.strip(), stamp)
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return _UPDATED
+
+
+def updated_for(rel_path, fallback_path):
+    """Commit date for a file or the folder holding it; file mtime as a last
+    resort, which is all a zip-upload install can offer."""
+    updated = last_updated_map()
+    if rel_path in updated:
+        return updated[rel_path]
+    prefix = os.path.dirname(rel_path) + "/"
+    dates = [v for k, v in updated.items() if k.startswith(prefix)]
+    if dates:
+        return max(dates)
+    try:
+        return datetime.fromtimestamp(
+            os.path.getmtime(fallback_path), timezone.utc).isoformat()
+    except OSError:
+        return None
+
+
+def human_date(iso):
+    if not iso:
+        return ""
+    try:
+        return datetime.fromisoformat(iso).strftime("%-d %b %Y")
+    except (ValueError, TypeError):
+        return ""
+
+
 # ----------------------------------------------------------------- catalogue
 
 def catalogue():
@@ -107,10 +168,12 @@ def catalogue():
         text = open(path, encoding="utf-8").read()
         match = re.search(r"^description:\s*(.+)$", text, re.M)
         version = re.search(r"^version:\s*(.+)$", text, re.M)
+        rel = os.path.relpath(path, ROOT).replace(os.sep, "/")
         items.append({
             "slug": slug,
             "category": category,
             "version": version.group(1).strip() if version else None,
+            "updated": updated_for(rel, path),
             "description": match.group(1).strip() if match else "",
             "page": os.path.exists(os.path.join(OUT, slug + ".html")),
             "zip": os.path.exists(os.path.join(DIST, slug + ".zip")),
@@ -149,6 +212,8 @@ border-top:1px solid var(--line);align-items:baseline}
 .row b{font-weight:600;font-size:15.5px}
 .row p{margin:0;color:var(--soft);font-size:14.5px}
 .row .get{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.row .when{display:block;margin-top:6px;font-family:var(--mono);font-size:11.5px;
+color:var(--muted);letter-spacing:.02em}
 .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
 border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:var(--muted);margin-left:8px}
 footer{margin-top:56px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:13.5px}
@@ -190,9 +255,11 @@ def index():
             tag = '<span class="tag">tested engine</span>' if item["engine"] else ""
             get = (f'<a class="get" href="/download/{name}.zip">Download &darr;</a>'
                    if item["zip"] else '<span class="get">&mdash;</span>')
+            when = human_date(item["updated"])
+            stamp = f'<span class="when">Updated {esc(when)}</span>' if when else ""
             rows.append(
                 f'<div class="row"><div>{label}{tag}</div>'
-                f'<p>{esc(item["description"])}</p><div>{get}</div></div>')
+                f'<p>{esc(item["description"])}{stamp}</p><div>{get}</div></div>')
 
     engine_count = sum(1 for i in items if i["engine"])
     body = "\n".join(rows)
