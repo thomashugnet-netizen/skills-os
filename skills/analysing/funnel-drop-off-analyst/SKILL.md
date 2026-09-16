@@ -65,11 +65,11 @@ If you don't have some of these, say so. The engine reports every missing column
 
 ## How I work
 
-1. **Pick the lane.** In lane A, I ask which ATS you use and hand you the report to pull, the field list, and a request you can forward to whoever owns it — `references/export-recipes.md` covers eleven systems from their own documentation, plus a generic fallback. One thing I always check first: most delivered reports give the current stage and one date, which loses the wait before each step. The wait is usually what separates a broken step from a slow one, so the ask has to be for status history, and that arrives as one row per status change rather than one per application.
+1. **Pick the lane.** In lane A I ask which ATS you use, then hand you the report to pull and a request you can forward to whoever owns it — `references/export-recipes.md` covers eleven systems from their own documentation. The check I always make first: most delivered reports give the current stage and a single date, which loses the wait before each step — and the wait is what separates a broken step from a slow one. So the ask is for status history, which arrives one row per status change.
 2. **Run the engine** — `python3 scripts/analyze.py --input <your file> --out report.json`.
 3. **Read the report back to you** in the structure below, in your terms, with the numbers as computed.
 
-The engine runs five passes, in this order. The order matters — passes 3 and 4 are what stop a plausible-looking correlation from becoming a wrong recommendation.
+The engine runs five passes. The order matters — passes 3 and 4 are what stop a plausible correlation becoming a wrong recommendation.
 
 ### Pass 1 — Build the funnel honestly
 
