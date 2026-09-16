@@ -65,7 +65,7 @@ If you don't have some of these, say so. The engine reports every missing column
 
 ## How I work
 
-1. **Pick the lane.** In lane A, I ask which ATS you use and hand you the exact report and field list to pull — `references/export-recipes.md` covers the major ATSs and a generic fallback, including what to untick before you export. Then I map your columns onto the canonical schema and show you anything I could not place.
+1. **Pick the lane.** In lane A, I ask which ATS you use and hand you the report to pull, the field list, and a request you can forward to whoever owns it — `references/export-recipes.md` covers eleven systems from their own documentation, plus a generic fallback. One thing I always check first: most delivered reports give the current stage and one date, which loses the wait before each step. The wait is usually what separates a broken step from a slow one, so the ask has to be for status history, and that arrives as one row per status change rather than one per application.
 2. **Run the engine** — `python3 scripts/analyze.py --input <your file> --out report.json`.
 3. **Read the report back to you** in the structure below, in your terms, with the numbers as computed.
 
@@ -126,7 +126,7 @@ Same structure every run.
 
 Every run ends with this, computed from your own findings rather than described.
 
-**Set up once** — the changes each finding implies and how many sites each has to reach. One policy change rolled out to 42 sites is 42 actions, not one.
+**Set up once** — the changes each finding implies and how many sites each has to reach. One policy change across 42 sites is 42 actions, not one.
 
 **Every week after** — how many candidates flow through the affected segments weekly: the population you chase, monitor or spot-check once the change is live. From your own volume over the exported period, not a benchmark.
 
@@ -136,9 +136,9 @@ No estimate of hours unless you give me a per-unit assumption; a total with no d
 
 ## How to read the confidence label
 
-**High** — large volume, survived every confound check, mechanism identified. **Medium** — clear but thin, or one confound could not be tested with the columns available. **Low** — suggestive only; I'll tell you what to export next rather than what to change.
+**High** — large volume, survived every confound check, mechanism identified. **Medium** — clear but thin, or a confound could not be tested with the columns available. **Low** — suggestive only; I'll say what to export next rather than what to change.
 
-I would rather give you three high-confidence findings than eight that look thorough.
+I would rather give three high-confidence findings than eight that look thorough.
 
 ## Verifying this yourself
 
