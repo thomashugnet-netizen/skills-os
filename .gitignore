@@ -1,0 +1,9 @@
+dist/
+site/out/
+__pycache__/
+*.pyc
+.venv/
+venv/
+data/leads.jsonl
+.DS_Store
+claude-skills-hr-ops.zip

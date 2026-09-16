@@ -1,0 +1,624 @@
+<title>Claude Skills for Frontline HR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  /* ==========================================================
+     Cue Design System tokens — taken verbatim from the
+     Fountain / Cue design system. Do not invent values here.
+     ========================================================== */
+  :root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+    --brand-50:  #eef2ff;
+    --brand-100: #e0e7ff;
+    --brand-600: #4f46e5;
+    --brand-800: #3730a3;
+
+    --neutral-white: #ffffff;
+    --neutral-50:  #f8fafc;
+    --neutral-100: #f1f5f9;
+    --neutral-200: #e2e8f0;
+    --neutral-300: #b7c0cb;
+    --neutral-400: #687281;
+    --neutral-600: #404d5f;
+    --neutral-900: #0f172a;
+
+    --blue-50: #e7f3ff;  --blue-600: #357fef;  --blue-800: #0c4497;
+    --teal-600: #39d4d6;
+    --purple-50: #f4e6ff; --purple-600: #a738ff;
+    --amber-50: #fff8e1; --amber-600: #f68006; --amber-800: #92400e;
+    --green-50: #d8f9d3; --green-600: #4ea441; --green-800: #145b2f;
+
+    --gradient-ai: linear-gradient(180deg, #3935ff 0%, #8f00ff 100%);
+    --gradient-brand: var(--gradient-ai);
+    --gradient-panel-deep: linear-gradient(107.436deg, #0e3575 0%, #030121 100%);
+    --gradient-panel-blue: linear-gradient(109.271deg, #130e75 0.01%, #2c88d7 100.01%);
+    --gradient-sky: linear-gradient(180deg, #ffffff 0%, #d0deff 50.96%, #ffffff 100%);
+
+    --h1: 72px; --h2: 56px; --h3: 48px; --h4: 40px; --h4-sm: 32px; --h5: 26px; --h6: 22px;
+    --text-xl: 22px; --text-l: 18px; --text-m: 16px; --text-s: 14px; --text-xs: 12px;
+    --lh-display: 1; --lh-tight: 1.1; --lh-snug: 1.3; --lh-body: 1.4;
+    --track-display: -0.03em; --track-tight: -0.02em; --track-none: 0;
+
+    --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+    --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+    --space-12: 48px; --space-14: 56px; --space-16: 64px; --space-20: 80px;
+
+    --radius-lg: 8px; --radius-2xl: 16px; --radius-full: 999px;
+    --container-large: 1280px;
+    --margin-lr: 80px; --margin-tb: 64px;
+    --section-pad: 80px; --section-pad-small: 48px;
+
+    --ring-default: inset 0 0 0 1px var(--neutral-200);
+    --ring-focus: inset 0 0 0 1px var(--brand-600), 0 0 0 3px rgba(79, 70, 229, 0.15);
+    --shadow-sm: 0 1px 8px 0 rgba(0, 0, 0, 0.05);
+    --shadow-card: 0 4px 24px 0 rgba(15, 23, 42, 0.06);
+    --shadow-glow: 0 1px 73px 0 rgba(135, 150, 197, 0.55), 0 4px 76px 0 rgba(191, 202, 230, 0.8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-m);
+    line-height: var(--lh-body);
+    color: var(--neutral-900);
+    background: var(--neutral-white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- primitives ---------- */
+  .fx-section { width: 100%; padding: var(--section-pad) var(--margin-lr); background: var(--neutral-white); }
+  .fx-section--muted { background: var(--neutral-50); }
+  .fx-section--sky { background: var(--gradient-sky); }
+  .fx-container { width: 100%; max-width: var(--container-large); margin-inline: auto; }
+
+  .fx-eyebrow {
+    font-size: var(--text-l);
+    line-height: var(--lh-body);
+    color: var(--brand-600);
+    font-weight: 400;
+    margin: 0;
+  }
+  .fx-eyebrow--bold { font-weight: 700; }
+
+  .fx-h1 { font-size: var(--h1); line-height: var(--lh-display); letter-spacing: var(--track-display); font-weight: 700; margin: 0; text-wrap: balance; }
+  .fx-h2 { font-size: var(--h2); line-height: var(--lh-display); letter-spacing: var(--track-display); font-weight: 700; margin: 0; text-wrap: balance; }
+  .fx-h4 { font-size: var(--h4); line-height: var(--lh-tight); letter-spacing: var(--track-tight); font-weight: 700; margin: 0; text-wrap: balance; }
+  .fx-h5 { font-size: var(--h5); line-height: var(--lh-snug); letter-spacing: var(--track-tight); font-weight: 700; margin: 0; }
+  .fx-h6 { font-size: var(--h6); line-height: var(--lh-snug); letter-spacing: var(--track-tight); font-weight: 600; margin: 0; }
+  .fx-lead { font-size: var(--text-xl); line-height: var(--lh-snug); color: var(--neutral-600); margin: 0; }
+  .fx-body { font-size: var(--text-l); line-height: var(--lh-body); color: var(--neutral-600); margin: 0; }
+  .fx-small { font-size: var(--text-s); line-height: var(--lh-body); color: var(--neutral-400); margin: 0; }
+
+  .fx-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: var(--space-2);
+    padding: 15px 23px;
+    border-radius: var(--radius-full);
+    font-family: inherit; font-size: var(--text-l); font-weight: 500; line-height: 24px;
+    white-space: nowrap; border: 1px solid transparent; cursor: pointer; overflow: hidden;
+    text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  }
+  .fx-btn--primary { background: var(--gradient-brand); color: var(--neutral-white); }
+  .fx-btn--secondary { background: var(--neutral-white); color: var(--neutral-900); border-color: var(--neutral-300); }
+  .fx-btn--inverse { background: var(--neutral-white); color: var(--neutral-900); }
+  .fx-btn--ghost { background: transparent; color: var(--neutral-900); padding-inline: 0; }
+  .fx-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .fx-btn--ghost:hover { box-shadow: none; opacity: .7; }
+  .fx-btn:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+  .fx-btn__icon { width: 16px; height: 16px; flex: none; }
+
+  .fx-card {
+    background: var(--neutral-white);
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+  }
+  .fx-card--muted { background: var(--neutral-50); border-color: transparent; }
+  .fx-card--brand { border-color: var(--brand-600); }
+
+  a { color: var(--brand-600); }
+
+  /* ---------- nav ---------- */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-8);
+    padding: var(--space-5) var(--margin-lr);
+    border-bottom: 1px solid var(--neutral-200);
+    background: var(--neutral-white);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .nav__brand { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; color: var(--neutral-900); }
+  .nav__mark {
+    width: 28px; height: 28px; border-radius: var(--radius-lg);
+    background: var(--gradient-brand); flex: none;
+  }
+  .nav__word { font-size: var(--text-xl); font-weight: 800; letter-spacing: var(--track-tight); }
+  .nav__links { display: flex; align-items: center; gap: var(--space-8); }
+  .nav__links a { color: var(--neutral-600); text-decoration: none; font-size: var(--text-m); font-weight: 500; }
+  .nav__links a:hover { color: var(--neutral-900); }
+  .nav__actions { display: flex; align-items: center; gap: var(--space-3); }
+
+  /* ---------- hero ---------- */
+  .hero { display: grid; gap: var(--space-6); max-width: 900px; }
+  .hero__meta { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); margin-top: var(--space-2); }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .tick { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-s); color: var(--neutral-600); font-weight: 500; }
+  .tick::before {
+    content: ""; width: 6px; height: 6px; border-radius: var(--radius-full);
+    background: var(--green-600); flex: none;
+  }
+
+  /* ---------- stats ---------- */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-8);
+    border-top: 1px solid var(--neutral-200);
+    padding-top: var(--space-10); margin-top: var(--space-16);
+  }
+  .stat__n { font-size: var(--h3); font-weight: 700; letter-spacing: var(--track-display); line-height: var(--lh-display); }
+  .stat__l { font-size: var(--text-s); color: var(--neutral-400); margin-top: var(--space-2); }
+
+  /* ---------- steps ---------- */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-6); margin-top: var(--space-12); }
+  .step { display: grid; gap: var(--space-3); align-content: start; }
+  .step__n {
+    width: 32px; height: 32px; border-radius: var(--radius-full);
+    background: var(--brand-50); color: var(--brand-600);
+    display: grid; place-items: center; font-size: var(--text-s); font-weight: 700;
+  }
+  code {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 0.92em; background: var(--neutral-100);
+    padding: 2px 6px; border-radius: 5px; color: var(--neutral-900);
+  }
+
+  /* ---------- catalogue ---------- */
+  .cat-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-10); }
+  .legend { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+  .legend__item { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-s); color: var(--neutral-400); }
+
+  .chip {
+    display: inline-flex; align-items: center;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: var(--radius-full); flex: none;
+  }
+  .chip--export { background: var(--amber-50); color: var(--amber-800); }
+  .chip--ready  { background: var(--green-50); color: var(--green-800); }
+  .chip--soon   { background: var(--neutral-100); color: var(--neutral-400); }
+
+  .cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: var(--space-6); }
+  .cat { display: grid; gap: 0; align-content: start; }
+  .cat__title {
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4);
+    padding-bottom: var(--space-3); border-bottom: 2px solid var(--neutral-900);
+  }
+  .cat__name { font-size: var(--text-l); font-weight: 700; letter-spacing: var(--track-tight); }
+  .cat__count { font-size: var(--text-xs); color: var(--neutral-400); font-weight: 600; }
+
+  .skill {
+    display: grid; grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-4);
+    align-items: baseline;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--neutral-200);
+  }
+  .skill__name { font-size: var(--text-m); font-weight: 600; color: var(--neutral-900); }
+  .skill__name a { color: inherit; text-decoration: none; }
+  .skill__name a:hover { color: var(--brand-600); text-decoration: underline; text-underline-offset: 2px; }
+  .skill__tags { display: inline-flex; gap: var(--space-2); }
+  .skill__d { grid-column: 1 / -1; font-size: var(--text-s); color: var(--neutral-400); line-height: var(--lh-body); margin: 0; }
+  .skill--soon .skill__name { color: var(--neutral-400); font-weight: 500; }
+
+  /* ---------- two-up ---------- */
+  .two-up { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-6); margin-top: var(--space-12); }
+  .kv { display: grid; gap: var(--space-2); padding: var(--space-4) 0; border-bottom: 1px solid var(--neutral-200); }
+  .kv:last-child { border-bottom: 0; }
+  .kv__k { font-size: var(--text-s); font-weight: 700; color: var(--neutral-900); }
+  .kv__v { font-size: var(--text-s); color: var(--neutral-400); }
+
+  ul.bare { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-2); }
+  ul.bare li { font-size: var(--text-m); color: var(--neutral-600); line-height: var(--lh-body); }
+
+  /* ---------- Cue panel ---------- */
+  .panel {
+    background: var(--gradient-panel-deep);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-20) var(--space-16);
+    color: var(--neutral-white);
+    display: grid; gap: var(--space-6);
+    position: relative; overflow: hidden;
+  }
+  .panel__eyebrow { color: var(--teal-600); font-size: var(--text-l); font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; margin: 0; }
+  .panel .fx-h2 { color: var(--neutral-white); max-width: 20ch; }
+  .panel__body { font-size: var(--text-xl); line-height: var(--lh-snug); color: rgba(255,255,255,.78); margin: 0; max-width: 62ch; }
+  .panel__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+  .panel__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-8); margin-top: var(--space-10); padding-top: var(--space-10); border-top: 1px solid rgba(255,255,255,.16); }
+  .panel__k { font-size: var(--text-s); font-weight: 700; color: var(--neutral-white); margin-bottom: var(--space-2); }
+  .panel__v { font-size: var(--text-s); color: rgba(255,255,255,.62); line-height: var(--lh-body); }
+  .panel__note { font-size: var(--text-s); color: rgba(255,255,255,.55); margin: 0; }
+
+  /* ---------- callout ---------- */
+  .callout {
+    border-left: 3px solid var(--amber-600);
+    background: var(--amber-50);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    padding: var(--space-6) var(--space-8);
+    display: grid; gap: var(--space-3);
+  }
+  .callout .fx-h6 { color: var(--amber-800); }
+  .callout p { color: var(--neutral-600); font-size: var(--text-m); line-height: var(--lh-body); margin: 0; }
+
+  /* ---------- footer ---------- */
+  .foot { border-top: 1px solid var(--neutral-200); padding: var(--space-16) var(--margin-lr); background: var(--neutral-white); }
+  .foot__in { max-width: var(--container-large); margin-inline: auto; display: flex; flex-wrap: wrap; gap: var(--space-8); justify-content: space-between; align-items: flex-start; }
+  .foot__links { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+  .foot__links a { font-size: var(--text-s); color: var(--neutral-400); text-decoration: none; }
+  .foot__links a:hover { color: var(--neutral-900); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1024px) {
+    :root { --h1: 56px; --h2: 44px; --h3: 38px; --margin-lr: 40px; --section-pad: 64px; }
+    .nav__links { display: none; }
+  }
+  @media (max-width: 640px) {
+    :root { --h1: 40px; --h2: 32px; --h3: 30px; --h4: 26px; --margin-lr: 20px; --section-pad: 48px; }
+    .fx-lead, .panel__body { font-size: var(--text-l); }
+    .panel { padding: var(--space-12) var(--space-6); }
+    .fx-card { padding: var(--space-6); }
+    .fx-btn { width: 100%; }
+    .hero__actions .fx-btn--ghost { width: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+    .fx-btn:hover { transform: none; }
+  }
+</style>
+
+<!-- ============================ NAV ============================ -->
+<nav class="nav">
+  <a class="nav__brand" href="#top">
+    <span class="nav__mark" aria-hidden="true"></span>
+    <span class="nav__word">Fountain</span>
+  </a>
+  <div class="nav__links">
+    <a href="#install">How it works</a>
+    <a href="#skills">The skills</a>
+    <a href="#data">Sample data</a>
+    <a href="#cue">Cue</a>
+  </div>
+  <div class="nav__actions">
+    <a class="fx-btn fx-btn--secondary fx-btn--sm" href="#" data-cta="demo">Book a demo</a>
+  </div>
+</nav>
+
+<!-- ============================ HERO ============================ -->
+<section class="fx-section" id="top" style="padding-top: var(--space-20);">
+  <div class="fx-container">
+    <div class="hero">
+      <p class="fx-eyebrow fx-eyebrow--bold">Free and open source</p>
+      <h1 class="fx-h1">Claude skills for frontline HR ops</h1>
+      <p class="fx-lead">Forty skill files that make Claude genuinely useful for high-volume hourly hiring. Download one, attach it to a chat, describe your problem. No signup, no setup, no terminal.</p>
+      <div class="hero__meta">
+        <span class="tick">Works on Claude's free plan</span>
+        <span class="tick">MIT licensed</span>
+        <span class="tick">No email required</span>
+      </div>
+      <div class="hero__actions">
+        <a class="fx-btn fx-btn--primary" href="#" data-cta="skills.download-all">
+          Download all skills
+          <svg class="fx-btn__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M2.5 12.5h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="fx-btn fx-btn--secondary" href="#skills" data-cta="skills.browse">Browse the library</a>
+        <a class="fx-btn fx-btn--ghost" href="#install" data-cta="skills.how">How it works</a>
+      </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+          <div class="stat__n">40</div>
+          <p class="stat__l">Skills across 8 categories</p>
+        </div>
+        <div class="stat">
+          <div class="stat__n">9</div>
+          <p class="stat__l">Available today — the rest ship through October</p>
+        </div>
+        <div class="stat">
+          <div class="stat__n">18,184</div>
+          <p class="stat__l">Rows of synthetic sample data to try them on</p>
+        </div>
+        <div class="stat">
+          <div class="stat__n">0</div>
+          <p class="stat__l">Dependencies, accounts or install steps</p>
+        </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ INSTALL ============================ -->
+<section class="fx-section fx-section--muted" id="install">
+  <div class="fx-container">
+    <p class="fx-eyebrow">Three steps</p>
+    <h2 class="fx-h2" style="margin-top: var(--space-4);">Attach a file. Ask your question.</h2>
+    <p class="fx-body" style="margin-top: var(--space-5); max-width: 60ch;">These are plain <code>.md</code> files. They are not Claude Code skills — there is no terminal, no <code>npx</code>, nothing to install.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step__n">1</div>
+        <h3 class="fx-h6">Download the skill</h3>
+        <p class="fx-small" style="font-size: var(--text-m); color: var(--neutral-600);">Pick the file for the job you're doing, or take the whole library as a zip.</p>
+      </div>
+      <div class="step">
+        <div class="step__n">2</div>
+        <h3 class="fx-h6">Attach it in Claude</h3>
+        <p class="fx-small" style="font-size: var(--text-m); color: var(--neutral-600);">Start a new chat, click the paperclip, select the file. On desktop, drag it in.</p>
+      </div>
+      <div class="step">
+        <div class="step__n">3</div>
+        <h3 class="fx-h6">Say what you need</h3>
+        <p class="fx-small" style="font-size: var(--text-m); color: var(--neutral-600);">“Read this skill and follow it. I need to work out why we're losing candidates before their first shift.”</p>
+      </div>
+    </div>
+
+    <div class="fx-card" style="margin-top: var(--space-12); display: grid; gap: var(--space-3);">
+      <h3 class="fx-h6">Using one regularly?</h3>
+      <p class="fx-body" style="font-size: var(--text-m);">Drop the files into a Claude Project once and every conversation in that project can use them, without re-attaching.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CATALOGUE ============================ -->
+<section class="fx-section" id="skills">
+  <div class="fx-container">
+    <div class="cat-head">
+      <div style="display: grid; gap: var(--space-4);">
+        <p class="fx-eyebrow">The library</p>
+        <h2 class="fx-h2">Forty skills, eight categories</h2>
+      </div>
+      <div class="legend">
+        <span class="legend__item"><span class="chip chip--ready">ready</span> available now</span>
+        <span class="legend__item"><span class="chip chip--export">export</span> works from a file you export</span>
+        <span class="legend__item"><span class="chip chip--soon">soon</span> shipping through October</span>
+      </div>
+    </div>
+
+    <div class="cats">
+
+      <!-- WRITING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Writing</span><span class="cat__count">1 of 5 ready</span></div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">Job Ad Writer</a></span>
+          <span class="skill__tags"><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">Hourly job ads that work on a phone, with a rewritten variant for every channel you post to.</p>
+        </div>
+        <div class="skill skill--soon"><span class="skill__name">Candidate Message Sequencer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">SMS and WhatsApp nudges for applicants who stall before their first shift.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Offer Letter Drafter</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Conditional offers, start-date confirmations and contingency wording by role.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Attendance Policy Writer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">No-show, lateness and break policies in language hourly teams actually follow.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Manager Comms Writer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">The messages a site manager sends daily: coverage asks, reminders, day-one instructions.</p></div>
+      </div>
+
+      <!-- SCREENING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Screening</span><span class="cat__count">2 of 5 ready</span></div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">Screening Question Builder</a></span>
+          <span class="skill__tags"><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">Knockout and scoring logic tuned to a target pass rate, not a target shortlist.</p>
+        </div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">Knockout Logic Auditor</a></span>
+          <span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">Finds which of your existing screening rules are rejecting people who would have worked out.</p>
+        </div>
+        <div class="skill skill--soon"><span class="skill__name">Scorecard Designer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Role scorecards with behavioural anchors, usable by someone who has never interviewed.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Resume-Free Triage Rubric</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">For roles where most applicants have no resume: availability, reliability, commute.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Bias Language Checker</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Reviews ads and questions for exclusionary wording and adverse-impact risk.</p></div>
+      </div>
+
+      <!-- INTERVIEWING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Interviewing</span><span class="cat__count">1 of 5 ready</span></div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">Structured Interview Guide</a></span>
+          <span class="skill__tags"><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">A fifteen-minute interview a site manager can run consistently, without training.</p>
+        </div>
+        <div class="skill skill--soon"><span class="skill__name">Phone Screen Script</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">The five-minute version. Availability first, everything else after.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Interview Panel Calibrator</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Gets multiple interviewers to the same bar, and proves it with a calibration exercise.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Interview Question Bank</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Role-specific, legally safer question banks with follow-up probes.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Interview No-Show Playbook</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Why interviews get missed, and the confirm-remind-reschedule flow that fixes it.</p></div>
+      </div>
+
+      <!-- ANALYSING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Analysing</span><span class="cat__count">3 of 5 ready</span></div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">Funnel Drop-off Analyst</a></span>
+          <span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">Finds where candidates leave, separates correlation from cause, ranks fixes by hires recovered.</p>
+        </div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">No-Show Pattern Finder</a></span>
+          <span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">Why hires don't turn up for shift one, and which single change recovers the most starts.</p>
+        </div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">Turnover Analyst</a></span>
+          <span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">30, 60 and 90-day attrition by site, manager, source and role — and which is the real driver.</p>
+        </div>
+        <div class="skill skill--soon"><span class="skill__name">Time-to-Hire Analyst</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Stage-by-stage cycle time that names the one stage actually holding the queue.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Source ROI Analyst</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Cost per hire and cost per <em>start</em> by channel — the second being the number nobody has.</p></div>
+      </div>
+
+      <!-- ONBOARDING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Onboarding</span><span class="cat__count">1 of 5 ready</span></div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">Day-One Readiness Checklist</a></span>
+          <span class="skill__tags"><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">Everything that must be true before a first shift, with an owner and a deadline on every line.</p>
+        </div>
+        <div class="skill skill--soon"><span class="skill__name">Onboarding Workflow Designer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">The apply-to-start sequence, with a fallback for every step that can stall.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">New Hire Pack Drafter</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Welcome pack, first-week schedule, uniform, equipment and parking.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Onboarding Drop-off Diagnostic</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Finds where accepted offers die before the first shift.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Manager Ramp Plan</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">A first-30-days plan for the manager who has twelve minutes to run it.</p></div>
+      </div>
+
+      <!-- COMPLYING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Complying</span><span class="cat__count">1 of 5 ready</span></div>
+        <div class="skill">
+          <span class="skill__name"><a href="#">I-9 Readiness Checker</a></span>
+          <span class="skill__tags"><span class="chip chip--ready">ready</span></span>
+          <p class="skill__d">The US I-9 process, the errors that show up in audits, and a manager-facing checklist.</p>
+        </div>
+        <div class="skill skill--soon"><span class="skill__name">E-Verify Process Mapper</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">The workflow and its timing rules, including how a tentative non-confirmation is handled.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Multi-State Rule Comparer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Hiring and onboarding requirements across the states you operate in, side by side.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Audit Prep Pack</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">The document and process inventory an I-9 or wage-hour audit will ask you for.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">AI Hiring Law Briefer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">What NYC LL144, Illinois AIVIA, Colorado and the EU AI Act require of automated screening.</p></div>
+      </div>
+
+      <!-- RETAINING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Retaining</span><span class="cat__count">0 of 5 ready</span></div>
+        <div class="skill skill--soon"><span class="skill__name">Stay Interview Kit</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Questions and cadence for hourly workers, plus what to do with the answers.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Exit Reason Analyst</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Clusters free-text exit responses into causes you can act on, weighted by volume.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Early Attrition Diagnostic</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Why 30-day quits happen: job preview, scheduling, manager, commute — ranked.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Check-in Designer</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Day 1, 7 and 30 check-in scripts with escalation rules for what comes back.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Coverage Risk Scorer</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Which locations are at risk of understaffing next week, from an attendance export.</p></div>
+      </div>
+
+      <!-- OPERATING -->
+      <div class="cat">
+        <div class="cat__title"><span class="cat__name">Operating</span><span class="cat__count">0 of 5 ready</span></div>
+        <div class="skill skill--soon"><span class="skill__name">Headcount Forecaster</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Hiring need from demand curves, seasonality and expected attrition — not last year's number.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Recruiter Capacity Planner</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Reqs per recruiter, where the load breaks, and what to automate first.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Job Board Spend Allocator</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">Reallocates budget across channels by cost-per-start and forecast shortfall.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Hiring Ops SOP Builder</span><span class="skill__tags"><span class="chip chip--soon">soon</span></span><p class="skill__d">Turns how-we-do-it-here into a process someone else can run.</p></div>
+        <div class="skill skill--soon"><span class="skill__name">Weekly Hiring Review Pack</span><span class="skill__tags"><span class="chip chip--export">export</span><span class="chip chip--soon">soon</span></span><p class="skill__d">The recurring report, and the meeting agenda that goes with it.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ DATA / PRIVACY ============================ -->
+<section class="fx-section fx-section--muted" id="data">
+  <div class="fx-container">
+    <p class="fx-eyebrow">Try before you point one at your own data</p>
+    <h2 class="fx-h2" style="margin-top: var(--space-4);">A sample dataset with real problems in it</h2>
+
+    <div class="two-up">
+      <div style="display: grid; gap: var(--space-6); align-content: start;">
+        <p class="fx-body">Fifteen of the forty skills read a file you export. So we built one you can practise on — 18,184 applications across 42 locations, four regions, five hourly roles, seven pipeline stages and twelve months including a Q4 spike.</p>
+        <p class="fx-body">It's entirely synthetic. No names, no emails, no addresses, no dates of birth — every entity is an opaque id, by construction.</p>
+        <p class="fx-body">And it isn't noise. Real causal structure is built in, including two deliberate confounds, so an analysis that only chases correlation gets the wrong answer:</p>
+        <ul class="bare">
+          <li>A region running a stricter screening rule than the rest of the estate</li>
+          <li>Eight sites where interview slots are scarce, and the wait that creates</li>
+          <li>An offer-to-first-shift gap that drives no-shows harder than commute distance</li>
+          <li>Five managers at roughly 3x baseline early attrition — on sites that skew to one role, so a naive cut blames the role</li>
+          <li>A weekend-application effect that disappears once you control for source mix</li>
+        </ul>
+        <div>
+          <a class="fx-btn fx-btn--secondary" href="#" data-cta="skills.sample-data">Download the sample data</a>
+        </div>
+      </div>
+
+      <div class="fx-card" style="align-content: start;">
+        <h3 class="fx-h5" style="margin-bottom: var(--space-5);">What's in the file</h3>
+        <div class="kv"><span class="kv__k">18,184 rows</span><span class="kv__v">One row per application, twelve months to Aug 2026</span></div>
+        <div class="kv"><span class="kv__k">42 locations · 4 regions</span><span class="kv__v">Multi-site operator, seasonal Q4 volume at 2.4x</span></div>
+        <div class="kv"><span class="kv__k">7 pipeline stages</span><span class="kv__v">Applied through to first shift completed</span></div>
+        <div class="kv"><span class="kv__k">21 columns</span><span class="kv__v">Stage timestamps, source, role, exit reason, tenure</span></div>
+        <div class="kv"><span class="kv__k">Reproducible</span><span class="kv__v">Seeded generator script ships with it</span></div>
+        <div class="kv"><span class="kv__k">Zero personal data</span><span class="kv__v">Nothing to anonymise — there was never anything there</span></div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: var(--space-12);">
+      <h3 class="fx-h6">Before you export your own data, take the personal data out</h3>
+      <p>Drop or hash names, emails, phone numbers, addresses (send a distance band instead), dates of birth, and free-text notes — notes reliably contain both names and information about protected characteristics.</p>
+      <p>The skills are written to refuse a file that looks like it contains identities, and to ask you to re-export. That's deliberate. Candidate records belong inside your own systems, under your own access controls. None of these analyses needs to know who anybody is — they work on counts, categories and dates.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CUE ============================ -->
+<section class="fx-section" id="cue">
+  <div class="fx-container">
+    <div class="panel">
+      <p class="panel__eyebrow">Run It.</p>
+      <h2 class="fx-h2">These skills think about your hiring. Cue runs it.</h2>
+      <p class="panel__body">Every skill on this page reads a file you exported and gives you back text. It can't see your systems, can't change anything, and doesn't remember your setup tomorrow. Every recommendation is yours to carry out by hand.</p>
+      <p class="panel__body">Cue is Fountain's Frontline Superintelligence — one agent that reads your live pipeline and executes across the full Fountain suite, inside your own permissions and governance. You state the objective, Cue proposes a plan, you approve, Cue does the work and summarises what changed. Every outcome logged, auditable, reversible.</p>
+
+      <div class="panel__actions">
+        <a class="fx-btn fx-btn--inverse" href="#" data-cta="cue.demo">See Cue on your pipeline</a>
+        <a class="fx-btn fx-btn--secondary" href="#" data-cta="cue.trial" style="background: transparent; color: #fff; border-color: rgba(255,255,255,.4);">Start with Cue credits</a>
+      </div>
+
+      <div class="panel__grid">
+        <div>
+          <div class="panel__k">Where a skill stops</div>
+          <p class="panel__v">You export a CSV. It reads that one moment.</p>
+        </div>
+        <div>
+          <div class="panel__k">Where Cue starts</div>
+          <p class="panel__v">Reads the live pipeline, no export step.</p>
+        </div>
+        <div>
+          <div class="panel__k">Analysis to action</div>
+          <p class="panel__v">Runs the fix instead of listing it. Bulk, cross-product, approved by you.</p>
+        </div>
+        <div>
+          <div class="panel__k">Same models</div>
+          <p class="panel__v">Powered by Anthropic's Claude — the models you just used here.</p>
+        </div>
+      </div>
+
+      <p class="panel__note" style="margin-top: var(--space-8);">Conversation with Cue is free. You pay only for completed outcomes — never per message, and never for a retry or a failed attempt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FINAL CTA ============================ -->
+<section class="fx-section fx-section--sky">
+  <div class="fx-container" style="text-align: center; display: grid; gap: var(--space-6); justify-items: center;">
+    <h2 class="fx-h2" style="max-width: 24ch;">Take the whole library. It's free.</h2>
+    <p class="fx-lead" style="max-width: 56ch;">Nine skills today, forty by the end of October. MIT licensed, issues open — tell us where one gets your operation wrong.</p>
+    <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center;">
+      <a class="fx-btn fx-btn--primary" href="#" data-cta="skills.download-all-footer">Download all skills</a>
+      <a class="fx-btn fx-btn--secondary" href="#" data-cta="skills.github">View on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="foot">
+  <div class="foot__in">
+    <div style="display: grid; gap: var(--space-3); max-width: 44ch;">
+      <a class="nav__brand" href="#top">
+        <span class="nav__mark" aria-hidden="true"></span>
+        <span class="nav__word">Fountain</span>
+      </a>
+      <p class="fx-small">The AI-native platform for the global frontline workforce. Built for retail, QSR, logistics and staffing.</p>
+    </div>
+    <div class="foot__links">
+      <a href="#skills">The skills</a>
+      <a href="#install">How it works</a>
+      <a href="#data">Sample data</a>
+      <a href="#cue">Cue</a>
+      <a href="#">GitHub</a>
+      <a href="#">Book a demo</a>
+    </div>
+  </div>
+  <div class="foot__in" style="margin-top: var(--space-10); padding-top: var(--space-6); border-top: 1px solid var(--neutral-200);">
+    <p class="fx-small">Skills are MIT licensed. Nothing on this page is legal advice — the compliance skills help you prepare, and say so.</p>
+    <p class="fx-small">© 2026 Fountain</p>
+  </div>
+</footer>

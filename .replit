@@ -1,0 +1,18 @@
+modules = ["python-3.11"]
+run = "python3 main.py"
+entrypoint = "main.py"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["python3", "main.py"]
+deploymentTarget = "autoscale"
+build = ["sh", "-c", "python3 site/build.py && python3 tools/package.py"]
+
+[[ports]]
+localPort = 8080
+externalPort = 80
+
+[env]
+PYTHONUNBUFFERED = "1"
