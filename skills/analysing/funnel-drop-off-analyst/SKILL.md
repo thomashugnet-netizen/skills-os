@@ -79,7 +79,7 @@ Orders your stages and computes, for each: **step conversion** (of those who rea
 
 Cuts each material loss by location, region, source, role and availability, and asks whether it is **systemic** (spread evenly) or **concentrated** (a minority of segments carrying most of it). Concentrated losses are cheaper to fix and are labelled as such.
 
-A segment is flagged when it converts at least 1.5x worse than the population and holds at least 30 candidates at that step. Below that it is reported as inconclusive, never quietly dropped. Every rate carries a Wilson 95% interval, because a point estimate on 34 people is not a finding.
+A segment is flagged when it converts at least 1.5x worse than the population and holds at least 30 candidates at that step. Below that it is inconclusive, never quietly dropped. Every rate carries a Wilson 95% interval — a point estimate on 34 people is not a finding.
 
 ### Pass 3 — Classify the mechanism
 
@@ -130,7 +130,7 @@ Every run ends with this, computed from your own findings rather than described.
 
 **Every week after** — how many candidates flow through the affected segments weekly: the population you chase, monitor or spot-check once the change is live. From your own volume over the exported period, not a benchmark.
 
-**To find out whether it worked** — one fresh export and one re-run per cycle. In lane A that is manual every time; nothing here updates itself.
+**To find out whether it worked** — one fresh export and one re-run per cycle. In lane A that is manual every time.
 
 No estimate of hours unless you give me a per-unit assumption; a total with no derivation is worth nothing. This is an invoice, not an argument — if it reads cheap, it is cheap.
 
