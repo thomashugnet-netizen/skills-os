@@ -144,3 +144,29 @@ a copy before the workflow exists:
 python3 tools/audit.py && python3 tools/package.py && python3 tools/catalogue.py
 python3 tools/site_assets.py --zip     # -> dist/site-assets.zip
 ```
+
+
+## Where the unreleased skills live
+
+Only what has passed its gate is in this repository. Everything else — the
+skills still being written, the authoring contracts, the old Python site — is in
+a **separate private repository**, because this one is meant to be public and 40
+unproven files in `skills/` would read as 40 products.
+
+`roadmap.json` carries their names, titles, categories and one-line
+descriptions, and nothing else. `tools/catalogue.py` folds it into
+`catalogue.json` as `coming_soon`, so the site can show where the library is
+going without a line of unreleased content leaving the private repo.
+
+When a skill graduates: move its file here, build it into a folder skill with
+its own tests, then regenerate the roadmap from the private repo so it stops
+being announced as coming soon.
+
+```
+python3 tools/roadmap.py --from <private repo>/skills
+```
+
+`tools/roadmap.py` also holds `HELD`: three skills deliberately kept out of the
+roadmap because they contradict guidance Fountain's own product gives. That is a
+decision about what this library says, not a technical exclusion — announcing
+them commits us to shipping them. Removing a name from `HELD` announces it.

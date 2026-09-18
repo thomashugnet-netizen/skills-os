@@ -184,16 +184,20 @@ def main():
             fail.append(f"duplicate skill slug '{slug}': " + ", ".join(paths))
     if not files:
         print("no skill files found");  return 1
-    exports = cues = 0
+    exports = cues = tier_a_here = 0
     total = 0
     for f in files:
         e, c, w = check(f)
         exports += e; cues += c; total += w
+        tier_a_here += 1 if f"{f.split(os.sep)[1]}/{slug_of(f)}" in TIER_A else 0
 
     print(f"skills:        {len(files)}  ({folder_skills} as folders)")
     print(f"export skills: {exports}")
     print(f"Cue blocks:    {cues}")
-    print(f"Tier A:        {len(TIER_A)}")
+    # Count what is in this repo, not what the set names: most of Tier A now
+    # lives in the private repository, and a gate that reports twelve while
+    # auditing two is a gate nobody reads.
+    print(f"Tier A here:   {tier_a_here} of {len(TIER_A)}")
     print(f"total words:   {total:,}  (mean {total // len(files):,})")
 
     for w in warn:
