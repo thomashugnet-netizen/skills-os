@@ -119,3 +119,28 @@ restarts but not a redeploy on some Replit plans, and nothing backs it up. Befor
 run a real campaign, write them somewhere durable instead — the account already has a
 Supabase connector, and swapping the six lines in `pack_submit()` for an insert is the
 whole change.
+
+## How the site gets the library
+
+`.github/workflows/publish.yml` does it. Push to `main` here and, if the gates pass,
+the built assets are copied into `thomashugnet-netizen/skills-os-site` under
+`site-assets/`, which Replit then serves.
+
+Nothing is published unless `tools/audit.py` passes and `tools/package.py` has run
+every skill's own test suite from inside its archive. A failing test leaves the site
+serving the previous version, which is the right outcome: stale beats broken.
+
+What travels: `catalogue.json`, the zip of every skill the catalogue marks available,
+and the sample datasets. Nothing else — not the authoring contracts in `tools/`, not
+the generator, not this file.
+
+**`site-assets/` in the site repo is generated. Never edit it by hand**, there or in
+Replit: the next publish overwrites it. Change the source here and push.
+
+To do the same thing locally — to inspect what would be published, or to hand someone
+a copy before the workflow exists:
+
+```
+python3 tools/audit.py && python3 tools/package.py && python3 tools/catalogue.py
+python3 tools/site_assets.py --zip     # -> dist/site-assets.zip
+```
