@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""
+Writes dist/catalogue.json: one machine-readable description of the library.
+
+Why this exists
+---------------
+The public site used to restate what each skill is -- its name, its category,
+its description, whether it needs a data export, whether it is ready. Two
+places describing the same object drift, and ours drifted within a day: the
+site told readers to attach one .md file long after the skill had become a
+zipped folder.
+
+So the repo publishes the facts and the site reads them. Anything a visitor is
+told about a skill should be derivable from this file, and anything that is not
+in here is something the site had to invent.
+
+    python3 tools/catalogue.py            # -> dist/catalogue.json
+    python3 tools/catalogue.py --print    # to stdout instead
+"""
+
+import glob
+import json
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DIST = os.path.join(ROOT, "dist")
+DATA = os.path.join(ROOT, "data")
+
+# A skill that carries this sentence is one that reads a candidate export. It is
+# the same marker the audit gate keys on, so the two can never disagree.
+DATA_BLOCK_MARKER = ("**If your file contains a column that looks nominative, I will "
+                     "stop and ask you to re-export rather than analyse it.**")
+
+# The four samples, in the order a reader should be offered them.
+DATASETS = [
+    ("frontline", "Retail & multi-site", "hire",
+     "42 stores, a seasonal peak, heavy job-board reliance."),
+    ("qsr", "Quick service restaurants", "hire",
+     "42 restaurants, the shortest funnel - apply to first shift in days."),
+    ("logistics", "Logistics & delivery", "hire",
+     "42 stations, drug screens and DOT medicals before day one."),
+    ("gig", "Delivery & courier (gig)", "activation",
+     "42 markets, no interview and no offer - activation, not hiring."),
+]
+
+
+def git_date(rel):
+    """Commit date, never file mtime: a clone rewrites every mtime, which would
+    report the whole library as changed today."""
+    try:
+        out = subprocess.run(["git", "log", "-1", "--format=%cI", "--", rel],
+                             cwd=ROOT, capture_output=True, text=True, timeout=20)
+        return (out.stdout.strip() or None)
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def size(path):
+    return os.path.getsize(path) if os.path.exists(path) else None
+
+
+def rows(path):
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8-sig") as fh:
+        return max(sum(1 for _ in fh) - 1, 0)
+
+
+def skills():
+    paths = (sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*.md")))
+             + sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*", "SKILL.md"))))
+    out = []
+    for path in paths:
+        parts = os.path.relpath(path, ROOT).split(os.sep)
+        category = parts[1]
+        folder = os.path.dirname(path)
+        is_folder = os.path.basename(path) == "SKILL.md"
+        slug = os.path.basename(folder) if is_folder else parts[-1][:-3]
+        text = open(path, encoding="utf-8").read()
+
+        def field(key):
+            found = re.search(rf"^{key}:\s*(.+)$", text, re.M)
+            return found.group(1).strip() if found else None
+
+        heading = re.search(r"^# (.+)$", text, re.M)
+        zip_path = os.path.join(DIST, slug + ".zip")
+        # "Available" means there is something to download that passed the gates,
+        # not that the file exists. Everything else is coming soon, and the site
+        # should say so rather than offer a button that disappoints.
+        has_engine = os.path.exists(os.path.join(folder, "scripts", "analyze.py"))
+        available = has_engine and os.path.exists(zip_path)
+
+        out.append({
+            "slug": slug,
+            "title": heading.group(1).strip() if heading else slug,
+            "category": category,
+            "description": field("description") or "",
+            "version": field("version"),
+            "updated": git_date(os.path.relpath(path, ROOT).replace(os.sep, "/")),
+            "available": available,
+            "tested_engine": has_engine,
+            "needs_dataset": DATA_BLOCK_MARKER in text,
+            "download": ({"path": f"skills/{slug}.zip", "bytes": size(zip_path)}
+                         if available else None),
+        })
+    return sorted(out, key=lambda s: (s["category"], s["slug"]))
+
+
+def datasets():
+    out = []
+    for slug, label, funnel, blurb in DATASETS:
+        pipeline = os.path.join(DATA, f"{slug}_pipeline_sample.csv")
+        if not os.path.exists(pipeline):
+            continue
+        spend = os.path.join(DATA, f"{slug}_spend_sample.csv")
+        if slug == "frontline":
+            spend = os.path.join(DATA, "sourcing_spend_sample.csv")
+        out.append({
+            "slug": slug,
+            "label": label,
+            "blurb": blurb,
+            "funnel": funnel,
+            "rows": rows(pipeline),
+            "pipeline": {"path": f"data/{os.path.basename(pipeline)}",
+                         "bytes": size(pipeline)},
+            "spend": ({"path": f"data/{os.path.basename(spend)}", "bytes": size(spend)}
+                      if os.path.exists(spend) else None),
+        })
+    return out
+
+
+def build():
+    items = skills()
+    return {
+        "$comment": "Generated by tools/catalogue.py. Do not edit by hand, and do "
+                    "not restate any of it elsewhere -- read it.",
+        "schema_version": 1,
+        "generated_at": subprocess.run(["date", "-u", "+%Y-%m-%dT%H:%M:%SZ"],
+                                       capture_output=True, text=True).stdout.strip(),
+        "library": {
+            "name": "Claude Skills for HR Ops",
+            "publisher": "Fountain",
+            "skills": len(items),
+            "available": sum(1 for s in items if s["available"]),
+            "categories": sorted({s["category"] for s in items}),
+        },
+        "install": {
+            "format": "zip",
+            "steps": [
+                "Download the .zip - do not unzip it.",
+                "In Claude, open Settings, then Customize, then Skills.",
+                "Press + and upload the .zip.",
+                "Start a new conversation and describe your problem. "
+                "Claude picks the skill up on its own.",
+            ],
+            "note": "An installed skill never updates itself. Re-upload the zip "
+                    "to move to a newer version.",
+        },
+        "skills": items,
+        "datasets": datasets(),
+    }
+
+
+if __name__ == "__main__":
+    doc = build()
+    text = json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
+    if "--print" in sys.argv:
+        print(text)
+    else:
+        os.makedirs(DIST, exist_ok=True)
+        with open(os.path.join(DIST, "catalogue.json"), "w", encoding="utf-8") as fh:
+            fh.write(text)
+        print(f"catalogue.json  {doc['library']['skills']} skills, "
+              f"{doc['library']['available']} available, "
+              f"{len(doc['datasets'])} datasets")
