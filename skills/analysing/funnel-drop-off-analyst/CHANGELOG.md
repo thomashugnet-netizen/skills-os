@@ -7,6 +7,22 @@ whether the version you are running is the current one.
 The version you have is in `SKILL.md`'s frontmatter, and the engine prints it at the top
 of every report.
 
+## 1.1.0
+
+- Four sample datasets instead of one, matched to the segments this library is written
+  for: retail, quick service restaurants, logistics and delivery, and gig delivery. Pick
+  the one that looks like your operation.
+- The gig sample runs a different funnel: a marketplace sign-up is never interviewed and
+  never given an offer, so it has five stages (signed up, documents in, background clear,
+  onboarding, first job) rather than seven. The engine detects which shape a file uses
+  from its stage names; there is nothing to configure, and a file mixing the two
+  vocabularies is refused rather than guessed at.
+- The 29 regression assertions now run against all four samples, the gig one included. An
+  engine that had memorised one file's answers fails the other three; two assertions that
+  had quietly done exactly that were rewritten when the other samples exposed them.
+- Stage positions in the engine are derived from the bound funnel rather than written as
+  literal indices, so "reached the end" means started or activated depending on the file.
+
 ## 1.0.0
 
 First release.

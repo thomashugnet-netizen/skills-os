@@ -1,7 +1,7 @@
 ---
 name: funnel-drop-off-analyst
 description: Finds where candidates leave your hiring funnel, separates correlation from cause, and ranks the fixes by how many hires they would recover.
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Funnel Drop-off Analyst
@@ -49,7 +49,16 @@ A row-per-application export covering at least one full month, at least 500 usab
 
 If you don't have some of these, say so. The engine reports every missing column and the specific finding it cost you, under **What I could not determine**. It will not fill a gap with an assumption.
 
-**No export handy?** Use `frontline_pipeline_sample.csv` — 18,184 applications, 42 locations, entirely synthetic.
+**No export handy?** Pick whichever sample looks like your operation — all four are entirely synthetic, all four carry the same eight planted patterns:
+
+| Sample | Shape |
+|---|---|
+| `frontline_pipeline_sample.csv` | Retail, 42 stores, 18k applications, seasonal peak |
+| `qsr_pipeline_sample.csv` | Quick service, 42 restaurants, 25k, the shortest funnel |
+| `logistics_pipeline_sample.csv` | Delivery and warehouse, 42 stations, 21k, DOT and drug screens |
+| `gig_pipeline_sample.csv` | Courier marketplace, 42 markets, 46k sign-ups, no interview and no offer |
+
+The gig sample runs on a five-stage activation funnel — signed up, documents in, background clear, onboarding, first job. I detect which shape a file uses from its stage names; there is nothing to configure.
 
 ## Before you paste anything
 
@@ -143,13 +152,13 @@ I would rather give three high-confidence findings than eight that look thorough
 
 ## Verifying this yourself
 
-Run `python3 scripts/analyze.py --test`. The sample dataset has eight causal patterns deliberately built in, two of them traps: a confound (five managers on sites skewed to one role) and a red herring (weekend applications that look worse until you control for source). The suite asserts the manager effect survives within role and the weekend effect does not survive at all. An engine chasing correlation fails both.
+Run `python3 scripts/analyze.py --test`. Each sample has eight causal patterns deliberately built in, two of them traps: a confound (five managers on sites skewed to one role) and a red herring (weekend applications that look worse until you control for source). The suite asserts the manager effect survives within role and the weekend effect does not survive at all. An engine chasing correlation fails both. The same assertions run against all four samples, including the gig one on its different stage list — so what passes is the method, not a memory of one file.
 
 ## Works with
 
 - **A CSV export from any ATS** — Greenhouse, Workday, iCIMS, SmartRecruiters and the rest. This is the default lane and needs nothing connected.
 - **The Fountain Cue MCP** — when connected, it supplies the same fields directly, so re-running after a change costs you nothing. Fountain publishes this skill and sells Cue; the engine, the thresholds and the findings are identical either way, and the skill works completely without it.
-- **`data/frontline_pipeline_sample.csv`** — the synthetic dataset, for trying the skill or checking an analysis method.
+- **The four synthetic samples in `data/`** — retail, quick service, logistics and gig, for trying the skill or checking an analysis method.
 
 ## Where this stops
 

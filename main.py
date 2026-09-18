@@ -276,8 +276,13 @@ your problem. {engine_count} of them ship a tested analysis engine rather than a
 model to do statistics in prose.</p>
 <div class="cta">
   <a class="btn btn--p" href="/pack">Get the whole pack</a>
-  <a class="btn btn--s" href="/data/frontline_pipeline_sample.csv">Sample dataset (CSV, 2.4&nbsp;MB)</a>
 </div>
+<h2>Try it on a sample first</h2>
+<p class="lead">Nobody should hand real candidate data to a tool they have not watched work.
+Pick whichever operation looks like yours. Every sample is synthetic, carries no personal data
+of any kind, and has real causal structure buried in it for a skill to find &mdash; including
+two traps for anything that mistakes correlation for cause.</p>
+{sample_rows()}
 {body}
 <footer>Published by Fountain. Every skill is MIT licensed &mdash; use it, change it,
 ship it inside your own tooling.</footer>
@@ -310,6 +315,36 @@ def download(slug):
         abort(404)
     return send_file(path, as_attachment=True, download_name=f"{slug}.zip",
                      mimetype="application/zip")
+
+
+SAMPLE_SETS = [
+    ("frontline_pipeline_sample.csv", "Retail &amp; multi-site",
+     "42 stores, a seasonal peak, heavy job-board reliance."),
+    ("qsr_pipeline_sample.csv", "Quick service restaurants",
+     "42 restaurants, the shortest funnel &mdash; apply to first shift in days."),
+    ("logistics_pipeline_sample.csv", "Logistics &amp; delivery",
+     "42 stations, drug screens and DOT medicals before day one."),
+    ("gig_pipeline_sample.csv", "Delivery &amp; courier (gig)",
+     "42 markets, 46k sign-ups, no interview and no offer &mdash; activation, not hiring."),
+]
+
+
+def sample_rows():
+    """The four datasets, whichever are actually on disk. Same eight planted
+    patterns in each, so whichever a reader picks, the skill has something real
+    to find."""
+    out = []
+    for name, label, blurb in SAMPLE_SETS:
+        path = os.path.join(DATA, name)
+        if not os.path.exists(path):
+            continue
+        mb = os.path.getsize(path) / 1_000_000
+        out.append(
+            f'<div class="row"><div><b>{label}</b></div>'
+            f'<p>{blurb}</p>'
+            f'<div><a class="get" href="/data/{name}">CSV {mb:.1f}&nbsp;MB &darr;</a></div></div>'
+        )
+    return "\n".join(out)
 
 
 @app.get("/data/<name>")

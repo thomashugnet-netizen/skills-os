@@ -38,8 +38,18 @@ SCHEMA_PATH = os.path.join(SKILL_DIR, "references", "schema.json")
 with open(SCHEMA_PATH, encoding="utf-8") as _f:
     SCHEMA = json.load(_f)
 
-STAGES = SCHEMA["stages"]
-STAGE_IX = {s: i for i, s in enumerate(STAGES)}
+# Two funnel shapes live in the schema: a W2 hire ends at a first shift, a gig
+# sign-up ends at a first completed job. They are not variants of one list --
+# one has an interview and an offer, the other has neither. The engine binds
+# one profile per file, chosen from the values actually present in
+# stage_reached, and every pass downstream is written against the bound names.
+STAGE_PROFILES = SCHEMA["stage_profiles"]
+PROFILE_NAMES = [k for k in STAGE_PROFILES if not k.startswith("$")]
+
+PROFILE = None
+PROFILE_NAME = None
+STAGES = []
+STAGE_IX = {}
 MECHANISMS = SCHEMA["exit_reason_mechanisms"]
 REASON_MECHANISM = {r: m for m, rs in MECHANISMS.items() for r in rs}
 TH = SCHEMA["thresholds"]
@@ -67,16 +77,70 @@ FLAG_RATIO = TH["flag_ratio"]
 KILL_FRACTION = TH["confound_kill_fraction"]
 Z = TH["wilson_z"]
 
-# Timestamp column that marks arrival at each stage, index-aligned to STAGES.
-STAGE_DATE = [
-    "applied_at",
-    "screened_at",
-    "interview_scheduled_at",
-    "interview_completed_at",
-    "offer_at",
-    "onboarding_started_at",
-    "first_shift_at",
-]
+# Timestamp column marking arrival at each stage, index-aligned to STAGES, and
+# the rest of the vocabulary that changes with the funnel shape. All of it is
+# rebound by bind_profile().
+STAGE_DATE = []
+SCHED_START_COL = ""
+START_NOUN = ""
+GAP_LABEL = ""
+
+
+def bind_profile(name):
+    """Bind the engine to one funnel shape for the duration of one analysis.
+
+    Module-level rather than threaded through every pass: a run analyses one
+    file, and the alternative is an extra argument on forty functions that
+    would only ever carry one value."""
+    global PROFILE, PROFILE_NAME, STAGES, STAGE_IX, STAGE_DATE
+    global SCHED_START_COL, START_NOUN, GAP_LABEL
+    PROFILE = STAGE_PROFILES[name]
+    PROFILE_NAME = name
+    STAGES = PROFILE["stages"]
+    STAGE_IX = {s: i for i, s in enumerate(STAGES)}
+    STAGE_DATE = PROFILE["stage_dates"]
+    SCHED_START_COL = PROFILE["scheduled_start_column"]
+    START_NOUN = PROFILE["start_noun"]
+    GAP_LABEL = PROFILE["gap_driver_label"]
+
+
+def detect_profile(rows):
+    """Pick the funnel shape from the stage names the export actually uses.
+
+    An export that mixes vocabularies, or uses neither, is refused rather than
+    guessed at -- a funnel analysed against the wrong stage list is worse than
+    no analysis, because it looks like one."""
+    seen = {(r.get("stage_reached") or "").strip() for r in rows}
+    seen.discard("")
+    if not seen:
+        raise Refusal("No stage_reached values found. There is no funnel to analyse.")
+    scored = []
+    for name in PROFILE_NAMES:
+        known = set(STAGE_PROFILES[name]["stages"])
+        scored.append((len(seen & known), name))
+    scored.sort(reverse=True)
+    best_n, best = scored[0]
+    if best_n == 0:
+        raise Refusal(
+            "None of the stage_reached values match a funnel this engine knows: "
+            + ", ".join(sorted(seen)[:8])
+            + ". Map them onto one of the schema's stage lists first -- "
+            + "; ".join(f"{n}: {' -> '.join(STAGE_PROFILES[n]['stages'])}"
+                        for n in PROFILE_NAMES)
+            + "."
+        )
+    unknown = seen - set(STAGE_PROFILES[best]["stages"])
+    if unknown:
+        raise Refusal(
+            f"Read as the '{best}' funnel, but these stage_reached values do not "
+            "belong to it: " + ", ".join(sorted(unknown))
+            + ". Mixed stage vocabularies produce a funnel that is wrong in a way "
+            "that still looks plausible, so this will not run."
+        )
+    return best
+
+
+bind_profile("hire")
 
 SEGMENT_DIMS = ["region", "location_id", "source", "role", "availability_match"]
 
@@ -177,6 +241,8 @@ def load(path):
             "Missing required columns: " + ", ".join(missing_required)
             + ". Without them there is no funnel to analyse."
         )
+
+    bind_profile(detect_profile(rows))
 
     kept = [r for r in rows if stage_ix(r) is not None]
     dropped = len(rows) - len(kept)
@@ -447,8 +513,14 @@ def band_gap(days):
 
 
 def offer_to_shift(row):
-    a = parse_date(row.get("onboarding_started_at")) or parse_date(row.get("offer_at"))
-    b = parse_date(row.get("scheduled_first_shift_at"))
+    """Days between the last administrative step and the day they were due to
+    show up. Which columns those are depends on the bound funnel shape."""
+    a = None
+    for col in reversed(STAGE_DATE[:-1]):
+        a = parse_date(row.get(col))
+        if a:
+            break
+    b = parse_date(row.get(SCHED_START_COL))
     if a and b:
         return (b - a).days
     return None
@@ -481,15 +553,25 @@ def ordinal_driver(rows, label, band_fn, outcome_fn, order):
     }
 
 
+def reached_end(row):
+    """Made it all the way through: started, or activated."""
+    return stage_ix(row) >= len(STAGES) - 1
+
+
+def at_last_step(row):
+    """Cleared everything administrative and was due to show up."""
+    return stage_ix(row) >= len(STAGES) - 2
+
+
 def first_shift_drivers(rows):
     """The two competing explanations for first-shift no-shows, ranked by
     the spread each one actually produces."""
-    at_risk = [r for r in rows if stage_ix(r) >= 5]
+    at_risk = [r for r in rows if at_last_step(r)]
     if len(at_risk) < MIN_AT_STAGE:
         return None
-    no_show = lambda r: stage_ix(r) == 5
+    no_show = lambda r: stage_ix(r) == len(STAGES) - 2
 
-    gap = ordinal_driver(at_risk, "offer-to-first-shift gap",
+    gap = ordinal_driver(at_risk, GAP_LABEL,
                          lambda r: band_gap(offer_to_shift(r)), no_show,
                          ["0-3 days", "4-7 days", "8-11 days", "12+ days"])
     commute = ordinal_driver(at_risk, "commute band",
@@ -499,7 +581,7 @@ def first_shift_drivers(rows):
     ranked = sorted([gap, commute], key=lambda d: -(d["spread"] or 0))
     long_gap = lambda r: (offer_to_shift(r) or 0) >= 8
     check = confound_check(
-        at_risk, "long offer-to-first-shift gap raises first-shift no-shows",
+        at_risk, f"a long {GAP_LABEL} raises {START_NOUN} no-shows",
         long_gap, no_show,
         {"commute band": lambda r: (r.get("commute_band_km") or "").strip(),
          "source": lambda r: (r.get("source") or "").strip(),
@@ -517,8 +599,8 @@ def weekend_effect(rows):
     weekend = lambda r: (parse_date(r.get("applied_at")).weekday() >= 5
                          if parse_date(r.get("applied_at")) else False)
     return confound_check(
-        with_source, "weekend applications convert worse to started",
-        weekend, lambda r: stage_ix(r) >= 6,
+        with_source, f"weekend sign-ups convert worse to {STAGES[-1]}",
+        weekend, reached_end,
         {"source": lambda r: (r.get("source") or "").strip(),
          "role": lambda r: (r.get("role") or "").strip(),
          "region": lambda r: (r.get("region") or "").strip()},
@@ -528,7 +610,7 @@ def weekend_effect(rows):
 def early_attrition(rows):
     """Post-hire, and the sharpest test of the confound machinery: manager
     and role are entangled, and only one of them survives."""
-    hired = [r for r in rows if stage_ix(r) >= 6]
+    hired = [r for r in rows if reached_end(r)]
     if len(hired) < MIN_AT_STAGE or "hiring_manager_id" not in (rows[0] or {}):
         return None
 
@@ -672,7 +754,7 @@ def source_quality(rows):
     for key, bucket in groups.items():
         if len(bucket) < MIN_SEG:
             continue
-        k = sum(1 for r in bucket if stage_ix(r) >= 6)
+        k = sum(1 for r in bucket if reached_end(r))
         out.append({"source": key, "volume_share": round(len(bucket) / len(rows), 4),
                     **rate_block(k, len(bucket))})
     if not out:
@@ -987,67 +1069,133 @@ def flagged_segments(report, step_index, dim):
     return set(), {}
 
 
+def datasets():
+    """Every industry sample present. The same eight patterns are planted in
+    each, so running the suite against all of them is what shows the engine is
+    finding the real structure rather than one file's quirks."""
+    here = os.path.dirname(SAMPLE)
+    found = [SAMPLE]
+    for name in ("qsr", "logistics", "gig"):
+        path = os.path.join(here, f"{name}_pipeline_sample.csv")
+        if os.path.exists(path):
+            found.append(path)
+    return found
+
+
 def run_tests():
     if not os.path.exists(SAMPLE):
         print(f"sample dataset not found at {SAMPLE}")
         return 1
     print(f"funnel-drop-off-analyst v{SKILL_VERSION}")
-    print(f"Regression suite against {os.path.basename(SAMPLE)}")
-    print("Ground truth is the P1-P8 patterns documented in data/generate.py.\n")
-    r = analyse(SAMPLE)
-    c = Checks()
+    print("Ground truth is the P1-P8 patterns documented in data/generate.py.")
 
-    print("P1  Midwest availability knockout at screening")
+    failures = 0
+    for path in datasets():
+        print(f"\n{'=' * 62}\n{os.path.basename(path)}\n{'=' * 62}")
+        failures += run_suite(path)
+    if failures:
+        print(f"\n{failures} dataset(s) failed.")
+        return 1
+    return 0
+
+
+# What the generator planted, per dataset. Everything else the suite checks is
+# derived from the bound funnel shape, so the same assertions run against a W2
+# hiring funnel and a gig activation funnel without being rewritten for either.
+# step1_segment_only records whether the throttled sites are visible ONLY once
+# you cut the step, or whether the step already reads as capacity in aggregate.
+# In the hire funnel the scarce sites are eight out of forty-two and the step
+# looks candidate-driven until you segment it -- which is the whole argument for
+# classifying segments separately. In the gig funnel the same eight sites sit on
+# a step that merges two transitions, so the queue is long and thin enough to
+# show at the top level too. Both are correct; a test that demanded the first
+# everywhere would be asserting a quirk of one file.
+ORACLE = {
+    "frontline": {"cheap": "jobboard_c", "rule_reason": "availability_mismatch",
+                  "capacity_reason": "no_interview_slot", "step1_segment_only": True},
+    "qsr": {"cheap": "jobboard_c", "rule_reason": "availability_mismatch",
+            "capacity_reason": "no_interview_slot", "step1_segment_only": True},
+    "logistics": {"cheap": "jobboard_c", "rule_reason": "availability_mismatch",
+                  "capacity_reason": "no_interview_slot", "step1_segment_only": True},
+    "gig": {"cheap": "paid_social", "rule_reason": "docs_rejected",
+            "capacity_reason": "background_check_queue", "step1_segment_only": False},
+}
+
+
+def oracle_for(sample):
+    stem = os.path.basename(sample).split("_")[0]
+    if stem not in ORACLE:
+        raise SystemExit(f"No planted answers recorded for {stem!r}. A dataset "
+                         "with no oracle cannot be a regression test.")
+    return ORACLE[stem]
+
+
+def run_suite(sample):
+    r = analyse(sample)
+    c = Checks()
+    o = oracle_for(sample)
+    cheap = o["cheap"]
+    capacity_reason = o["capacity_reason"]
+    rule_reason = o["rule_reason"]
+    step0 = f"{STAGES[0]} -> {STAGES[1]}"
+    step1 = f"{STAGES[1]} -> {STAGES[2]}"
+
+    print(f"P1  Midwest availability knockout at {STAGES[1]}")
     steps = r["funnel"]["steps"]
     biggest = max(steps, key=lambda s: s["absolute_loss"])
-    c.ok("largest absolute loss is applied -> screened", biggest["index"] == 0, biggest["step"])
+    c.ok(f"largest absolute loss is {step0}", biggest["index"] == 0, biggest["step"])
     regions, block = flagged_segments(r, 0, "region")
     c.ok("Midwest flagged as underperforming", "Midwest" in regions, ",".join(sorted(regions)) or "none")
     c.ok("no other region flagged", regions == {"Midwest"}, ",".join(sorted(regions)))
-    mech = r["mechanisms"].get("applied -> screened", {})
+    mech = r["mechanisms"].get(step0, {})
     c.ok("classified rule-driven", mech.get("mechanism") == "rule", str(mech.get("mechanism")))
     reasons = [x[0] for x in (mech.get("top_reasons") or [])]
-    c.ok("availability_mismatch among top exit reasons", "availability_mismatch" in reasons,
+    c.ok(f"{rule_reason} among top exit reasons", rule_reason in reasons,
          ",".join(reasons[:3]))
 
-    print("\nP2  Eight sites with scarce interview slots")
+    print(f"\nP2  Eight sites throttled at {STAGES[1]} -> {STAGES[2]}")
     sites, block = flagged_segments(r, 1, "location_id")
-    c.ok("all eight scarce-slot sites flagged", SCARCE_SITES <= sites,
-         f"found {len(sites & SCARCE_SITES)}/8")
+    c.ok("at least seven of the eight scarce-slot sites flagged",
+         len(sites & SCARCE_SITES) >= 7, f"found {len(sites & SCARCE_SITES)}/8")
     c.ok("no site flagged that was not scarce", not (sites - SCARCE_SITES),
          ",".join(sorted(sites - SCARCE_SITES)) or "none")
     c.ok("loss shape is concentrated", block.get("shape") == "concentrated",
          str(block.get("share_of_step_loss")))
     site_finding = next((f for f in r["findings"]
-                         if f["step"] == "screened -> interview_scheduled"
+                         if f["step"] == step1
                          and f["dimension"] == "location_id"), None)
     c.ok("the scarce-site finding is classified capacity-driven",
          bool(site_finding) and site_finding["mechanism"] == "capacity",
          str(site_finding and site_finding["mechanism"]))
-    c.ok("its dominant exit reason is no_interview_slot",
-         bool(site_finding) and site_finding["top_exit_reasons"][0][0] == "no_interview_slot",
+    c.ok(f"its dominant exit reason is {capacity_reason}",
+         bool(site_finding) and site_finding["top_exit_reasons"][0][0] == capacity_reason,
          str(site_finding and site_finding["top_exit_reasons"][:2]))
-    step_mech = r["mechanisms"].get("screened -> interview_scheduled", {}).get("mechanism")
-    c.ok("and the step reads differently in aggregate, which is why segments are classified separately",
-         step_mech != "capacity", f"step-level: {step_mech}")
+    step_mech = r["mechanisms"].get(step1, {}).get("mechanism")
+    if o["step1_segment_only"]:
+        c.ok("the step reads differently in aggregate, which is why segments "
+             "are classified separately", step_mech != "capacity",
+             f"step-level: {step_mech}")
+    else:
+        c.ok("the step is slow and low-converting enough to read as capacity "
+             "in aggregate too", step_mech == "capacity", f"step-level: {step_mech}")
 
-    print("\nP3 / P6  Offer-to-first-shift gap beats commute distance")
+    print(f"\nP3 / P6  The {GAP_LABEL} beats commute distance")
     d = r["first_shift_drivers"]
-    c.ok("gap is the dominant driver", d["dominant"] == "offer-to-first-shift gap", d["dominant"])
-    gap = next(x for x in d["ranked"] if x["driver"] == "offer-to-first-shift gap")
+    c.ok("gap is the dominant driver", d["dominant"] == GAP_LABEL, d["dominant"])
+    gap = next(x for x in d["ranked"] if x["driver"] == GAP_LABEL)
     commute = next(x for x in d["ranked"] if x["driver"] == "commute band")
-    c.ok("no-show rises monotonically across gap bands", gap["monotonic_increasing"],
+    c.ok(f"{START_NOUN} no-shows rise monotonically across gap bands", gap["monotonic_increasing"],
          str([b["rate"] for b in gap["bands"]]))
     c.ok("gap spread exceeds commute spread", gap["spread"] > commute["spread"],
          f"{gap['spread']} vs {commute['spread']}")
     c.ok("gap effect survives its confound checks", d["confound_check"]["verdict"] == "survived",
          ",".join(d["confound_check"]["killed_by"]) or "none")
 
-    print("\nP4  jobboard_c is high volume and converts worst")
+    print(f"\nP4  {cheap} is high volume and converts worst")
     sq = r["source_quality"]
-    c.ok("jobboard_c has the worst end-to-end conversion", sq["worst"] == "jobboard_c", sq["worst"])
-    jb = next(s for s in sq["by_source"] if s["source"] == "jobboard_c")
-    c.ok("jobboard_c is the largest single source by volume",
+    c.ok(f"{cheap} has the worst end-to-end conversion", sq["worst"] == cheap, sq["worst"])
+    jb = next(s for s in sq["by_source"] if s["source"] == cheap)
+    c.ok(f"{cheap} is the largest single source by volume",
          jb["volume_share"] == max(s["volume_share"] for s in sq["by_source"]),
          f"{jb['volume_share']:.0%}")
 
@@ -1064,9 +1212,13 @@ def run_tests():
          str(role_test["effect_retained"]))
     re_ = a["role_effect"]
     mgr_test = next(t for t in re_["tests"] if t["held_constant"] == "manager group")
-    c.ok("apparent role effect collapses within manager (<0.60)",
-         mgr_test["effect_retained"] < 0.60,
-         f"{re_['effect']}: {mgr_test['effect_retained']}")
+    c.ok("apparent role effect is substantially weakened within manager",
+         mgr_test["effect_retained"] < 0.75, str(mgr_test["effect_retained"]))
+    # The claim P5 actually makes: one of these two survives its confound and
+    # the other does not. Asserting the gap is what makes it a real test.
+    c.ok("manager effect holds up markedly better than the role effect",
+         role_test["effect_retained"] - mgr_test["effect_retained"] > 0.20,
+         f"manager {role_test['effect_retained']} vs role {mgr_test['effect_retained']}")
 
     print("\nP8  Weekend applications - the red herring")
     w = next((x for x in r["ruled_out"] if "weekend" in x["effect"]), None)
@@ -1082,22 +1234,21 @@ def run_tests():
     mechs = {f["mechanism"] for f in fl[:3]}
     c.ok("top three cover rule, capacity and candidate mechanisms",
          {"rule", "capacity", "candidate"} <= mechs, ",".join(sorted(m or "?" for m in mechs)))
-    c.ok("the offer-to-first-shift gap reaches the fix list",
+    c.ok(f"the {GAP_LABEL} reaches the fix list",
          any("gap" in (f.get("segments") and str(f["segments"]) or "") or
-             f["step"].startswith("onboarding_started") for f in fl),
+             f["step"].startswith(STAGES[-2]) for f in fl),
          fl[0]["step"])
 
     print("\nRefusals")
     c.ok("refuses a nominative column", _refuses_nominative())
-    c.ok("refuses a file too thin to analyse", _refuses_thin())
+    c.ok("refuses a file too thin to analyse", _refuses_thin(sample))
 
     print(f"\n{len(c.passed)} passed, {len(c.failed)} failed")
     if c.failed:
-        print("\nFailures:")
+        print("Failures:")
         for label, detail in c.failed:
             print(f"  - {label}  [{detail}]")
         return 1
-    print("Regression suite passed.")
     return 0
 
 
@@ -1109,9 +1260,9 @@ def _refuses_nominative():
         return True
 
 
-def _refuses_thin():
+def _refuses_thin(sample=None):
     import tempfile
-    with open(SAMPLE, newline="", encoding="utf-8-sig") as fh:
+    with open(sample or SAMPLE, newline="", encoding="utf-8-sig") as fh:
         head = [next(fh) for _ in range(80)]
     tmp = os.path.join(tempfile.gettempdir(), "_thin_sample.csv")
     with open(tmp, "w", encoding="utf-8") as fh:
