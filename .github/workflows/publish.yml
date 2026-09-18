@@ -1,30 +1,26 @@
-# Publishes the library to the site's repository.
+# Publishes the library. One repository, no keys.
 #
-# The site used to be fed by hand: someone rebuilt the packages, zipped them up,
-# dragged the folder into Replit, and hoped they had not forgotten a file. That
-# lasted exactly as long as nothing changed. This removes the geste entirely --
-# push to this repo and the site's copy follows, or nothing moves at all.
+# An earlier version copied the built files into a second repository, which
+# needed a personal access token because GitHub does not let one repo write to
+# another. That existed only because this repo was private. It is not, so the
+# whole apparatus goes: the site reads this repository directly.
 #
-# Nothing is published unless the gates pass. tools/audit.py blocks hidden
-# content and malformed skills; tools/package.py extracts each archive to a
-# scratch directory and runs that skill's own test suite from inside it. A
-# failure here leaves the site serving the previous version, which is the
-# correct outcome: stale beats broken.
+# What this does on every push to main:
+#   - runs the gates. tools/audit.py blocks hidden content and malformed skills;
+#     tools/package.py extracts each archive to a scratch directory and runs that
+#     skill's own test suite from inside it.
+#   - regenerates catalogue.json and README.md and commits them back here
+#   - attaches the skill archives and the sample datasets to the "latest" release
 #
-# One-time setup
-# --------------
-# This workflow needs permission to write to the site's repository, which
-# GitHub does not grant across repos by default.
+# Nothing is published unless the gates pass, so a failure leaves the site
+# serving the previous release. Stale beats broken.
 #
-#   1. Create a fine-grained personal access token
-#      (github.com/settings/personal-access-tokens/new):
-#        - Repository access: only SITE_REPO below
-#        - Permissions: Contents -> Read and write
-#   2. In THIS repository: Settings -> Secrets and variables -> Actions
-#        - New repository secret, named SITE_REPO_TOKEN, paste the token
+# Where the site reads from -- both are public, permanent, and need no token:
+#   catalogue   https://raw.githubusercontent.com/thomashugnet-netizen/skills-os/main/catalogue.json
+#   a download  https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/<file>
 #
-# The token works whether either repository is public or private, so opening
-# this one up later changes nothing here.
+# GITHUB_TOKEN below is issued by GitHub to this workflow automatically. There is
+# nothing to create and nothing to store.
 
 name: publish
 
@@ -35,24 +31,21 @@ on:
       - "skills/**"
       - "data/**"
       - "tools/**"
+      - "roadmap.json"
       - ".github/workflows/publish.yml"
   workflow_dispatch:
 
-env:
-  SITE_REPO: thomashugnet-netizen/skills-os-site
-  # Where the assets land inside the site's repository. One line to change if
-  # the site serves its static files from somewhere else.
-  DEST_DIR: site-assets
+permissions:
+  contents: write
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the library
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          # tools/catalogue.py reads commit dates to work out when each skill
-          # last changed, so a shallow clone would report the whole library as
+          # tools/catalogue.py reads commit dates to say when each skill last
+          # changed, so a shallow clone would report the whole library as
           # updated today.
           fetch-depth: 0
 
@@ -62,40 +55,37 @@ jobs:
       - name: Audit
         run: python3 tools/audit.py
 
-      - name: Package every skill, running each one's tests from its archive
+      - name: Package every skill, running its tests from inside its archive
         run: python3 tools/package.py
 
-      - name: Build the catalogue
-        run: python3 tools/catalogue.py
-
-      - name: Assemble what the site may serve
-        run: python3 tools/site_assets.py
-
-      - name: Check out the site
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.SITE_REPO }}
-          token: ${{ secrets.SITE_REPO_TOKEN }}
-          path: site-repo
-
-      - name: Copy the assets across
+      - name: Regenerate the catalogue and the README
         run: |
-          rm -rf "site-repo/${DEST_DIR}"
-          mkdir -p "site-repo/${DEST_DIR}"
-          cp -R dist/site-assets/. "site-repo/${DEST_DIR}/"
+          python3 tools/catalogue.py
+          python3 tools/gen_readme.py
 
-      - name: Commit, but only if something actually changed
-        working-directory: site-repo
+      - name: Commit them back, if they changed
         run: |
           git config user.name  "skills-os publisher"
           git config user.email "noreply@github.com"
-          git add -A "${DEST_DIR}"
+          git add catalogue.json README.md
           if git diff --cached --quiet; then
-            echo "Nothing changed. Not pushing an empty commit."
-            exit 0
+            echo "Catalogue and README already current."
+          else
+            git commit -m "Regenerate catalogue and README [skip ci]"
+            git push
           fi
-          SUMMARY=$(python3 -c "import json;c=json.load(open('../dist/catalogue.json'))['library'];d=json.load(open('../dist/catalogue.json'))['datasets'];print(f\"{c['available']} available of {c['skills']} skills, {len(d)} sample datasets\")")
-          git commit -m "Publish library: ${SUMMARY}" \
-                     -m "From ${GITHUB_REPOSITORY}@${GITHUB_SHA}" \
-                     -m "Generated by .github/workflows/publish.yml. Do not edit ${DEST_DIR}/ by hand -- the next publish overwrites it."
-          git push
+
+      - name: Assemble what may be published
+        run: python3 tools/site_assets.py
+
+      - name: Publish the downloads
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # One moving tag. Every download URL stays valid forever, because the
+          # site links to /releases/latest/download/<file> and never to a version.
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest \
+            --title "Current library" \
+            --notes "Built from ${GITHUB_SHA}. Downloads here are what catalogue.json describes." \
+            $(find dist/site-assets -type f ! -name catalogue.json)

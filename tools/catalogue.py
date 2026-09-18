@@ -189,9 +189,15 @@ if __name__ == "__main__":
     if "--print" in sys.argv:
         print(text)
     else:
-        os.makedirs(DIST, exist_ok=True)
-        with open(os.path.join(DIST, "catalogue.json"), "w", encoding="utf-8") as fh:
-            fh.write(text)
+        # At the repo root, not in dist/. It is not a build artifact -- it is the
+        # published contract, the one file the site reads. Keeping it in the tree
+        # means anyone can see what the site is being told, and the site can fetch
+        # it straight from GitHub with no build step and no credentials.
+        for target in (os.path.join(ROOT, "catalogue.json"),
+                       os.path.join(DIST, "catalogue.json")):
+            os.makedirs(os.path.dirname(target), exist_ok=True)
+            with open(target, "w", encoding="utf-8") as fh:
+                fh.write(text)
         print(f"catalogue.json  {doc['library']['available']} available, "
               f"{doc['library']['coming_soon']} coming soon, "
               f"{len(doc['datasets'])} datasets")

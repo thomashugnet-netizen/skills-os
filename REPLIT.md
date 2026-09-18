@@ -122,29 +122,36 @@ whole change.
 
 ## How the site gets the library
 
-`.github/workflows/publish.yml` does it. Push to `main` here and, if the gates pass,
-the built assets are copied into `thomashugnet-netizen/skills-os-site` under
-`site-assets/`, which Replit then serves.
+One repository. No keys, no copying, no second place for anything to go stale.
 
-Nothing is published unless `tools/audit.py` passes and `tools/package.py` has run
-every skill's own test suite from inside its archive. A failing test leaves the site
-serving the previous version, which is the right outcome: stale beats broken.
+`.github/workflows/publish.yml` runs on every push to `main`. If the gates pass it
+regenerates `catalogue.json` and `README.md`, commits them back here, and attaches
+the skill archives and sample datasets to the `latest` release.
 
-What travels: `catalogue.json`, the zip of every skill the catalogue marks available,
-and the sample datasets. Nothing else — not the authoring contracts in `tools/`, not
-the generator, not this file.
+The site reads two public URLs. Both are permanent and need no credentials:
 
-**`site-assets/` in the site repo is generated. Never edit it by hand**, there or in
-Replit: the next publish overwrites it. Change the source here and push.
+```
+catalogue   https://raw.githubusercontent.com/thomashugnet-netizen/skills-os/main/catalogue.json
+a download   https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/<file>
+```
 
-To do the same thing locally — to inspect what would be published, or to hand someone
-a copy before the workflow exists:
+`latest` is a moving tag, so a link the site publishes today still resolves after
+every future release. Nothing needs updating on the site when the library changes.
+
+If a gate fails, nothing is published and the previous release stays up. Stale
+beats broken.
+
+`catalogue.json` lives at the repo root rather than in `dist/` because it is not a
+build artifact, it is the published contract: the one file the site reads, visible
+to anyone who wants to check what the site is being told. **It is generated. Never
+edit it by hand** — the next publish overwrites it.
+
+To see what would be published, without pushing:
 
 ```
 python3 tools/audit.py && python3 tools/package.py && python3 tools/catalogue.py
 python3 tools/site_assets.py --zip     # -> dist/site-assets.zip
 ```
-
 
 ## Where the unreleased skills live
 

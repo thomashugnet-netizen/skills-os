@@ -25,7 +25,8 @@ One line to remember, and it means a Merge button only gets clicked when it matt
 6. **Merge only on green.** A red cross means a test failed. Fix it; do not merge
    past it. Every other guarantee in this repository rests on this one.
 7. **Merging publishes.** `.github/workflows/publish.yml` fires on `main` only, so
-   a branch never reaches the site.
+   a branch never reaches the site. It needs no secret: GitHub issues the workflow
+   its own token, and the site reads this repository's public URLs directly.
 
 ## Changing a skill that people already have
 
@@ -55,9 +56,9 @@ Without those, the only honest thing to tell a user is "re-download and hope".
 | File | Made by | Where |
 |---|---|---|
 | `README.md` | `tools/gen_readme.py` | here |
-| `dist/catalogue.json` | `tools/catalogue.py` | built in CI, not committed |
+| `catalogue.json` | `tools/catalogue.py` | repo root — the published contract |
 | `dist/site-assets/` | `tools/site_assets.py` | built in CI, not committed |
-| `site-assets/` | `publish.yml` | in the site repo |
+| the `latest` release | `publish.yml` | GitHub releases |
 
 `roadmap.json` is the one exception: it is generated, but from the *private*
 repository, so CI cannot rebuild it. Regenerate it by hand when that repo changes.
@@ -68,7 +69,8 @@ afternoon.
 
 ## When the catalogue gains a field
 
-The site reads `catalogue.json` and ignores what it does not recognise, in silence.
+The site reads `catalogue.json` from this repository's raw URL and ignores what it
+does not recognise, in silence.
 A new field nobody mentions to the site never appears, and the hour spent looking
 for why is entirely avoidable. Adding a field means telling whoever maintains the
 site, in the same breath.
