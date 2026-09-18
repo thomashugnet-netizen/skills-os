@@ -26,6 +26,13 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Every download the site offers, as a URL it can use verbatim. Release assets
+# are flat -- there are no folders in a GitHub release -- so a site building its
+# own links from a repo path would 404 on every one of them. Publishing the
+# finished URL removes the chance to get it wrong.
+RELEASE = ("https://github.com/thomashugnet-netizen/skills-os"
+           "/releases/latest/download")
 DIST = os.path.join(ROOT, "dist")
 DATA = os.path.join(ROOT, "data")
 
@@ -106,7 +113,10 @@ def skills():
             "available": available,
             "tested_code": has_engine,
             "needs_dataset": DATA_BLOCK_MARKER in text,
-            "download": ({"path": f"skills/{slug}.zip", "bytes": size(zip_path)}
+            "download": ({"path": f"skills/{slug}.zip",
+                          "file": f"{slug}.zip",
+                          "url": f"{RELEASE}/{slug}.zip",
+                          "bytes": size(zip_path)}
                          if available else None),
         })
     return sorted(out, key=lambda s: (s["category"], s["slug"]))
@@ -128,8 +138,13 @@ def datasets():
             "funnel": funnel,
             "rows": rows(pipeline),
             "pipeline": {"path": f"data/{os.path.basename(pipeline)}",
+                         "file": os.path.basename(pipeline),
+                         "url": f"{RELEASE}/{os.path.basename(pipeline)}",
                          "bytes": size(pipeline)},
-            "spend": ({"path": f"data/{os.path.basename(spend)}", "bytes": size(spend)}
+            "spend": ({"path": f"data/{os.path.basename(spend)}",
+                       "file": os.path.basename(spend),
+                       "url": f"{RELEASE}/{os.path.basename(spend)}",
+                       "bytes": size(spend)}
                       if os.path.exists(spend) else None),
         })
     return out
@@ -164,6 +179,12 @@ def build():
             "coming_soon": len(soon),
             "categories": sorted({s["category"] for s in items}
                                  | {s["category"] for s in soon}),
+        },
+        "source": {
+            "repo": "https://github.com/thomashugnet-netizen/skills-os",
+            "catalogue": "https://raw.githubusercontent.com/thomashugnet-netizen"
+                         "/skills-os/main/catalogue.json",
+            "downloads": RELEASE,
         },
         "install": {
             "format": "zip",
