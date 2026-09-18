@@ -51,12 +51,14 @@ If you don't have some of these, say so. The engine reports every missing column
 
 **No export handy?** Pick whichever sample looks like your operation — all four are entirely synthetic, all four carry the same eight planted patterns:
 
-| Sample | Shape |
-|---|---|
-| `frontline_pipeline_sample.csv` | Retail, 42 stores, 18k applications, seasonal peak |
-| `qsr_pipeline_sample.csv` | Quick service, 42 restaurants, 25k, the shortest funnel |
-| `logistics_pipeline_sample.csv` | Delivery and warehouse, 42 stations, 21k, DOT and drug screens |
-| `gig_pipeline_sample.csv` | Courier marketplace, 42 markets, 46k sign-ups, no interview and no offer |
+| Sample | Shape | Where |
+|---|---|---|
+| `frontline_pipeline_sample.csv` | Retail, 42 stores, 18k applications, seasonal peak | ships in `data/` |
+| `qsr_pipeline_sample.csv` | Quick service, 42 restaurants, 25k, the shortest funnel | download |
+| `logistics_pipeline_sample.csv` | Delivery and warehouse, 42 stations, 21k, DOT and drug screens | download |
+| `gig_pipeline_sample.csv` | Courier marketplace, 42 markets, 46k sign-ups, no interview and no offer | download |
+
+Retail travels with the skill. The other three are 3-6 MB each and would triple the download for a file most people open once, so they live on the library page you got this skill from.
 
 The gig sample runs on a five-stage activation funnel — signed up, documents in, background clear, onboarding, first job. I detect which shape a file uses from its stage names; there is nothing to configure.
 
