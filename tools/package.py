@@ -72,7 +72,13 @@ def files_for(slug, skill_md, folder):
 def verify_standalone(slug, members):
     """Extract to a scratch directory and run the skill's own test suite there.
     Proves the archive carries everything it needs."""
-    engine = next((a for a, _ in members if a.endswith("scripts/analyze.py")), None)
+    # Any script in scripts/ that answers --test is this skill's suite. Keying
+    # on analyze.py specifically meant a writing skill's checker was packaged
+    # without ever being run from the archive -- which is exactly the failure
+    # this function exists to catch.
+    engine = next((a for a, _ in members
+                   if "/scripts/" in a and a.endswith(".py")
+                   and "--test" in open(_, encoding="utf-8").read()), None)
     if not engine:
         return True, "no test suite to run"
 

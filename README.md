@@ -54,7 +54,7 @@ All 43 skills, grouped the way the library is laid out. The 17 marked **export**
 |---|---|
 | [`attendance-policy-writer`](skills/writing/attendance-policy-writer.md) | Writes no-call/no-show, lateness and break policies in language hourly teams and site managers actually follow, structured so the same event produces the same outcome at every site. |
 | [`candidate-message-sequencer`](skills/writing/candidate-message-sequencer.md) | Builds short SMS, WhatsApp and email nudge sequences for applicants who stall between applying and their first shift, timed to the stage they stalled at. |
-| [`job-ad-writer`](skills/writing/job-ad-writer.md) | Writes high-volume hourly job ads that work on a phone, with a variant for each channel you post to. |
+| [`job-ad-writer`](skills/writing/job-ad-writer/) | Writes high-volume hourly job ads that work on a phone, with a variant for each channel you post to. |
 | [`manager-comms-writer`](skills/writing/manager-comms-writer.md) | Writes the daily messages a district or store manager sends — shift coverage asks, interview reminders, day-one instructions, schedule changes — in the voice of someone the reader sees every day. |
 | [`offer-letter-drafter`](skills/writing/offer-letter-drafter.md) | Drafts conditional offers, start-date confirmations and contingency wording for hourly roles, with the shift pattern and first-shift logistics in the same message. |
 

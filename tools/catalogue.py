@@ -87,10 +87,13 @@ def skills():
 
         heading = re.search(r"^# (.+)$", text, re.M)
         zip_path = os.path.join(DIST, slug + ".zip")
-        # "Available" means there is something to download that passed the gates,
-        # not that the file exists. Everything else is coming soon, and the site
-        # should say so rather than offer a button that disappoints.
-        has_engine = os.path.exists(os.path.join(folder, "scripts", "analyze.py"))
+        # "Available" means there is something to download that passed the
+        # gates, not that the file exists. The gate differs by kind -- an
+        # analysis skill proves itself against planted patterns in the sample
+        # data, a writing skill against fixtures with planted faults -- but
+        # every available skill ships code that says what "correct" means for
+        # it and a suite the packager ran from inside the archive.
+        has_engine = bool(glob.glob(os.path.join(folder, "scripts", "*.py")))
         available = has_engine and os.path.exists(zip_path)
 
         out.append({
@@ -101,7 +104,7 @@ def skills():
             "version": field("version"),
             "updated": git_date(os.path.relpath(path, ROOT).replace(os.sep, "/")),
             "available": available,
-            "tested_engine": has_engine,
+            "tested_code": has_engine,
             "needs_dataset": DATA_BLOCK_MARKER in text,
             "download": ({"path": f"skills/{slug}.zip", "bytes": size(zip_path)}
                          if available else None),

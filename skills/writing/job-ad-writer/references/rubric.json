@@ -1,0 +1,30 @@
+{
+  "$comment": "The rules check_ad.py enforces. Every one of them is something SKILL.md already promises, so the checker cannot drift away from the skill: if a rule here is not in the skill, one of the two is wrong.",
+  "schema_version": 1,
+  "first_screen_chars": 400,
+  "reading_grade_max": 8.0,
+  "long_sentence_words": 25,
+  "channel_limits": {
+    "job_board": {"chars": null, "lines": null},
+    "social": {"chars": 400, "lines": null},
+    "sms": {"chars": 160, "lines": null},
+    "poster": {"chars": null, "lines": 6},
+    "referral": {"chars": 500, "lines": null}
+  },
+  "pay_vague": ["competitive salary", "competitive pay", "competitive rate",
+                "salary doe", "doe", "depending on experience", "negotiable",
+                "attractive package", "excellent package", "market rate"],
+  "corporate_verbs": ["leverage", "spearhead", "synergy", "synergies", "ideate",
+                      "operationalise", "operationalize", "utilise", "utilize",
+                      "facilitate", "optimise", "optimize", "streamline"],
+  "hype_nouns": ["rockstar", "rock star", "ninja", "guru", "wizard", "superstar",
+                 "hero", "warrior", "family atmosphere", "work hard play hard"],
+  "gendered": ["salesman", "salesmen", "saleswoman", "waitress", "waiter",
+               "barman", "barmaid", "handyman", "manpower", "workman",
+               "workmen", "foreman", "chairman", "he/she", "s/he",
+               "young and energetic", "young, energetic", "recent graduate"],
+  "proxy_requirements": ["own car", "own vehicle", "own transport",
+                         "own transportation", "must have a car", "must drive"],
+  "culture_words": ["our mission", "our values", "our culture", "we believe",
+                    "who we are", "about us", "our story", "our people are"]
+}
