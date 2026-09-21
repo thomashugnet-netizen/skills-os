@@ -102,6 +102,6 @@ Written, not yet through their gate. They ship when they pass it.
 
 ## How this is built
 
-`tools/audit.py` blocks hidden or deceptive content across every file a skill ships. `tools/package.py` extracts each archive to a scratch directory and runs that skill's own suite from inside it, so a package that only works in this repository is not a package. Nothing reaches the site unless both pass — see `REPLIT.md`.
+`tools/audit.py` blocks hidden or deceptive content across every file a skill ships. `tools/package.py` extracts each archive to a scratch directory and runs that skill's own suite from inside it, so a package that only works in this repository is not a package. Nothing reaches the site unless both pass — see `CONTRIBUTING.md`.
 
 Published by Fountain. MIT licensed.

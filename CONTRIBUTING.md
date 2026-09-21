@@ -98,3 +98,61 @@ python3 tools/catalogue.py             # -> dist/catalogue.json
 python3 tools/gen_readme.py            # -> README.md
 python3 tools/site_assets.py --zip     # exactly what the site would receive
 ```
+
+## How the site gets the library
+
+One repository. No keys, no copying, no second place for anything to go stale.
+
+`.github/workflows/publish.yml` runs on every push to `main`. If the gates pass it
+builds `catalogue.json` and attaches it to the `latest` release together with the
+skill archives and the sample datasets it describes.
+
+Everything the site needs is in that release, at permanent URLs that need no
+credentials:
+
+```
+https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/catalogue.json
+```
+
+That one file names every other URL, so the site needs no second constant.
+`latest` is a moving tag, so a link published today still resolves after every
+future release, and nothing on the site needs updating when the library changes.
+
+**CI never writes to this repository.** A publish puts no commit on `main`, so a
+push from a laptop is never rejected by one. `catalogue.json` is not committed
+either: it records each archive's byte size, and a zip is not byte-identical
+across zlib versions, so a committed copy would drift from the one CI builds for
+reasons nobody can act on. It ships inside the release, beside the archives it
+describes, where the two cannot disagree.
+
+If a gate fails, nothing is published and the previous release stays up. Stale
+beats broken.
+
+To see exactly what would be published, without pushing:
+
+```
+python3 tools/audit.py && python3 tools/package.py && python3 tools/catalogue.py
+python3 tools/site_assets.py --zip     # -> dist/site-assets.zip
+```
+
+## Where the unreleased skills live
+
+Only what has passed its gate is in this repository. Everything else — the skills
+still being written, the authoring contracts, the retired Python site — is in a
+separate private repository, because this one is public and forty unproven files
+in `skills/` would read as forty products.
+
+`roadmap.json` carries their names, titles, categories and one-line descriptions,
+and nothing else. `tools/catalogue.py` folds it into `catalogue.json` as
+`coming_soon`, so the site can show where the library is going without a line of
+unreleased content leaving the private repo.
+
+```
+python3 tools/roadmap.py --from <private repo>/skills
+```
+
+`tools/roadmap.py` also holds `HELD`: three skills deliberately kept out of the
+roadmap because they contradict guidance Fountain's own product gives. That is a
+decision about what this library says, not a technical exclusion — announcing a
+skill commits us to shipping it, so removing a name from `HELD` is a publication
+decision.

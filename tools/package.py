@@ -142,22 +142,6 @@ def main():
         stamp = f"  v{version}" if version else ""
         print(f"ok    {slug}.zip{stamp}  {size:>7.0f} KB{note}")
 
-    if built:
-        bundle = os.path.join(DIST, "frontline-hiring-pack.zip")
-        with zipfile.ZipFile(bundle, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
-            for path in built:
-                zf.write(path, os.path.basename(path))
-            zf.writestr("README.txt",
-                        "Each .zip in here is one skill.\n\n"
-                        "Claude installs one skill per upload: Settings > Customize >\n"
-                        "Skills > + > upload a single .zip from this folder. Team and\n"
-                        "Enterprise owners can provision them for everyone from\n"
-                        "Organization settings > Skills.\n\n"
-                        "This bundle is a convenience download, not a single installable\n"
-                        "skill - unzip it first.\n")
-        print(f"\nbundle  frontline-hiring-pack.zip  "
-              f"{os.path.getsize(bundle) / 1024:>6.0f} KB  ({len(built)} skills)")
-
     print(f"\n{len(built)} packaged, {len(failed)} failed")
     return 1 if failed else 0
 

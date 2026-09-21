@@ -119,7 +119,7 @@ def main():
              "skill ships. `tools/package.py` extracts each archive to a scratch "
              "directory and runs that skill's own suite from inside it, so a package "
              "that only works in this repository is not a package. Nothing reaches the "
-             "site unless both pass — see `REPLIT.md`.")
+             "site unless both pass — see `CONTRIBUTING.md`.")
     o.append("")
     o.append(f"Published by {lib['publisher']}. MIT licensed.")
     o.append("")
