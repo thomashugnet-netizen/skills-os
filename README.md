@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**2 ready now. 38 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**3 ready now. 37 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -18,6 +18,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | Skill | What it does | |
 |---|---|---|
 | [`funnel-drop-off-analyst`](skills/analysing/funnel-drop-off-analyst/) | Finds where candidates leave your hiring funnel, separates correlation from cause, and ranks the fixes by how many hires they would recover. | needs a CSV export, 0.3 MB |
+| [`candidate-message-sequencer`](skills/writing/candidate-message-sequencer/) | Builds short SMS, WhatsApp and email nudge sequences for applicants who stall between applying and their first shift, and checks them against a written rubric before you send. | no data needed, 23 KB |
 | [`job-ad-writer`](skills/writing/job-ad-writer/) | Writes high-volume hourly job ads that work on a phone, with a variant for each channel you post to. | no data needed, 16 KB |
 
 ## Sample datasets
@@ -38,7 +39,6 @@ Written, not yet through their gate. They ship when they pass it.
 **Writing — the words that go out**
 
 - `attendance-policy-writer` — Writes no-call/no-show, lateness and break policies in language hourly teams and site managers actually follow, structured so the same event produces the same outcome at every site.
-- `candidate-message-sequencer` — Builds short SMS, WhatsApp and email nudge sequences for applicants who stall between applying and their first shift, timed to the stage they stalled at.
 - `manager-comms-writer` — Writes the daily messages a district or store manager sends — shift coverage asks, interview reminders, day-one instructions, schedule changes — in the voice of someone the reader sees every day.
 - `offer-letter-drafter` — Drafts conditional offers, start-date confirmations and contingency wording for hourly roles, with the shift pattern and first-shift logistics in the same message.
 

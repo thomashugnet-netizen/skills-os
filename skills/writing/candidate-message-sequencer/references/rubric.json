@@ -1,0 +1,50 @@
+{
+  "$comment": "The rules check_sequence.py enforces. Every one of them is something SKILL.md already promises, so the checker cannot drift away from the skill: if a rule here is not in the skill, one of the two is wrong. The sequence-level rules are the point -- a set of individually reasonable messages can still be harassment.",
+  "schema_version": 1,
+
+  "channel_limits": {
+    "sms":      {"chars": 160, "max_messages": 4, "needs_opt_out": true},
+    "whatsapp": {"chars": 700, "max_messages": 4, "needs_opt_out": true},
+    "email":    {"chars": 1200, "max_messages": 5, "needs_opt_out": false}
+  },
+
+  "cadence": {
+    "min_hours_between": 20,
+    "max_window_days": 21,
+    "quiet_hours_start": "20:00",
+    "quiet_hours_end": "08:00"
+  },
+
+  "duplicate_similarity": 0.8,
+
+  "opt_out_markers": [
+    "stop to opt out", "reply stop", "text stop", "opt out",
+    "unsubscribe", "reply end"
+  ],
+
+  "sensitive_asks": [
+    "national insurance", "social security", "ssn", "sort code",
+    "account number", "bank details", "iban", "date of birth",
+    "passport number", "driving licence number", "driver's license number",
+    "right to work document", "visa number", "photo of your id"
+  ],
+
+  "false_urgency": [
+    "final warning", "last chance", "final notice", "act now or",
+    "you will lose your spot", "this is your last", "immediately or we will",
+    "don't miss out forever", "urgent action required"
+  ],
+
+  "action_verbs": [
+    "reply", "text", "call", "click", "tap", "book", "pick", "choose",
+    "confirm", "upload", "bring", "come in", "scan", "visit", "let us know"
+  ],
+
+  "identification_markers": ["{employer}", "{company}", "{employer_name}", "{brand}"],
+
+  "reading_grade_max": 8.0,
+  "long_sentence_words": 22,
+  "max_exclamations_per_message": 1,
+  "max_emoji_per_message": 1,
+  "shouting_min_run": 4
+}

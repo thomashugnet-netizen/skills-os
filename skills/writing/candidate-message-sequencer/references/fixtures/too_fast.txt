@@ -1,0 +1,12 @@
+stage: applied, no screening call booked
+channel: sms
+stop_when: the candidate books a call
+
+[day 0, 09:00]
+Hi {first_name}, it's {employer}. Book a call for {role}: {link}. Reply STOP to opt out.
+
+[day 0, 15:00]
+{first_name}, {employer} again. Did you see our message? Pick a slot: {link}
+
+[day 1, 11:00]
+{first_name}, this is {employer}. Last few slots for {role} this week: {link}

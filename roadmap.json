@@ -248,13 +248,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "candidate-message-sequencer",
-      "title": "Candidate Message Sequencer",
-      "category": "writing",
-      "description": "Builds short SMS, WhatsApp and email nudge sequences for applicants who stall between applying and their first shift, timed to the stage they stalled at.",
-      "needs_dataset": false
-    },
-    {
       "slug": "manager-comms-writer",
       "title": "Manager Comms Writer",
       "category": "writing",

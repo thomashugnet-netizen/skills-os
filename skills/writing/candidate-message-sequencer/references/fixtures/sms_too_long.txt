@@ -1,0 +1,6 @@
+stage: applied, no screening call booked
+channel: sms
+stop_when: the candidate books a call
+
+[day 0, 10:00]
+Hi {first_name}, it's {employer} getting in touch about the {role} role you applied for at {site}. We have screening slots open on Thursday and Friday this week and also next Monday morning, and the call takes about ten minutes. Book here: {link}. Reply STOP to opt out.
