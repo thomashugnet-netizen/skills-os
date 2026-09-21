@@ -17,13 +17,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "time-to-hire-analyst",
-      "title": "Time-to-Hire Analyst",
-      "category": "analysing",
-      "description": "Breaks hiring cycle time down stage by stage and names the one stage actually holding the queue, rather than the one that looks slowest.",
-      "needs_dataset": true
-    },
-    {
       "slug": "turnover-analyst",
       "title": "Turnover Analyst",
       "category": "analysing",

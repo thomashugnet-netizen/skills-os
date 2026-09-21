@@ -1,0 +1,296 @@
+{
+  "$comment": "Canonical schema for frontline hiring funnel analysis. Every data lane maps into this; scripts/analyze.py reads nothing else. Column names are the contract - an adapter renames source columns into these.",
+  "schema_version": "1.0.0",
+  "row_grain": "one row per application",
+  "stages": [
+    "applied",
+    "screened",
+    "interview_scheduled",
+    "interview_completed",
+    "offer_extended",
+    "onboarding_started",
+    "started"
+  ],
+  "columns": {
+    "application_id": {
+      "type": "opaque_id",
+      "required": true,
+      "unlocks": "Row identity and de-duplication.",
+      "pii": "Must not resolve to a person outside your own systems."
+    },
+    "applied_at": {
+      "type": "date",
+      "required": true,
+      "unlocks": "Time window, seasonality stratification, elapsed-time confound checks."
+    },
+    "stage_reached": {
+      "type": "enum(stages)",
+      "required": true,
+      "unlocks": "The funnel itself. Without it there is no analysis."
+    },
+    "location_id": {
+      "type": "opaque_id",
+      "required": false,
+      "unlocks": "Whether a loss is systemic or concentrated in a handful of sites."
+    },
+    "region": {
+      "type": "category",
+      "required": false,
+      "unlocks": "Configuration differences applied at group level."
+    },
+    "hiring_manager_id": {
+      "type": "opaque_id",
+      "required": false,
+      "unlocks": "Manager-level early attrition. Always tested within role.",
+      "pii": "Must be opaque. A manager is a person."
+    },
+    "role": {
+      "type": "category",
+      "required": false,
+      "unlocks": "Role mix confound. Also a driver in its own right."
+    },
+    "source": {
+      "type": "category",
+      "required": false,
+      "unlocks": "Channel quality, and the single most important confound in this dataset."
+    },
+    "commute_band_km": {
+      "type": "ordinal",
+      "required": false,
+      "levels": [
+        "0-5",
+        "6-10",
+        "11-20",
+        "21-40",
+        "40+"
+      ],
+      "unlocks": "Commute effect on first-shift no-shows. Send a band, never an address."
+    },
+    "availability_match": {
+      "type": "category",
+      "required": false,
+      "unlocks": "Whether a screening rule is knocking out available candidates."
+    },
+    "screened_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Wait before screening. Part of the capacity-vs-rule distinction."
+    },
+    "interview_scheduled_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Scheduling wait - the signature of scarce interview slots."
+    },
+    "interview_completed_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Interview no-show rate and the wait that drives it."
+    },
+    "offer_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Offer stage timing."
+    },
+    "onboarding_started_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Start of the offer-to-first-shift gap."
+    },
+    "scheduled_first_shift_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "The offer-to-first-shift gap, usually the largest single no-show driver."
+    },
+    "first_shift_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Whether the hire actually turned up. The most expensive loss in the funnel."
+    },
+    "exit_reason": {
+      "type": "category",
+      "required": false,
+      "unlocks": "Mechanism classification: rule / capacity / candidate / quality."
+    },
+    "separation_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Early attrition, which turns a hire into a loss after the fact."
+    },
+    "tenure_days": {
+      "type": "integer",
+      "required": false,
+      "unlocks": "30/60/90-day attrition banding."
+    },
+    "separation_reason": {
+      "type": "category",
+      "required": false,
+      "unlocks": "Whether early leavers are a hiring problem or a job problem."
+    },
+    "docs_submitted_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Wait before screening. Part of the capacity-vs-rule distinction.",
+      "description": "Activation funnel only. Date the sign-up's documents were submitted."
+    },
+    "background_clear_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Interview no-show rate and the wait that drives it.",
+      "description": "Activation funnel only. Date the background check cleared."
+    },
+    "scheduled_first_job_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "The offer-to-first-shift gap, usually the largest single no-show driver.",
+      "description": "Activation funnel only. Date the worker was expected to take a first job."
+    },
+    "first_job_at": {
+      "type": "date",
+      "required": false,
+      "unlocks": "Whether the hire actually turned up. The most expensive loss in the funnel.",
+      "description": "Activation funnel only. Date of the first completed job. Blank means never activated."
+    }
+  },
+  "exit_reason_mechanisms": {
+    "rule": [
+      "availability_mismatch",
+      "failed_knockout",
+      "incomplete_application",
+      "not_qualified_screen",
+      "market_not_open",
+      "docs_rejected"
+    ],
+    "capacity": [
+      "no_interview_slot",
+      "recruiter_no_action",
+      "no_slot_available",
+      "background_check_queue",
+      "no_onboarding_slot"
+    ],
+    "candidate": [
+      "unresponsive",
+      "withdrew",
+      "interview_no_show",
+      "offer_declined",
+      "unresponsive_after_offer",
+      "no_show_first_shift",
+      "candidate_declined",
+      "took_other_offer",
+      "abandoned_signup",
+      "never_completed_docs",
+      "no_show_first_job",
+      "unresponsive_after_clear"
+    ],
+    "quality": [
+      "not_qualified",
+      "failed_background_check",
+      "failed_assessment",
+      "failed_drug_screen",
+      "failed_dot_medical",
+      "licence_not_verified",
+      "failed_vehicle_check",
+      "failed_insurance_check",
+      "failed_identity_check"
+    ]
+  },
+  "refuses": {
+    "nominative_columns": [
+      "name",
+      "first_name",
+      "last_name",
+      "full_name",
+      "candidate_name",
+      "email",
+      "email_address",
+      "phone",
+      "phone_number",
+      "mobile",
+      "address",
+      "street",
+      "postcode",
+      "post_code",
+      "zip",
+      "zipcode",
+      "dob",
+      "date_of_birth",
+      "birth_date",
+      "ssn",
+      "social_security",
+      "national_insurance",
+      "ni_number",
+      "notes",
+      "comments",
+      "free_text"
+    ],
+    "note": "If any column name matches or contains one of these, the engine stops and asks for a re-export. Candidate records belong inside your own systems."
+  },
+  "thresholds": {
+    "min_rows_total": 500,
+    "min_rows_at_stage": 50,
+    "min_segment_volume": 30,
+    "flag_ratio": 1.5,
+    "confound_kill_fraction": 0.4,
+    "wilson_z": 1.96
+  },
+  "stage_profiles": {
+    "$comment": "Two funnel shapes. The engine picks one by matching the values found in stage_reached, and every downstream pass is identical. A W2 hire is interviewed and given an offer; a gig worker is cleared and activated. Nothing else about the analysis differs.",
+    "hire": {
+      "label": "Apply to first shift",
+      "applies_to": "W2 frontline hiring: retail, restaurants and QSR, logistics W2, staffing placement",
+      "stages": [
+        "applied",
+        "screened",
+        "interview_scheduled",
+        "interview_completed",
+        "offer_extended",
+        "onboarding_started",
+        "started"
+      ],
+      "stage_dates": [
+        "applied_at",
+        "screened_at",
+        "interview_scheduled_at",
+        "interview_completed_at",
+        "offer_at",
+        "onboarding_started_at",
+        "first_shift_at"
+      ],
+      "scheduled_start_column": "scheduled_first_shift_at",
+      "start_noun": "first shift",
+      "gap_driver_label": "offer-to-first-shift gap"
+    },
+    "activation": {
+      "label": "Sign-up to first job",
+      "applies_to": "Gig and 1099 marketplaces: delivery, courier, rideshare. There is no interview and no offer; the funnel ends at the first completed job, not at a start date.",
+      "stages": [
+        "signed_up",
+        "docs_submitted",
+        "background_clear",
+        "onboarding_started",
+        "activated"
+      ],
+      "stage_dates": [
+        "applied_at",
+        "docs_submitted_at",
+        "background_clear_at",
+        "onboarding_started_at",
+        "first_job_at"
+      ],
+      "scheduled_start_column": "scheduled_first_job_at",
+      "start_noun": "first job",
+      "gap_driver_label": "onboarding-to-first-job gap"
+    }
+  },
+  "duration_thresholds": {
+    "$comment": "Thresholds for the cycle-time engine. Separate from 'thresholds', which governs the conversion-rate engine: a rate and a wait are not made unreliable by the same things.",
+    "min_completed_per_step": 100,
+    "min_segment_completed": 30,
+    "segment_flag_ratio": 1.8,
+    "segment_flag_min_days": 2.0,
+    "load_effect_ratio": 1.25,
+    "load_min_days": 1.5,
+    "max_out_of_order_share": 0.02,
+    "censoring_warn_share": 0.2,
+    "censoring_refuse_share": 0.6
+  }
+}

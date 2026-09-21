@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**2 ready now. 38 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**3 ready now. 37 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -18,6 +18,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | Skill | What it does | |
 |---|---|---|
 | [`funnel-drop-off-analyst`](skills/analysing/funnel-drop-off-analyst/) | Finds where candidates leave your hiring funnel, separates correlation from cause, and ranks the fixes by how many hires they would recover. | needs a CSV export, 0.3 MB |
+| [`time-to-hire-analyst`](skills/analysing/time-to-hire-analyst/) | Breaks hiring cycle time down stage by stage and names the one stage actually holding the queue, rather than the average. | needs a CSV export, 0.3 MB |
 | [`job-ad-writer`](skills/writing/job-ad-writer/) | Writes high-volume hourly job ads that work on a phone, with a variant for each channel you post to. | no data needed, 16 KB |
 
 ## Sample datasets
@@ -65,7 +66,6 @@ Written, not yet through their gate. They ship when they pass it.
 
 - `no-show-pattern-finder` — Finds out why hires don't turn up for their first shift, and which single change would recover the most starts. *(needs a CSV export)*
 - `source-roi-analyst` — Joins channel spend to hiring outcomes to produce cost per start and cost per retained hire, rather than cost per application. *(needs a CSV export)*
-- `time-to-hire-analyst` — Breaks hiring cycle time down stage by stage and names the one stage actually holding the queue, rather than the one that looks slowest. *(needs a CSV export)*
 - `turnover-analyst` — Breaks down 30, 60 and 90-day attrition by location, manager, source and role, and separates which of them is actually driving it. *(needs a CSV export)*
 
 **Onboarding — apply to first shift**
