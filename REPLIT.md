@@ -128,12 +128,14 @@ One repository. No keys, no copying, no second place for anything to go stale.
 regenerates `catalogue.json` and `README.md`, commits them back here, and attaches
 the skill archives and sample datasets to the `latest` release.
 
-The site reads two public URLs. Both are permanent and need no credentials:
+Everything the site needs is in the `latest` release, at permanent URLs that
+need no credentials:
 
 ```
-catalogue   https://raw.githubusercontent.com/thomashugnet-netizen/skills-os/main/catalogue.json
-a download   https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/<file>
+https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/catalogue.json
 ```
+
+That one file names every other URL, so the site needs no second constant.
 
 `latest` is a moving tag, so a link the site publishes today still resolves after
 every future release. Nothing needs updating on the site when the library changes.
@@ -141,10 +143,10 @@ every future release. Nothing needs updating on the site when the library change
 If a gate fails, nothing is published and the previous release stays up. Stale
 beats broken.
 
-`catalogue.json` lives at the repo root rather than in `dist/` because it is not a
-build artifact, it is the published contract: the one file the site reads, visible
-to anyone who wants to check what the site is being told. **It is generated. Never
-edit it by hand** — the next publish overwrites it.
+`catalogue.json` is not committed. It records each archive's byte size, and a zip
+is not byte-identical across zlib versions, so a committed copy drifts from the one
+CI builds for reasons nobody can act on. It ships inside the release, beside the
+archives it describes, where the two cannot disagree.
 
 To see what would be published, without pushing:
 

@@ -9,17 +9,23 @@
 #   - runs the gates. tools/audit.py blocks hidden content and malformed skills;
 #     tools/package.py extracts each archive to a scratch directory and runs that
 #     skill's own test suite from inside it.
-#   - checks catalogue.json and README.md are what the sources produce, and
-#     fails if not. CI never writes to this repository, so a publish never puts
-#     a commit on main and a push from a laptop is never rejected.
-#   - attaches the skill archives and the sample datasets to the "latest" release
+#   - builds catalogue.json and attaches it to the "latest" release together
+#     with the skill archives and the sample datasets it describes
+#
+# CI never writes to this repository. A publish puts no commit on main, so a
+# push from a laptop is never rejected.
+#
+# The catalogue is not committed. It records each archive's byte size, and a zip
+# is not identical across zlib versions, so a committed copy would drift from
+# the one CI builds for reasons nobody can act on. It ships beside the archives
+# instead, where the two cannot disagree.
 #
 # Nothing is published unless the gates pass, so a failure leaves the site
 # serving the previous release. Stale beats broken.
 #
 # Where the site reads from -- both are public, permanent, and need no token:
-#   catalogue   https://raw.githubusercontent.com/thomashugnet-netizen/skills-os/main/catalogue.json
-#   a download  https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/<file>
+#   everything  https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/<file>
+#   start at    .../releases/latest/download/catalogue.json — it names the rest
 #
 # GITHUB_TOKEN below is issued by GitHub to this workflow automatically. There is
 # nothing to create and nothing to store.
@@ -61,27 +67,10 @@ jobs:
       - name: Package every skill, running its tests from inside its archive
         run: python3 tools/package.py
 
-      # CI verifies; it does not write. An earlier version regenerated these and
-      # committed them back, which put a commit on main after every publish --
-      # so the next push from a laptop was rejected, every single time, and the
-      # conflict was always in a generated file. Checking instead means the
-      # committed catalogue is provably what the sources produce, and nobody
-      # ever has to pull before pushing.
-      - name: Check the catalogue and README are current
+      - name: Build the catalogue and assemble what may be published
         run: |
           python3 tools/catalogue.py
-          python3 tools/gen_readme.py
-          if ! git diff --quiet catalogue.json README.md; then
-            echo "::error::catalogue.json or README.md is out of date."
-            echo "Run these and commit the result:"
-            echo "  python3 tools/catalogue.py && python3 tools/gen_readme.py"
-            git --no-pager diff --stat catalogue.json README.md
-            exit 1
-          fi
-          echo "Both current."
-
-      - name: Assemble what may be published
-        run: python3 tools/site_assets.py
+          python3 tools/site_assets.py
 
       - name: Publish the downloads
         env:
@@ -93,4 +82,4 @@ jobs:
           gh release create latest \
             --title "Current library" \
             --notes "Built from ${GITHUB_SHA}. Downloads here are what catalogue.json describes." \
-            $(find dist/site-assets -type f ! -name catalogue.json)
+            $(find dist/site-assets -type f)

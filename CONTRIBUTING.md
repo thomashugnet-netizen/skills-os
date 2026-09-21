@@ -56,8 +56,7 @@ Without those, the only honest thing to tell a user is "re-download and hope".
 | File | Made by | Where |
 |---|---|---|
 | `README.md` | `tools/gen_readme.py` | here |
-| `catalogue.json` | `tools/catalogue.py` | repo root — the published contract |
-| `README.md` (again) | regenerate **before committing**; CI fails if it is stale | |
+| `catalogue.json` | `tools/catalogue.py` | `dist/`, then the release — not committed |
 | `dist/site-assets/` | `tools/site_assets.py` | built in CI, not committed |
 | the `latest` release | `publish.yml` | GitHub releases |
 
@@ -70,25 +69,25 @@ afternoon.
 
 ## When the catalogue gains a field
 
-The site reads `catalogue.json` from this repository's raw URL and ignores what it
-does not recognise, in silence.
+The site reads `catalogue.json` from the latest release and ignores what it does
+not recognise, in silence.
 A new field nobody mentions to the site never appears, and the hour spent looking
 for why is entirely avoidable. Adding a field means telling whoever maintains the
 site, in the same breath.
 
-## Regenerate before you commit
+## Regenerate the README before you commit
 
-CI checks that `catalogue.json` and `README.md` are what the sources produce and
-fails the build if they are not. It does not fix them: a workflow that commits
-to `main` puts a commit there after every publish, and the next push from a
-laptop is rejected with a conflict in a generated file. Checking instead costs
-one command:
+`README.md` is generated and committed, so it goes stale unless it is rebuilt in
+the same commit as any change to a skill, a dataset or `roadmap.json`:
 
 ```
 python3 tools/catalogue.py && python3 tools/gen_readme.py
 ```
 
-Run it in the same commit as any change to a skill, a dataset or `roadmap.json`.
+CI does not check it and does not fix it. A workflow that commits to `main` puts
+a commit there after every publish, and the next push from a laptop is rejected
+with a conflict in a generated file — which happened twice before this rule
+replaced it.
 
 ## Running the gates locally
 

@@ -44,6 +44,8 @@ def build():
         shutil.rmtree(OUT)
     os.makedirs(os.path.join(OUT, "skills"))
     os.makedirs(os.path.join(OUT, "data"))
+    # The catalogue travels with the archives it describes, so the two can
+    # never disagree about what exists or how big it is.
     shutil.copy2(catalogue_path, os.path.join(OUT, "catalogue.json"))
 
     copied = []
