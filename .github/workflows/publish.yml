@@ -9,7 +9,9 @@
 #   - runs the gates. tools/audit.py blocks hidden content and malformed skills;
 #     tools/package.py extracts each archive to a scratch directory and runs that
 #     skill's own test suite from inside it.
-#   - regenerates catalogue.json and README.md and commits them back here
+#   - checks catalogue.json and README.md are what the sources produce, and
+#     fails if not. CI never writes to this repository, so a publish never puts
+#     a commit on main and a push from a laptop is never rejected.
 #   - attaches the skill archives and the sample datasets to the "latest" release
 #
 # Nothing is published unless the gates pass, so a failure leaves the site
@@ -36,6 +38,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  # Needed to create the release. Nothing here pushes a commit.
   contents: write
 
 jobs:
@@ -58,22 +61,24 @@ jobs:
       - name: Package every skill, running its tests from inside its archive
         run: python3 tools/package.py
 
-      - name: Regenerate the catalogue and the README
+      # CI verifies; it does not write. An earlier version regenerated these and
+      # committed them back, which put a commit on main after every publish --
+      # so the next push from a laptop was rejected, every single time, and the
+      # conflict was always in a generated file. Checking instead means the
+      # committed catalogue is provably what the sources produce, and nobody
+      # ever has to pull before pushing.
+      - name: Check the catalogue and README are current
         run: |
           python3 tools/catalogue.py
           python3 tools/gen_readme.py
-
-      - name: Commit them back, if they changed
-        run: |
-          git config user.name  "skills-os publisher"
-          git config user.email "noreply@github.com"
-          git add catalogue.json README.md
-          if git diff --cached --quiet; then
-            echo "Catalogue and README already current."
-          else
-            git commit -m "Regenerate catalogue and README [skip ci]"
-            git push
+          if ! git diff --quiet catalogue.json README.md; then
+            echo "::error::catalogue.json or README.md is out of date."
+            echo "Run these and commit the result:"
+            echo "  python3 tools/catalogue.py && python3 tools/gen_readme.py"
+            git --no-pager diff --stat catalogue.json README.md
+            exit 1
           fi
+          echo "Both current."
 
       - name: Assemble what may be published
         run: python3 tools/site_assets.py
