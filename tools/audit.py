@@ -114,6 +114,16 @@ def check(path):
 
     if not re.match(r"^---\nname: " + re.escape(slug) + r"\n", t):
         fail.append(f"{path}: frontmatter name must be '{slug}'")
+    # The slug is not just a folder name any more: it is the skill's public
+    # identifier, in the download URL and in the Cue import URL. Anything
+    # outside lowercase, digits and single hyphens behaves differently across
+    # the three systems that now parse it -- an underscore survives a URL, an
+    # uppercase letter does not survive every path comparison, and a space is
+    # a different string on each side. Cheaper to refuse than to discover.
+    if not re.match(r"^[a-z0-9]+(-[a-z0-9]+)*$", slug):
+        fail.append(f"{path}: slug '{slug}' must be lowercase words joined by "
+                    "single hyphens — it is a public identifier, in the "
+                    "download URL and the Cue import URL")
     if "description:" not in t.split("---")[1]:
         fail.append(f"{path}: frontmatter missing description")
     # Optional today, but if it is declared it has to be usable: a reader who

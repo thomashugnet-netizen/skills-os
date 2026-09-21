@@ -33,6 +33,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # finished URL removes the chance to get it wrong.
 RELEASE = ("https://github.com/thomashugnet-netizen/skills-os"
            "/releases/latest/download")
+
+# Where "Import in Cue" goes. Cue identifies a skill by its slug -- the same
+# slug as the folder, the zip and the frontmatter name -- so there is no second
+# identifier and no mapping table to keep in step with this one. Cue resolves
+# the slug by reading this file, so a skill that is not published here cannot
+# be imported, and the version Cue records is the version this file names at
+# the moment of the click.
+#
+# The finished URL is published rather than its shape, for the same reason the
+# download URLs are: a site or a product assembling its own link from a base
+# and a slug is a second place the route lives, and it will be the one that is
+# wrong after the route moves.
+CUE_IMPORT = "https://cue.fountain.com/import"
 DIST = os.path.join(ROOT, "dist")
 DATA = os.path.join(ROOT, "data")
 
@@ -118,6 +131,11 @@ def skills():
                           "url": f"{RELEASE}/{slug}.zip",
                           "bytes": size(zip_path)}
                          if available else None),
+            # Only an available skill gets one, so the site cannot render an
+            # import button for a skill that does not exist yet: there is no
+            # URL to render it with. A rule nobody has to remember.
+            "cue": ({"import_url": f"{CUE_IMPORT}/{slug}"}
+                    if available else None),
         })
     return sorted(out, key=lambda s: (s["category"], s["slug"]))
 

@@ -67,6 +67,49 @@ Editing any of the others by hand works right up until the next build silently
 overwrites it — which is the correct behaviour, and an unpleasant way to spend an
 afternoon.
 
+## The slug is a public identifier
+
+A skill's slug — the folder name, which the audit forces to match the frontmatter
+`name` — is now the identifier three systems use:
+
+| Where | Looks like |
+|---|---|
+| the download | `.../releases/latest/download/<slug>.zip` |
+| the zip's own layout | `<slug>/SKILL.md` at the top level |
+| **Import in Cue** | `https://cue.fountain.com/import/<slug>` |
+
+There is deliberately **no second identifier and no mapping table.** A numeric id
+with a table mapping it to a slug would be two records of one fact, and the one
+kept by hand is the one that ends up wrong. The audit refuses a slug that is not
+lowercase words joined by single hyphens, because all three systems above parse
+it and they do not agree on underscores, capitals or spaces.
+
+The consequence to know: **renaming a published skill breaks every link to it** —
+the download, the site's page, and anyone's saved Cue import URL. It is not a
+rename, it is a retirement plus a new skill. Get the slug right before the first
+publish.
+
+`catalogue.py` builds the Cue URL from one constant, `CUE_IMPORT`. Neither the
+site nor Cue should assemble that URL from a base and a slug: that puts the route
+in a second place, and the second place is the one still pointing at the old
+route a month later. The site reads `skills[].cue.import_url` and renders the
+button only when it is present — which is never for a coming-soon skill, so the
+button cannot advertise something that does not exist.
+
+## Cue reads this catalogue; it holds no copy
+
+Cue receives a slug in the URL and resolves it by fetching
+`catalogue.json` from the `latest` release, at the moment of the click. That
+gives it three things for free:
+
+- a skill that is not published cannot be imported — it is not in the file
+- the version Cue records is whatever the file says at click time, which is the
+  version it is actually importing
+- nothing on the Cue side needs updating when the library changes
+
+If Cue ever keeps its own list instead, that list will drift from this one. That
+failure has already happened twice in this project, in both directions.
+
 ## When the catalogue gains a field
 
 The site reads `catalogue.json` from the latest release and ignores what it does
