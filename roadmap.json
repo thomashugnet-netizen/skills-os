@@ -24,13 +24,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "turnover-analyst",
-      "title": "Turnover Analyst",
-      "category": "analysing",
-      "description": "Breaks down 30, 60 and 90-day attrition by location, manager, source and role, and separates which of them is actually driving it.",
-      "needs_dataset": true
-    },
-    {
       "slug": "ai-hiring-law-briefer",
       "title": "AI Hiring Law Briefer",
       "category": "complying",
