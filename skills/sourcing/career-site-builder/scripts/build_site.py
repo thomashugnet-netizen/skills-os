@@ -177,6 +177,7 @@ def brand_of(index_html):
 
 HEADER_RE = re.compile(r'<header class="site-header">.*?</header>', re.S)
 FOOTER_RE = re.compile(r'<footer class="site-footer">.*?</footer>', re.S)
+DIALOG_RE = re.compile(r'<dialog class="upsell".*?</dialog>', re.S)
 URL_ATTR_RE = re.compile(r'\b(href|src)="([^"]*)"')
 
 
@@ -196,7 +197,7 @@ def rebase(fragment, depth):
 
 
 def page(site, rel, head_extra, title, description, canonical_rel, body, chrome, brand, depth):
-    header, footer = chrome
+    header, footer, dialog = chrome
     css = "../" * depth
     return f"""<!doctype html>
 <html lang="en">
@@ -220,6 +221,7 @@ def page(site, rel, head_extra, title, description, canonical_rel, body, chrome,
 {body}
 </main>
 {rebase(footer, depth)}
+{dialog}
 <script src="{css}js/site.js" defer></script>
 </body>
 </html>
@@ -308,7 +310,7 @@ def job_page(j, brand, chrome):
         <h2>More near {esc(j['city'])}</h2>
         <p>See every open job in {esc(j['city'])}, or search all locations.</p>
         <p><a href="../locations/{j['loc_slug']}.html">Jobs in {esc(j['city'])}, {esc(j['region'])}</a></p>
-        <p><a href="index.html">Search all jobs</a></p>
+        <p><a href="../index.html#search">Search all jobs</a></p>
       </div>
     </div>
   </section>"""
@@ -329,7 +331,7 @@ def location_page(city, region, jobs, brand, chrome):
       <p class="eyebrow">Jobs by location</p>
       <h1>Jobs in {esc(city)}, {esc(region)}</h1>
       <p class="lead">{len(jobs)} open {"job" if len(jobs) == 1 else "jobs"} at {esc(brand)} in {esc(city)}: {esc(", ".join(cats).lower())}. Pay and schedule are on every listing.</p>
-      <p><a class="btn btn--primary" href="../jobs/index.html?where={esc(city)}">Filter these jobs</a></p>
+      <p><a class="btn btn--primary" href="../index.html#search">Search all jobs</a></p>
     </div>
   </section>
   <section class="section">
@@ -383,7 +385,11 @@ def html_files(site):
     return sorted(out)
 
 
-def build(site, jobs_csv, base_url):
+def build(site, jobs_csv, base_url, pages=True):
+    """pages=True: one page per job and per location, from a real export.
+    pages=False: a single landing page. The rows are example roles, listed on
+    the landing page as examples, and every link to a job or location opens the
+    preview dialog instead of a page."""
     if not os.path.isdir(site):
         shutil.copytree(STARTER, site)
         print(f"created {site} from the starter")
@@ -397,7 +403,8 @@ def build(site, jobs_csv, base_url):
     if not header or not footer:
         die('index.html needs a <header class="site-header"> and a <footer class="site-footer">; '
             "every other page copies them")
-    chrome = (header.group(0), footer.group(0))
+    dialog = DIALOG_RE.search(index)
+    chrome = (header.group(0), footer.group(0), dialog.group(0) if dialog else "")
 
     # Remove what a previous run generated, and nothing else
     for rel in html_files(site):
@@ -409,36 +416,59 @@ def build(site, jobs_csv, base_url):
         os.rmdir(loc_dir)
 
     jobs = load_jobs(jobs_csv) if jobs_csv else []
-    for j in jobs:
-        write(os.path.join(site, "jobs", j["slug"] + ".html"), job_page(j, brand, chrome))
     by_loc = {}
     for j in jobs:
         by_loc.setdefault((j["city"], j["region"], j["loc_slug"]), []).append(j)
-    for (city, region, ls), js in sorted(by_loc.items()):
-        write(os.path.join(site, "locations", ls + ".html"), location_page(city, region, js, brand, chrome))
+    if pages:
+        for j in jobs:
+            write(os.path.join(site, "jobs", j["slug"] + ".html"), job_page(j, brand, chrome))
+        for (city, region, ls), js in sorted(by_loc.items()):
+            write(os.path.join(site, "locations", ls + ".html"), location_page(city, region, js, brand, chrome))
 
-    # The job list lives in the HTML, so crawlers and AI agents see every job
-    search_path = os.path.join(site, "jobs", "index.html")
-    if os.path.exists(search_path):
-        items = "\n".join(
-            f'        <li><a href="{j["slug"]}.html">{esc(j["title"])}</a>'
-            f'<p class="job-meta"><span>{esc(j["city"])}, {esc(j["region"])}</span>'
-            f'<span>{esc(j["pay_label"])}</span><span>{esc(j["schedule"])}</span></p></li>'
-            for j in sorted(jobs, key=lambda x: (x["city"], x["title"])))
-        text, ok = fill_slot(read(search_path), r'<ol class="job-list" id="job-results"[^>]*>', items)
-        if not ok:
-            die('jobs/index.html has no <ol class="job-list" id="job-results"> to fill')
-        write(search_path, text)
-        feed = [{"title": j["title"], "url": j["slug"] + ".html", "city": j["city"],
-                 "region": j["region"], "postal_code": j["postal_code"], "category": j["category"],
-                 "category_label": j["category_label"], "pay_label": j["pay_label"],
-                 "schedule": j["schedule"], "summary": j["summary"]} for j in jobs]
-        write(os.path.join(site, "jobs", "jobs.js"),
-              "window.JOBS = " + json.dumps(feed, indent=1, ensure_ascii=False) + ";\n")
+    if not pages:
+        for d in ("jobs", "locations"):
+            dd = os.path.join(site, d)
+            if os.path.isdir(dd):
+                shutil.rmtree(dd)
 
-    locs = "\n".join(f'        <li><a href="locations/{ls}.html">{esc(city)}, {esc(region)} ({len(js)})</a></li>'
+    # The job list lives in the landing page HTML, so crawlers and AI agents see
+    # every job without running any JavaScript
+    def job_link(j):
+        if pages:
+            return f'<a href="jobs/{j["slug"]}.html">{esc(j["title"])}</a>'
+        return (f'<a href="#full-version" data-upsell="job" data-topic="{esc(j["title"])}">'
+                f'{esc(j["title"])}</a>')
+    items = "\n".join(
+        f'        <li>{job_link(j)}'
+        f'<p class="job-meta"><span>{esc(j["city"])}, {esc(j["region"])}</span>'
+        f'<span>{esc(j["pay_label"])}</span><span>{esc(j["schedule"])}</span></p></li>'
+        for j in sorted(jobs, key=lambda x: (x["city"], x["title"])))
+    index, ok = fill_slot(index, r'<ol class="job-list" id="job-results"[^>]*>', items)
+    if not ok:
+        die('index.html has no <ol class="job-list" id="job-results"> to fill')
+    status = ("Showing every open job. Use the search above to narrow it down." if pages else
+              "These are example listings that show how search works. Your live jobs appear here in the full version.")
+    if not pages:
+        index = re.sub(r'(<h2 id="results-title">).*?(</h2>)',
+                       lambda m: m.group(1) + "Example jobs" + m.group(2), index, count=1, flags=re.S)
+    index = re.sub(r'(<p class="status" id="job-status"[^>]*>).*?(</p>)',
+                   lambda m: m.group(1) + status + m.group(2), index, count=1, flags=re.S)
+    feed = [{"title": j["title"], "url": (f"jobs/{j['slug']}.html" if pages else ""),
+             "city": j["city"], "region": j["region"], "postal_code": j["postal_code"],
+             "category": j["category"], "category_label": j["category_label"],
+             "pay_label": j["pay_label"], "schedule": j["schedule"], "summary": j["summary"]}
+            for j in jobs]
+    write(os.path.join(site, "js", "jobs.js"),
+          "window.JOBS = " + json.dumps(feed, indent=1, ensure_ascii=False) + ";\n")
+
+    def loc_link(city, region, ls, n):
+        label = f"{esc(city)}, {esc(region)} ({n})"
+        if pages:
+            return f'<a href="locations/{ls}.html">{label}</a>'
+        return f'<a href="#full-version" data-upsell="location" data-topic="{esc(city)}, {esc(region)}">{label}</a>'
+    locs = "\n".join(f"        <li>{loc_link(city, region, ls, len(js))}</li>"
                      for (city, region, ls), js in sorted(by_loc.items()))
-    locs += '\n        <li><a href="jobs/index.html">All locations</a></li>'
+    locs += '\n        <li><a href="index.html#search">All locations</a></li>'
     index, _ = fill_slot(index, r'<ul class="loc-list" id="location-list"[^>]*>', locs)
     write(index_path, index)
 
@@ -496,11 +526,12 @@ def build(site, jobs_csv, base_url):
             continue
         t = read(os.path.join(site, rel))
         lines.append(f"- [{title_of(t)}]({base}/{rel}): {meta(t, 'description')}")
-    if jobs:
+    if jobs and pages:
         lines += ["", "## Open jobs by location", ""]
         for (city, region, ls), js in sorted(by_loc.items()):
             lines.append(f"- [{city}, {region}]({base}/locations/{ls}.html): {len(js)} open jobs")
-        lines += ["", "## Pay by job", ""]
+    if jobs:
+        lines += ["", "## Pay by job" if pages else "## Example roles (illustrative, not live openings)", ""]
         seen = set()
         for j in sorted(jobs, key=lambda x: (x["category"], x["title"])):
             key = (j["title"], j["pay_label"])
@@ -509,16 +540,21 @@ def build(site, jobs_csv, base_url):
             seen.add(key)
             lines.append(f"- {j['title']} ({j['city']}, {j['region']}): {j['pay_label'] or 'pay not listed'}; {j['schedule']}")
     lines += ["", "## How to apply", "",
-              f"Search jobs at {base}/jobs/index.html. Each job page has an Apply link and lists pay and schedule.", ""]
+              f"Search jobs at {base}/index.html#search. Each job lists pay and schedule.", ""]
     write(os.path.join(site, "llms.txt"), "\n".join(lines))
 
     preview, archive = package(site)
 
-    print(f"built {site}: {len(jobs)} job pages, {len(by_loc)} location pages, "
-          f"{len(html_files(site))} pages in the sitemap, brand '{brand}'")
+    if pages:
+        print(f"built {site}: {len(jobs)} job pages, {len(by_loc)} location pages, "
+              f"{len(html_files(site))} pages in the sitemap, brand '{brand}'")
+    else:
+        print(f"built {site}: landing page with {len(jobs)} example roles in {len(by_loc)} locations, "
+              f"brand '{brand}'")
     print(f"preview: {preview}")
     print(f"download: {archive}")
-    return {"jobs": len(jobs), "locations": len(by_loc), "pages": len(html_files(site)),
+    return {"jobs": len(jobs) if pages else 0, "locations": len(by_loc) if pages else 0,
+            "examples": 0 if pages else len(jobs), "pages": len(html_files(site)),
             "preview": preview, "archive": archive}
 
 
@@ -565,12 +601,15 @@ def package(site):
 def main():
     ap = argparse.ArgumentParser(description="Build the generated parts of a careers site.")
     ap.add_argument("--site", required=True, help="site folder; created from the starter if missing")
-    ap.add_argument("--jobs", help="CSV of open jobs")
+    ap.add_argument("--jobs", help="CSV of real open jobs: one page per job and per location")
+    ap.add_argument("--examples", help="CSV of example roles: a single landing page, job links open the preview dialog")
     ap.add_argument("--base-url", default=PLACEHOLDER_BASE, help="where the site will live")
-    ap.add_argument("--demo", action="store_true", help="use the fictional sample jobs")
+    ap.add_argument("--demo", action="store_true", help="landing page for the fictional sample employer")
     a = ap.parse_args()
-    jobs = SAMPLE if a.demo and not a.jobs else a.jobs
-    build(a.site, jobs, a.base_url)
+    if a.jobs:
+        build(a.site, a.jobs, a.base_url, pages=True)
+    else:
+        build(a.site, a.examples or (SAMPLE if a.demo else None), a.base_url, pages=False)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 
 ## The jobs file
 
-`build_site.py` reads one CSV, one row per open job. Required columns:
+`build_site.py` reads one CSV, one row per job. With `--examples` the rows are example roles shown on the landing page and labelled as examples; with `--jobs` they are real openings and each gets its own page. Required columns:
 
 | Column | Used for |
 |---|---|

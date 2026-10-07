@@ -66,6 +66,7 @@ CHECKS = {
     "ai.faq_schema": ("AI visibility", "advisory", "site", "FAQ pages carry FAQPage markup"),
     "conv.mobile_viewport": ("Conversion", "blocking", "page", "a mobile viewport on every page"),
     "conv.search_jobs_nav": ("Conversion", "blocking", "page", "a jobs link in the header of every page"),
+    "conv.dead_ends": ("Conversion", "blocking", "page", "every link goes somewhere: a section, a page, or the preview dialog"),
     "conv.home_search": ("Conversion", "advisory", "site", "a job search form on the home page"),
     "conv.apply_link": ("Conversion", "blocking", "page", "every job page has an Apply link"),
     "conv.pay_shown": ("Conversion", "advisory", "page", "every job page shows pay as a number"),
@@ -74,6 +75,7 @@ CHECKS = {
     "a11y.lang": ("Accessibility", "blocking", "page", "the page declares its language"),
     "a11y.img_alt": ("Accessibility", "blocking", "page", "every image has alt text (empty for decoration)"),
     "a11y.form_labels": ("Accessibility", "blocking", "page", "every form field has a label"),
+    "a11y.dialog": ("Accessibility", "blocking", "page", "the preview dialog has a name and a way to close it"),
     "a11y.focus_visible": ("Accessibility", "blocking", "site", "focus is never hidden without a visible replacement"),
     "a11y.contrast": ("Accessibility", "blocking", "site", "text colour pairs meet 4.5:1"),
     "a11y.reduced_motion": ("Accessibility", "advisory", "site", "motion switches off for people who ask for less"),
@@ -98,6 +100,7 @@ CLAIM_RE = re.compile(r"(?i)\b(award[- ]winning|#\s?1\b|number one|best place to
 MONEY_RE = re.compile(r"(\$|£|€)\s?\d|\d[\d,.]*\s?(usd|eur|gbp|aed)\b", re.I)
 SCHEDULE_RE = re.compile(r"(?i)\b(schedule|shift|hours|full-time|part-time|days?|nights?|weekends?|\d\s?(am|pm))\b")
 HANDOFF_RE = re.compile(r"(?i)(continue|finish|complete)[^.]{0,60}(application|apply)[^.]{0,80}\b(on|at|with|via)\b")
+PLACEHOLDER = "https://careers.example.com"
 JOBS_LINK_RE = re.compile(r"(?i)\bjobs?\b|\bcareers?\b.*\bsearch|\bopenings?\b|\bpositions?\b|\bapply\b")
 
 
@@ -126,6 +129,10 @@ class Page(HTMLParser):
         self.has_faq_details = False
         self.marks = []
         self.styles = []
+        self.ids = set()
+        self.anchors = []          # (href or None, has_upsell)
+        self.dialogs = []          # dicts: id, labelled, buttons
+        self._dialog = None
         self._stack = []
         self._in_title = self._in_jsonld = self._in_style = self._skip = 0
         self._in_label = 0
@@ -138,6 +145,14 @@ class Page(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         a = {k: (v or "") for k, v in attrs}
+        if a.get("id"):
+            self.ids.add(a["id"])
+        if tag == "dialog" or a.get("role") == "dialog":
+            self._dialog = {"id": a.get("id"), "labelledby": a.get("aria-labelledby"),
+                            "label": a.get("aria-label"), "buttons": 0}
+            self.dialogs.append(self._dialog)
+        if tag == "button" and self._dialog is not None:
+            self._dialog["buttons"] += 1
         if tag == "html":
             self.lang = a.get("lang")
         elif tag == "title":
@@ -174,6 +189,7 @@ class Page(HTMLParser):
                 self.links.append(("img", "src", a["src"], ""))
         elif tag == "a":
             self._a = [a.get("href", ""), []]
+            self.anchors.append((a.get("href"), "data-upsell" in a))
         elif tag == "label":
             self._in_label += 1
             if a.get("for"):
@@ -223,6 +239,8 @@ class Page(HTMLParser):
             self._form_fields = None
         elif tag in ("header", "nav"):
             self._in_header = max(0, self._in_header - 1)
+        elif tag == "dialog":
+            self._dialog = None
         elif tag == "mark" and self._in_mark:
             self._in_mark -= 1
             self.marks.append(" ".join("".join(self._mark_buf).split()))
@@ -453,6 +471,23 @@ def run(site=None, page=None):
             if any(h.startswith("http") for h, _ in applies) and not HANDOFF_RE.search(p.visible):
                 fails["conv.ats_handoff"].append(r)
 
+        dead = []
+        for href, upsell in p.anchors:
+            h = (href or "").strip()
+            if not h or h == "#" or h.lower().startswith("javascript:"):
+                if not upsell:
+                    dead.append(h or "(no href)")
+            elif h.startswith("#") and h[1:] not in p.ids:
+                dead.append(h)
+        if dead:
+            fails["conv.dead_ends"].append(f"{r} ({', '.join(sorted(set(dead))[:5])})")
+        if any(up for _, up in p.anchors):
+            targets = {(h or "").lstrip("#") for h, up in p.anchors if up}
+            good = [d for d in p.dialogs if d["id"] in targets and d["buttons"]
+                    and (d["label"] or (d["labelledby"] and d["labelledby"] in p.ids))]
+            if not good:
+                fails["a11y.dialog"].append(f"{r} (links open a dialog that is missing, unnamed or has no close button)")
+
         if not p.lang:
             fails["a11y.lang"].append(r)
         if p.imgs_no_alt:
@@ -638,65 +673,80 @@ def _edit(path, old, new, count=1):
 
 
 def _first_job(site):
-    return sorted(f for f in os.listdir(os.path.join(site, "jobs")) if f.endswith(".html") and f != "index.html")[0]
+    return sorted(f for f in os.listdir(os.path.join(site, "jobs")) if f.endswith(".html"))[0]
 
 
+def _first_location(site):
+    return sorted(os.listdir(os.path.join(site, "locations")))[0]
+
+
+# (name, base, setup(site), must_fail, must_not_fail, exact)
+# base "landing" is the one-page preview with example roles; "full" has job and
+# location pages built from a real export.
 MUTATIONS = [
-    # (name, setup(site), must_fail, must_not_fail, exact)
-    ("no viewport", lambda s: _edit(f"{s}/index.html", '<meta name="viewport" content="width=device-width, initial-scale=1">\n', ""),
+    ("no viewport", "landing", lambda s: _edit(f"{s}/index.html", '<meta name="viewport" content="width=device-width, initial-scale=1">\n', ""),
      {"conv.mobile_viewport"}, set(), True),
-    ("no h1", lambda s: (_edit(f"{s}/faq.html", "<h1>", "<h2>"), _edit(f"{s}/faq.html", "</h1>", "</h2>")),
+    ("no h1", "full", lambda s: (_edit(f"{s}/locations/{_first_location(s)}", "<h1>", "<h2>"), _edit(f"{s}/locations/{_first_location(s)}", "</h1>", "</h2>")),
      {"seo.h1"}, {"conv.search_jobs_nav"}, True),
-    ("two h1", lambda s: _edit(f"{s}/store-teams.html", "<h2>A typical shift</h2>", "<h1>A typical shift</h1>"),
+    ("two h1", "landing", lambda s: _edit(f"{s}/index.html", "</main>", "<h1>A second title</h1></main>"),
      {"seo.h1"}, set(), True),
-    ("image without alt", lambda s: _edit(f"{s}/index.html", '<main id="main">', '<main id="main"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">'),
+    ("image without alt", "landing", lambda s: _edit(f"{s}/index.html", '<main id="main">', '<main id="main"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">'),
      {"a11y.img_alt"}, {"seo.broken_links"}, True),
-    ("unlabelled search field", lambda s: _edit(f"{s}/index.html", '<label for="q">Job or keyword</label>', ""),
+    ("unlabelled search field", "landing", lambda s: _edit(f"{s}/index.html", '<label for="q">Job or keyword</label>', ""),
      {"a11y.form_labels"}, set(), True),
-    ("lorem ipsum", lambda s: _edit(f"{s}/index.html", "Specifics, not slogans.", "Lorem ipsum dolor sit amet."),
+    ("lorem ipsum", "landing", lambda s: _edit(f"{s}/index.html", "Specifics, not slogans.", "Lorem ipsum dolor sit amet."),
      {"content.placeholder"}, set(), True),
-    ("broken link", lambda s: _edit(f"{s}/faq.html", "</main>", '<p><a href="benefits.html">Benefits</a></p></main>'),
+    ("broken link", "full", lambda s: _edit(f"{s}/locations/{_first_location(s)}", "</main>", '<p><a href="benefits.html">Benefits</a></p></main>'),
      {"seo.broken_links"}, set(), True),
-    ("JobPosting without datePosted", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'\n\s*"datePosted": "[^"]*",'), ""),
+    ("link to nowhere", "landing", lambda s: _edit(f"{s}/index.html", '<a href="#full-version" data-upsell="page" data-topic="Benefits">', '<a href="#">'),
+     {"conv.dead_ends"}, set(), True),
+    ("anchor to a missing section", "landing", lambda s: _edit(f"{s}/index.html", '<li><a href="index.html#faq">FAQ</a></li>', '<li><a href="#questions">FAQ</a></li>'),
+     {"conv.dead_ends"}, set(), True),
+    ("preview dialog missing", "landing", lambda s: _edit(f"{s}/index.html", re.compile(r'<dialog class="upsell".*?</dialog>'), ""),
+     {"a11y.dialog", "conv.dead_ends"}, set(), True),
+    ("preview dialog without a name", "landing", lambda s: _edit(f"{s}/index.html", ' aria-labelledby="upsell-title"', ""),
+     {"a11y.dialog"}, {"conv.dead_ends"}, True),
+    ("JobPosting without datePosted", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'\n\s*"datePosted": "[^"]*",'), ""),
      {"seo.jobposting_required"}, {"seo.jobposting_recommended"}, True),
-    ("JobPosting without salary", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r',\n\s*"baseSalary": \{.*?\n  \}'), ""),
+    ("JobPosting without salary", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r',\n\s*"baseSalary": \{.*?\n  \}'), ""),
      {"seo.jobposting_recommended"}, {"conv.pay_shown", "seo.jobposting_required"}, True),
-    ("pay missing from the page", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'<p class="pay">.*?</p>'), ""),
+    ("pay missing from a job page", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'<p class="pay">.*?</p>'), ""),
      {"conv.pay_shown"}, {"seo.jobposting_recommended"}, True),
-    ("JavaScript-only home page", lambda s: (_edit(f"{s}/index.html", re.compile(r"<body>.*</body>"), '<body><div id="root"></div><script src="app.js"></script></body>'),
+    ("JavaScript-only home page", "landing", lambda s: (_edit(f"{s}/index.html", re.compile(r"<body>.*</body>"), '<body><div id="root"></div><script src="app.js"></script></body>'),
                                               open(f"{s}/app.js", "w").write("render();")),
      {"ai.content_in_html"}, {"seo.broken_links", "a11y.img_alt"}, False),
-    ("focus outline removed", lambda s: _edit(f"{s}/css/site.css", ":focus-visible { outline: 3px solid var(--focus);", ":focus { outline: none;"),
+    ("focus outline removed", "landing", lambda s: _edit(f"{s}/css/site.css", ":focus-visible { outline: 3px solid var(--focus);", ":focus { outline: none;"),
      {"a11y.focus_visible"}, set(), True),
-    ("low contrast brand colour", lambda s: _edit(f"{s}/css/tokens.css", "--accent-ink: #1a1a1a;", "--accent-ink: #ffd27a;"),
+    ("low contrast brand colour", "landing", lambda s: _edit(f"{s}/css/tokens.css", "--accent-ink: #1a1a1a;", "--accent-ink: #ffd27a;"),
      {"a11y.contrast"}, set(), True),
-    ("motion with no opt-out", lambda s: _edit(f"{s}/css/site.css", "prefers-reduced-motion: reduce", "min-width: 1px"),
+    ("motion with no opt-out", "landing", lambda s: _edit(f"{s}/css/site.css", "prefers-reduced-motion: reduce", "min-width: 1px"),
      {"a11y.reduced_motion"}, set(), True),
-    ("cliche", lambda s: _edit(f"{s}/hiring-process.html", "Four steps,", "We work hard, play hard. Four steps,"),
+    ("cliche", "landing", lambda s: _edit(f"{s}/index.html", "Four steps,", "We work hard, play hard. Four steps,") if "Four steps," in open(f"{s}/index.html").read()
+     else _edit(f"{s}/index.html", "Specifics, not slogans.", "We work hard, play hard."),
      {"content.cliche"}, {"content.unverified_claim"}, True),
-    ("unverified award", lambda s: _edit(f"{s}/index.html", "Specifics, not slogans.", "An award-winning employer."),
+    ("unverified award", "landing", lambda s: _edit(f"{s}/index.html", "Specifics, not slogans.", "An award-winning employer."),
      {"content.unverified_claim"}, {"content.cliche"}, True),
-    ("award marked for confirmation", lambda s: _edit(f"{s}/index.html", "Specifics, not slogans.", '<mark class="confirm">An award-winning employer.</mark>'),
+    ("award marked for confirmation", "landing", lambda s: _edit(f"{s}/index.html", "Specifics, not slogans.", '<mark class="confirm">An award-winning employer.</mark>'),
      set(), {"content.unverified_claim"}, True),
-    ("sitemap missing", lambda s: os.remove(f"{s}/sitemap.xml"),
+    ("sitemap missing", "full", lambda s: os.remove(f"{s}/sitemap.xml"),
      {"seo.sitemap"}, set(), True),
-    ("sitemap misses a page", lambda s: _edit(f"{s}/sitemap.xml", re.compile(r"  <url><loc>[^<]*faq\.html</loc>.*?</url>\n"), ""),
+    ("sitemap misses a page", "full", lambda s: _edit(f"{s}/sitemap.xml", re.compile(r"  <url><loc>[^<]*locations/[^<]*</loc>.*?</url>\n"), ""),
      {"seo.sitemap"}, set(), True),
-    ("robots blocks everything", lambda s: _edit(f"{s}/robots.txt", "Allow: /", "Disallow: /"),
+    ("robots blocks everything", "landing", lambda s: _edit(f"{s}/robots.txt", "Allow: /", "Disallow: /"),
      {"seo.robots"}, set(), True),
-    ("no llms.txt", lambda s: os.remove(f"{s}/llms.txt"),
+    ("no llms.txt", "landing", lambda s: os.remove(f"{s}/llms.txt"),
      {"ai.llms_txt"}, set(), True),
-    ("no jobs link in a header", lambda s: _edit(f"{s}/faq.html", re.compile(r'<header class="site-header">.*?</header>'), '<header class="site-header"><a href="index.html">Home</a></header>'),
+    ("no jobs link in a header", "full", lambda s: _edit(f"{s}/locations/{_first_location(s)}", re.compile(r'<header class="site-header">.*?</header>'), '<header class="site-header"><a href="../index.html">Home</a></header>'),
      {"conv.search_jobs_nav"}, set(), True),
-    ("orphan job page", lambda s: (_edit(f"{s}/jobs/index.html", re.compile(r'<li><a href="%s">.*?</li>' % re.escape(_first_job(s))), ""),
-                                   [_edit(f"{s}/locations/{n}", re.compile(r'<li><a href="\.\./jobs/%s">.*?</li>' % re.escape(_first_job(s))), "")
-                                    for n in os.listdir(f"{s}/locations") if _first_job(s) in open(f"{s}/locations/{n}").read()]),
+    ("orphan job page", "full", lambda s: (_edit(f"{s}/index.html", re.compile(r'<li><a href="jobs/%s">.*?</li>' % re.escape(_first_job(s))), ""),
+                                           [_edit(f"{s}/locations/{n}", re.compile(r'<li><a href="\.\./jobs/%s">.*?</li>' % re.escape(_first_job(s))), "")
+                                            for n in os.listdir(f"{s}/locations") if _first_job(s) in open(f"{s}/locations/{n}").read()]),
      {"ai.jobs_in_html"}, {"seo.broken_links"}, True),
-    ("external apply not explained", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'<p class="handoff-note">.*?</p>'), ""),
+    ("external apply not explained", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'<p class="handoff-note">.*?</p>'), ""),
      {"conv.ats_handoff"}, {"conv.apply_link"}, True),
-    ("FAQ without markup", lambda s: _edit(f"{s}/faq.html", re.compile(r'<script type="application/ld\+json" id="faq-jsonld">.*?</script>'), ""),
+    ("FAQ without markup", "landing", lambda s: _edit(f"{s}/index.html", re.compile(r'<script type="application/ld\+json" id="faq-jsonld">.*?</script>'), ""),
      {"ai.faq_schema"}, set(), True),
-    ("five third-party scripts", lambda s: _edit(f"{s}/index.html", "</body>", "".join(f'<script src="https://t{i}.example.net/x.js"></script>' for i in range(5)) + "</body>"),
+    ("five third-party scripts", "landing", lambda s: _edit(f"{s}/index.html", "</body>", "".join(f'<script src="https://t{i}.example.net/x.js"></script>' for i in range(5)) + "</body>"),
      {"perf.third_party_scripts"}, set(), True),
 ]
 
@@ -712,58 +762,89 @@ def run_tests():
         else:
             failed += 1
 
+    import contextlib
+    import io
+    import zipfile
     builder = _load_builder()
     tmp = tempfile.mkdtemp(prefix="career-site-")
     try:
-        clean = os.path.join(tmp, "clean")
-        import contextlib
-        import io
+        bases = {}
+        print("Landing page, the demo")
+        landing = os.path.join(tmp, "landing")
         with contextlib.redirect_stdout(io.StringIO()):
-            stats = builder.build(clean, builder.SAMPLE, "https://careers.northline.example")
-        print("Clean demo build")
-        res = run(site=clean)
-        check("demo site passes every check", not res["fails"], json.dumps(res["fails"])[:300])
-        jobs_csv = sum(1 for _ in open(builder.SAMPLE, encoding="utf-8")) - 1
-        check("one page per job", stats["jobs"] == jobs_csv, f"{stats['jobs']} vs {jobs_csv}")
-        jp = [r for r in os.listdir(os.path.join(clean, "jobs")) if r.endswith(".html") and r != "index.html"]
-        check("every job page carries JobPosting markup",
-              all(is_job_page(parse(os.path.join(clean, "jobs", r))) for r in jp))
-        check("base URL replaced everywhere",
-              "careers.example.com" not in open(os.path.join(clean, "sitemap.xml")).read()
-              and "careers.example.com" not in open(os.path.join(clean, "index.html")).read())
-        check("unconfirmed facts are listed for the employer", len(res["to_confirm"]) >= 10,
-              str(len(res["to_confirm"])))
-        search = parse(os.path.join(clean, "jobs", "index.html"))
-        check("every job is listed in the search page HTML",
-              sum(1 for t, _, u, _ in search.links if t == "a" and u in jp) == len(jp))
-        with contextlib.redirect_stdout(io.StringIO()):
-            builder.build(clean, builder.SAMPLE, "https://careers.northline.example")
-        check("rebuilding is idempotent", not run(site=clean)["fails"])
-
-        preview = open(stats["preview"], encoding="utf-8").read()
+            ls = builder.build(landing, builder.SAMPLE, "https://careers.northline.example", pages=False)
+        bases["landing"] = landing
+        res = run(site=landing)
+        check("landing page passes every check", not res["fails"], json.dumps(res["fails"])[:300])
+        check("it is one page: no job or location pages", not os.path.exists(os.path.join(landing, "jobs"))
+              and not os.path.exists(os.path.join(landing, "locations")) and res["pages"] == 1)
+        home = parse(os.path.join(landing, "index.html"))
+        upsell_jobs = sum(1 for h, up in home.anchors if up and h == "#full-version")
+        examples = sum(1 for _ in open(builder.SAMPLE, encoding="utf-8")) - 1
+        check("every example job opens the preview dialog", upsell_jobs >= examples, f"{upsell_jobs} vs {examples}")
+        check("example listings are labelled as examples", "example listings" in home.visible.lower())
+        check("unconfirmed facts are listed for the employer", len(res["to_confirm"]) >= 10, str(len(res["to_confirm"])))
+        preview = open(ls["preview"], encoding="utf-8").read()
         check("the preview is one self-contained file",
-              'rel="stylesheet"' not in preview and "<style>" in preview and "src=\"js/" not in preview)
-        import zipfile
+              'rel="stylesheet"' not in preview and "<style>" in preview and 'src="js/' not in preview)
+
+        print("\nFull site, from a jobs export")
+        full = os.path.join(tmp, "full")
+        with contextlib.redirect_stdout(io.StringIO()):
+            stats = builder.build(full, builder.SAMPLE, "https://careers.northline.example", pages=True)
+        bases["full"] = full
+        res = run(site=full)
+        check("full site passes every check", not res["fails"], json.dumps(res["fails"])[:300])
+        jobs_csv = examples
+        check("one page per job", stats["jobs"] == jobs_csv, f"{stats['jobs']} vs {jobs_csv}")
+        jp = [r for r in os.listdir(os.path.join(full, "jobs")) if r.endswith(".html")]
+        check("every job page carries JobPosting markup",
+              all(is_job_page(parse(os.path.join(full, "jobs", r))) for r in jp))
+        check("base URL replaced everywhere",
+              "careers.example.com" not in open(os.path.join(full, "sitemap.xml")).read()
+              and "careers.example.com" not in open(os.path.join(full, "index.html")).read())
+        search = parse(os.path.join(full, "index.html"))
+        check("every job is listed in the landing page HTML",
+              sum(1 for t, _, u, _ in search.links if t == "a" and u.startswith("jobs/") and u[5:] in jp) == len(jp))
         with zipfile.ZipFile(stats["archive"]) as z:
             names = set(z.namelist())
         check("the download holds every page of the site",
-              all(f"clean/{r}" in names for r in ["index.html", "sitemap.xml", "llms.txt", "jobs/index.html"])
-              and sum(1 for n in names if n.startswith("clean/jobs/") and n.endswith(".html")) == len(jp) + 1)
+              all(f"full/{r}" in names for r in ["index.html", "sitemap.xml", "llms.txt", "js/jobs.js"])
+              and sum(1 for n in names if n.startswith("full/jobs/") and n.endswith(".html")) == len(jp))
+        with contextlib.redirect_stdout(io.StringIO()):
+            builder.build(full, builder.SAMPLE, "https://careers.northline.example", pages=True)
+        check("rebuilding is idempotent", not run(site=full)["fails"])
+        with contextlib.redirect_stdout(io.StringIO()):
+            builder.build(os.path.join(tmp, "switch"), builder.SAMPLE, PLACEHOLDER, pages=True)
+            builder.build(os.path.join(tmp, "switch"), builder.SAMPLE, PLACEHOLDER, pages=False)
+        check("switching back to a landing page leaves no stale job pages",
+              not os.path.exists(os.path.join(tmp, "switch", "jobs")) and not run(site=os.path.join(tmp, "switch"))["fails"])
+
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("fill_brief", os.path.join(HERE, "fill_brief.py"))
+        fb = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(fb)
+        brief = fb.fill("Northline", "deep blue", "store team members and drivers", ["Store Careers", "Driving"])
+        tpl = fb.template()
+        restored = (brief.replace("- Store Careers\n- Driving", "{segment pages}")
+                    .replace("store team members and drivers", "{talent segments}")
+                    .replace("deep blue", "{brand colour}").replace("Northline", "{Company}"))
+        check("the brief is filled word for word, with no blank left", "{" not in brief and restored == tpl)
 
         rubric = open(os.path.join(SKILL, "references", "rubric.md"), encoding="utf-8").read()
         undocumented = [c for c in CHECKS if f"`{c}`" not in rubric]
         check("every check is documented in references/rubric.md", not undocumented, str(undocumented))
 
         print("\nSingle-page audit")
-        single = run(page=os.path.join(clean, "index.html"))
+        single = run(page=os.path.join(full, "index.html"))
         check("site-wide checks are skipped, not failed",
               not ({"seo.sitemap", "seo.broken_links", "ai.llms_txt"} & set(single["fails"]))
               and "seo.sitemap" in single["skipped"])
 
         print("\nPlanted faults")
-        for name, setup, must, must_not, exact in MUTATIONS:
+        for name, base, setup, must, must_not, exact in MUTATIONS:
             site = os.path.join(tmp, re.sub(r"\W+", "-", name))
-            shutil.copytree(clean, site)
+            shutil.copytree(bases[base], site)
             setup(site)
             got = set(run(site=site)["fails"])
             missing = must - got
