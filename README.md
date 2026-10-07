@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**2 ready now. 38 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**3 ready now. 38 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -18,6 +18,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | Skill | What it does | |
 |---|---|---|
 | [`funnel-drop-off-analyst`](skills/analysing/funnel-drop-off-analyst/) | Finds where candidates leave your hiring funnel, separates correlation from cause, and ranks the fixes by how many hires they would recover. | needs a CSV export, 0.3 MB |
+| [`career-site-builder`](skills/sourcing/career-site-builder/) | Builds or audits a careers site, career page or jobs page for an hourly, multi-site employer, with job pages that search engines and AI assistants can read, pay on every listing, and a checker that proves it before handover. | no data needed, 57 KB |
 | [`job-ad-writer`](skills/writing/job-ad-writer/) | Writes high-volume hourly job ads that work on a phone, with a variant for each channel you post to. | no data needed, 16 KB |
 
 ## Sample datasets

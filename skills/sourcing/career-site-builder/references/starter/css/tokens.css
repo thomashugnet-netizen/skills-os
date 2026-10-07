@@ -1,0 +1,45 @@
+/*
+  Design tokens. This is the only file that changes per brand.
+  Swap the five brand values, keep the rest. Every pair used for text
+  in site.css is listed in check_site.py's contrast check, so a brand
+  colour that fails contrast is caught before launch, not after.
+*/
+:root {
+  /* Brand: replace these five */
+  --brand: #123c69;          /* primary, used for header, buttons, links */
+  --brand-ink: #ffffff;      /* text that sits on --brand */
+  --accent: #f2a007;         /* one highlight colour, used sparingly */
+  --accent-ink: #1a1a1a;     /* text that sits on --accent */
+  --brand-soft: #e7eef6;     /* tinted background for brand sections */
+
+  /* Neutrals: warm, so the site does not read as a software product */
+  --ink: #1d1f22;
+  --ink-muted: #4a4f57;
+  --surface: #ffffff;
+  --surface-warm: #faf7f2;
+  --surface-dark: #1d1f22;
+  --on-dark: #f5f3ef;
+  --line: #e4dfd6;
+  --focus: #b35c00;
+
+  /* Type: system stack, no font download, fast on a phone */
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.5rem;
+  --step-3: clamp(1.75rem, 1.4rem + 1.6vw, 2.4rem);
+  --step-4: clamp(2.2rem, 1.6rem + 3vw, 3.6rem);
+
+  /* Space and shape */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --radius: 10px;
+  --radius-lg: 18px;
+  --max: 72rem;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 6px 20px rgba(0, 0, 0, 0.06);
+}
