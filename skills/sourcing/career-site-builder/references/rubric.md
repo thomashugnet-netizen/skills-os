@@ -43,6 +43,7 @@ failure.
 |---|---|---|---|
 | `conv.mobile_viewport` | blocking | page | a mobile viewport on every page |
 | `conv.search_jobs_nav` | blocking | page | a jobs link in the header of every page |
+| `conv.dead_ends` | blocking | page | every link goes somewhere: a section, a page, or the preview dialog |
 | `conv.home_search` | advisory | site | a job search form on the home page |
 | `conv.apply_link` | blocking | page | every job page has an Apply link |
 | `conv.pay_shown` | advisory | page | every job page shows pay as a number |
@@ -56,6 +57,7 @@ failure.
 | `a11y.lang` | blocking | page | the page declares its language |
 | `a11y.img_alt` | blocking | page | every image has alt text (empty for decoration) |
 | `a11y.form_labels` | blocking | page | every form field has a label |
+| `a11y.dialog` | blocking | page | the preview dialog has a name and a way to close it |
 | `a11y.focus_visible` | blocking | site | focus is never hidden without a visible replacement |
 | `a11y.contrast` | blocking | site | text colour pairs meet 4.5:1 |
 | `a11y.reduced_motion` | advisory | site | motion switches off for people who ask for less |
