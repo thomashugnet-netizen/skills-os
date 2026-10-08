@@ -36,7 +36,11 @@ build is no longer what it builds by default.
 - **`references/launch-checklist.md`**: what legal, IT and brand teams at a large
   employer check that no automated check can, with a verification list.
 - **Job pages** gain a pay and benefits section, from an optional `benefits` column.
-- **56 tests**, up from 37. Both modes must pass clean, the brief must fill word for
+- **`scripts/advise.py` and `references/recommendations.json`**: after the check, the
+  three things to do first and a full plan by owner (must, should, could), from a
+  catalogue in which every check has a recommendation and every fact-based must cites
+  a source. Shared word for word with `careers-site-advisor`.
+- **82 tests**, up from 37: 26 for the advice and 56 for the site. Both modes must pass clean, the brief must fill word for
   word, switching modes must leave no stale pages, and 39 planted faults must each be
   caught for their named reason. Sample dates are shifted at test time, so the suite
   does not start failing when the calendar passes them. The suite caught a real defect on the way: job pages

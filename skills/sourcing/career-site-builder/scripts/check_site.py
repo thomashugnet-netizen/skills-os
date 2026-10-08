@@ -669,7 +669,8 @@ def run(site=None, page=None):
         for m in p.marks:
             to_confirm.append(f"{r}: {m}")
 
-    return {"pages": len(pages), "fails": {k: v for k, v in fails.items() if v and k not in skipped},
+    return {"pages": len(pages), "job_pages": sum(1 for p in pages.values() if is_job_page(p)),
+            "fails": {k: v for k, v in fails.items() if v and k not in skipped},
             "skipped": sorted(skipped), "to_confirm": to_confirm, "site_mode": site_mode}
 
 
@@ -828,6 +829,12 @@ MUTATIONS = [
 
 
 def run_tests():
+    if not os.path.exists(os.path.join(HERE, "build_site.py")):
+        # This checker is shared with skills that do not build sites. Its suite
+        # needs the builder, so it runs in career-site-builder, where both live.
+        print("check_site.py: suite runs in career-site-builder; nothing to build here")
+        print("\n0 passed, 0 failed")
+        return True
     passed = failed = 0
 
     def check(name, ok, detail=""):

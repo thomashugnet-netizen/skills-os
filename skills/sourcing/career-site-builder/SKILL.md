@@ -52,6 +52,8 @@ From the tested starter in `references/starter/`: I set your brand in `css/token
 
 `scripts/check_site.py --site <folder>` runs every check in `references/rubric.md`: search engine rules taken from the search engine's own job-posting guidelines, AI visibility, conversion, accessibility, the legal basics (privacy notice, accommodations, equal opportunity), honesty and speed. I fix what it finds and run it again. I do not hand over a page with a blocking finding. What a checker cannot see, a large employer's legal, IT and brand teams will ask about; `references/launch-checklist.md` lists it, and `references/sources.md` says what each rule rests on and when it was checked.
 
+Then `scripts/advise.py --site <folder>` turns what is left, and what you told me (the states you hire in, how long your application takes, whether jobs reach the site by hand), into the three things to do first and a full plan by owner: must, should, could. Every recommendation is there to get you more of the right applicants or less legal exposure, and each one cites its source. What I do not know becomes a question, not an assumption.
+
 If I cannot run code in this conversation, I still write the page from the starter, but I tell you plainly that the generated parts and the checks were not run, and how to turn code execution on.
 
 ## What you get
@@ -61,7 +63,8 @@ If I cannot run code in this conversation, I still write the page from the start
 3. **A preview**: the landing page as one self-contained file that opens styled, in this chat or by double-click.
 4. **The page as a zip**, ready for any static host. No build tools, no framework, no tracking scripts.
 5. **The check report.**
-6. **The launch list**: every fact marked for confirmation, the photos to supply, the integrations behind each link that opens the dialog, and the legal, IT and brand items from `references/launch-checklist.md` that apply to you.
+6. **The three things to do first**, then the full plan from `scripts/advise.py`.
+7. **The launch list**: every fact marked for confirmation, the photos to supply, the integrations behind each link that opens the dialog, and the legal, IT and brand items from `references/launch-checklist.md` that apply to you.
 
 ## The preview dialog
 
