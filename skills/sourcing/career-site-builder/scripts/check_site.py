@@ -54,6 +54,10 @@ CHECKS = {
     "seo.canonical": ("Search", "advisory", "page", "a canonical URL on every page"),
     "seo.jobposting_required": ("Search", "blocking", "page", "JobPosting markup has every field Google requires"),
     "seo.jobposting_recommended": ("Search", "advisory", "page", "JobPosting markup has pay, employment type, closing date and id"),
+    "seo.jobposting_placement": ("Search", "blocking", "page", "JobPosting markup only on a single job's own page, never on a list"),
+    "seo.jobposting_title": ("Search", "blocking", "page", "the JobPosting title is the job title only: no pay, place, code or company"),
+    "seo.jobposting_matches_page": ("Search", "blocking", "page", "the title and pay in the markup are visible on the page"),
+    "seo.jobposting_expired": ("Search", "blocking", "page", "no live page marks up a job whose closing date has passed"),
     "seo.job_pages": ("Search", "advisory", "site", "each job has its own page with JobPosting markup"),
     "seo.location_pages": ("Search", "advisory", "site", "a page per location people search for"),
     "seo.sitemap": ("Search", "blocking", "site", "sitemap.xml lists every page"),
@@ -70,6 +74,7 @@ CHECKS = {
     "conv.home_search": ("Conversion", "advisory", "site", "a job search form on the home page"),
     "conv.apply_link": ("Conversion", "blocking", "page", "every job page has an Apply link"),
     "conv.pay_shown": ("Conversion", "advisory", "page", "every job page shows pay as a number"),
+    "conv.benefits_on_job": ("Conversion", "advisory", "page", "every job page describes benefits, which several pay-transparency laws require"),
     "conv.schedule_shown": ("Conversion", "advisory", "page", "every job page says what the hours are"),
     "conv.ats_handoff": ("Conversion", "advisory", "page", "the jump to an external application site is explained"),
     "a11y.lang": ("Accessibility", "blocking", "page", "the page declares its language"),
@@ -82,11 +87,14 @@ CHECKS = {
     "content.placeholder": ("Honesty", "blocking", "page", "no lorem ipsum, TODO or unfilled placeholders"),
     "content.cliche": ("Honesty", "advisory", "page", "none of the phrases candidates have learned to ignore"),
     "content.unverified_claim": ("Honesty", "advisory", "page", "awards and rankings are marked for confirmation"),
+    "legal.privacy_link": ("Legal", "blocking", "page", "a candidate privacy notice is linked from every page"),
+    "legal.accommodations": ("Legal", "blocking", "page", "every page says how to ask for an accommodation"),
+    "legal.eeo_statement": ("Legal", "advisory", "page", "an equal-opportunity statement on every page"),
     "perf.page_weight": ("Speed", "advisory", "page", "HTML, CSS and JS under 500 KB per page"),
     "perf.image_weight": ("Speed", "advisory", "site", "no image over 400 KB"),
     "perf.third_party_scripts": ("Speed", "advisory", "page", "four or fewer third-party scripts per page"),
 }
-AREAS = ["Search", "AI visibility", "Conversion", "Accessibility", "Honesty", "Speed"]
+AREAS = ["Search", "AI visibility", "Conversion", "Accessibility", "Legal", "Honesty", "Speed"]
 
 JOBPOSTING_REQUIRED = ["title", "description", "datePosted", "hiringOrganization"]
 JOBPOSTING_RECOMMENDED = ["baseSalary", "employmentType", "validThrough", "identifier"]
@@ -101,6 +109,8 @@ MONEY_RE = re.compile(r"(\$|£|€)\s?\d|\d[\d,.]*\s?(usd|eur|gbp|aed)\b", re.I)
 SCHEDULE_RE = re.compile(r"(?i)\b(schedule|shift|hours|full-time|part-time|days?|nights?|weekends?|\d\s?(am|pm))\b")
 HANDOFF_RE = re.compile(r"(?i)(continue|finish|complete)[^.]{0,60}(application|apply)[^.]{0,80}\b(on|at|with|via)\b")
 PLACEHOLDER = "https://careers.example.com"
+import datetime as _dt
+TODAY = _dt.date.today().isoformat()
 JOBS_LINK_RE = re.compile(r"(?i)\bjobs?\b|\bcareers?\b.*\bsearch|\bopenings?\b|\bpositions?\b|\bapply\b")
 
 
@@ -139,6 +149,8 @@ class Page(HTMLParser):
         self._in_header = 0
         self._in_mark = 0
         self._mark_buf = []
+        self._in_main = 0
+        self.main_text = []
         self._a = None
         self._buf = []
         self._form_fields = None
@@ -204,6 +216,8 @@ class Page(HTMLParser):
             self._form_fields = 0
         elif tag in ("header", "nav"):
             self._in_header += 1
+        elif tag == "main":
+            self._in_main += 1
         elif tag == "mark" and "confirm" in a.get("class", ""):
             self._in_mark += 1
             self._mark_buf = []
@@ -241,6 +255,8 @@ class Page(HTMLParser):
             self._in_header = max(0, self._in_header - 1)
         elif tag == "dialog":
             self._dialog = None
+        elif tag == "main":
+            self._in_main = max(0, self._in_main - 1)
         elif tag == "mark" and self._in_mark:
             self._in_mark -= 1
             self.marks.append(" ".join("".join(self._mark_buf).split()))
@@ -254,6 +270,8 @@ class Page(HTMLParser):
         if self._skip:
             return
         self.text.append(data)
+        if self._in_main:
+            self.main_text.append(data)
         if self._in_mark:
             self._mark_buf.append(data)
         else:
@@ -436,8 +454,37 @@ def run(site=None, page=None):
             fails["seo.canonical"].append(r)
         if any(o.get("@type") == "__invalid__" for o in p.jsonld_objects):
             fails["seo.jobposting_required"].append(f"{r} (structured data is not valid JSON)")
-        for jp in jsonld_of(p, "JobPosting"):
+        postings = jsonld_of(p, "JobPosting")
+        job_links = {h for tag, _, h, _ in p.links if tag == "a" and re.search(r"jobs/[^/#?]+\.html$", h)
+                     and not h.endswith("index.html")}
+        if len(postings) > 1 or (postings and ('id="job-results"' in p.raw or len(job_links) > 1)):
+            fails["seo.jobposting_placement"].append(f"{r} ({len(postings)} postings on one page)")
+        for jp in postings:
+            title = str(jp.get("title", ""))
+            org = jp.get("hiringOrganization", {})
+            org = org.get("name", "") if isinstance(org, dict) else str(org)
+            if (re.search(r"[$\u00a3\u20ac]|\d+\s*(/|per)\s*(h|hr|hour)|\||\s[-\u2013]\s|#\s?\d|\b[A-Z]{2,}-\d+", title)
+                    or (org and org.lower() in title.lower())):
+                fails["seo.jobposting_title"].append(f"{r} (\"{title}\")")
+            seen_text = p.visible.replace(",", "")
+            mism = []
+            if title and title.lower() not in p.visible.lower():
+                mism.append("title")
+            sal = jp.get("baseSalary", {})
+            val = sal.get("value", {}) if isinstance(sal, dict) else {}
+            for k in ("minValue", "maxValue", "value"):
+                v = val.get(k) if isinstance(val, dict) else None
+                if isinstance(v, (int, float)) and str(int(v)) not in seen_text:
+                    mism.append(f"pay {v}")
+            if mism:
+                fails["seo.jobposting_matches_page"].append(f"{r} ({', '.join(mism)} not shown on the page)")
+            vt = str(jp.get("validThrough", ""))[:10]
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", vt) and vt < TODAY:
+                fails["seo.jobposting_expired"].append(f"{r} (closed {vt})")
+            desc = str(jp.get("description", ""))
             miss = [k for k in JOBPOSTING_REQUIRED if not jp.get(k)]
+            if jp.get("description") and (not re.search(r"<(p|br|li)\b", desc) or desc.strip() == title.strip()):
+                miss.append("description as HTML with paragraph breaks")
             loc = jp.get("jobLocation")
             remote = jp.get("jobLocationType") == "TELECOMMUTE"
             addr = (loc or {}).get("address", {}) if isinstance(loc, dict) else {}
@@ -470,6 +517,15 @@ def run(site=None, page=None):
                 fails["conv.schedule_shown"].append(r)
             if any(h.startswith("http") for h, _ in applies) and not HANDOFF_RE.search(p.visible):
                 fails["conv.ats_handoff"].append(r)
+            if not re.search(r"(?i)\bbenefits?\b", " ".join(p.main_text)):
+                fails["conv.benefits_on_job"].append(r)
+
+        if not any(re.search(r"(?i)privacy", t) for tag, _, h, t in p.links if tag == "a"):
+            fails["legal.privacy_link"].append(r)
+        if not re.search(r"(?i)accommodat", p.visible):
+            fails["legal.accommodations"].append(r)
+        if not re.search(r"(?i)equal (employment )?opportunit", p.visible):
+            fails["legal.eeo_statement"].append(r)
 
         dead = []
         for href, upsell in p.anchors:
@@ -711,7 +767,7 @@ MUTATIONS = [
     ("JobPosting without salary", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r',\n\s*"baseSalary": \{.*?\n  \}'), ""),
      {"seo.jobposting_recommended"}, {"conv.pay_shown", "seo.jobposting_required"}, True),
     ("pay missing from a job page", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'<p class="pay">.*?</p>'), ""),
-     {"conv.pay_shown"}, {"seo.jobposting_recommended"}, True),
+     {"conv.pay_shown", "seo.jobposting_matches_page"}, {"seo.jobposting_recommended"}, True),
     ("JavaScript-only home page", "landing", lambda s: (_edit(f"{s}/index.html", re.compile(r"<body>.*</body>"), '<body><div id="root"></div><script src="app.js"></script></body>'),
                                               open(f"{s}/app.js", "w").write("render();")),
      {"ai.content_in_html"}, {"seo.broken_links", "a11y.img_alt"}, False),
@@ -746,6 +802,26 @@ MUTATIONS = [
      {"conv.ats_handoff"}, {"conv.apply_link"}, True),
     ("FAQ without markup", "landing", lambda s: _edit(f"{s}/index.html", re.compile(r'<script type="application/ld\+json" id="faq-jsonld">.*?</script>'), ""),
      {"ai.faq_schema"}, set(), True),
+    ("JobPosting on a list page", "full", lambda s: _edit(f"{s}/locations/{_first_location(s)}", "</head>",
+                                                          re.search(r'<script type="application/ld\+json">.*?</script>', open(f"{s}/jobs/{_first_job(s)}").read(), re.S).group(0) + "</head>"),
+     {"seo.jobposting_placement"}, set(), False),
+    ("pay in the JobPosting title", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'"title": "([^"]+)",'), '"title": "Category Analyst $68k",'),
+     {"seo.jobposting_title", "seo.jobposting_matches_page"}, set(), True),
+    ("markup pay not on the page", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'"minValue": [0-9.]+'), '"minValue": 99999.0'),
+     {"seo.jobposting_matches_page"}, {"seo.jobposting_title"}, True),
+    ("expired posting still live", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'"validThrough": "[^"]*"'), '"validThrough": "2020-01-31T23:59"'),
+     {"seo.jobposting_expired"}, set(), True),
+    ("description without paragraphs", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r'"description": "[^"]*"'), '"description": "Plain text only"'),
+     {"seo.jobposting_required"}, set(), True),
+    ("job page without benefits", "full", lambda s: _edit(f"{s}/jobs/{_first_job(s)}", re.compile(r"<h2>Pay and benefits</h2><ul>.*?</ul>"), ""),
+     {"conv.benefits_on_job"}, set(), True),
+    ("no privacy link", "landing", lambda s: _edit(f"{s}/index.html", re.compile(r'<li><a [^>]*>Candidate privacy notice</a></li>'), ""),
+     {"legal.privacy_link"}, set(), True),
+    ("no accommodations", "landing", lambda s: _edit(f"{s}/index.html", re.compile(r"(?i)accommodation"), "assistance", count=0),
+     {"legal.accommodations"}, {"conv.dead_ends"}, True),
+    ("no equal-opportunity statement", "landing", lambda s: (_edit(f"{s}/index.html", "Equal employment opportunity", "Policies", count=-1),
+                                                          _edit(f"{s}/index.html", "an equal opportunity employer", "hiring")),
+     {"legal.eeo_statement"}, set(), True),
     ("five third-party scripts", "landing", lambda s: _edit(f"{s}/index.html", "</body>", "".join(f'<script src="https://t{i}.example.net/x.js"></script>' for i in range(5)) + "</body>"),
      {"perf.third_party_scripts"}, set(), True),
 ]
@@ -768,6 +844,21 @@ def run_tests():
     builder = _load_builder()
     tmp = tempfile.mkdtemp(prefix="career-site-")
     try:
+        # The sample's dates are fixed; shift them so the suite never sees an
+        # expired posting just because the calendar moved on.
+        import csv
+        import datetime
+        rows = list(csv.DictReader(open(builder.SAMPLE, encoding="utf-8")))
+        today = datetime.date.today()
+        for row in rows:
+            row["date_posted"] = (today - datetime.timedelta(days=7)).isoformat()
+            row["valid_through"] = (today + datetime.timedelta(days=90)).isoformat()
+        sample = os.path.join(tmp, "jobs.csv")
+        with open(sample, "w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator="\n")
+            w.writeheader()
+            w.writerows(rows)
+        builder.SAMPLE = sample
         bases = {}
         print("Landing page, the demo")
         landing = os.path.join(tmp, "landing")

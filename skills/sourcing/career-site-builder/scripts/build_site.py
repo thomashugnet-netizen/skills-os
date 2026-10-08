@@ -47,7 +47,7 @@ REQUIRED = ["job_id", "title", "category", "city", "region", "country",
             "pay_min", "pay_max", "pay_unit", "employment_type", "schedule",
             "date_posted", "apply_url", "summary"]
 OPTIONAL = ["postal_code", "street_address", "currency", "valid_through",
-            "duties", "requirements"]
+            "duties", "requirements", "benefits"]
 
 CATEGORY_LABELS = {
     "store-teams": "Store teams", "food-service": "Food service",
@@ -262,6 +262,8 @@ def job_jsonld(j, brand):
         "jobLocation": {"@type": "Place", "address": address},
         "directApply": False,
     }
+    if bullets(j["benefits"]):
+        data["jobBenefits"] = ", ".join(bullets(j["benefits"]))
     if j["valid_through"]:
         data["validThrough"] = j["valid_through"] + ("T23:59" if len(j["valid_through"]) == 10 else "")
     if j["pay_min"] or j["pay_max"]:
@@ -281,6 +283,10 @@ def job_page(j, brand, chrome):
            else '<p class="pay">Pay is discussed at interview</p>')
     duties = "".join(f"<li>{esc(x)}</li>" for x in bullets(j["duties"]))
     reqs = "".join(f"<li>{esc(x)}</li>" for x in bullets(j["requirements"]))
+    perks = "".join(f"<li>{esc(x)}</li>" for x in bullets(j["benefits"]))
+    benefits = (f"<h2>Pay and benefits</h2><ul>{perks}</ul>" if perks else
+                '<h2>Pay and benefits</h2><p>Benefits for this role are described under '
+                '<a href="../index.html#benefits">pay and benefits</a>.</p>')
     emp = EMPLOYMENT_LABELS.get(j["employment_type"].upper(), j["employment_type"])
     body = f"""  <section class="job-head">
     <div class="wrap grid grid--2">
@@ -305,6 +311,7 @@ def job_page(j, brand, chrome):
         <p>{esc(j['summary'])}</p>
         {"<h2>What you will do</h2><ul>" + duties + "</ul>" if duties else ""}
         {"<h2>What you need</h2><ul>" + reqs + "</ul>" if reqs else ""}
+        {benefits}
       </div>
       <div class="card">
         <h2>More near {esc(j['city'])}</h2>

@@ -30,9 +30,17 @@ them as an XML feed. A spreadsheet typed by hand works too.
   `description`, `datePosted`, `hiringOrganization`, `jobLocation` with an address.
   Recommended and filled when the data exists: `baseSalary`, `employmentType`,
   `validThrough`, `identifier`.
-- **Take filled jobs down.** Markup on a job that is closed breaks the search engine's
-  guidelines and annoys the candidate. Rebuild from a current export, and set
-  `valid_through` when you know the closing date.
+- **Markup only where one job lives.** JobPosting goes on the job's own page and never
+  on a search, location or list page; `check_site.py` enforces it.
+- **The title is the job title only.** No pay, place, job code or company name in the
+  markup's `title`; the search engine treats anything else as keyword stuffing.
+- **Markup matches the page.** Pay in the markup must be visible on the page. A
+  mismatch is a policy violation, not a style issue.
+- **Take filled jobs down.** Leave a past `validThrough`, return a 404 or 410, or remove
+  the markup. A filled job still marked up breaks the guidelines and annoys the
+  candidate. Rebuild from a current export, and set `valid_through` when you know the
+  closing date. At volume, the search engine's indexing API is recommended over the
+  sitemap for job URLs.
 - **One page per location.** "Jobs in Macon" and "cashier jobs near me" are how
   frontline candidates search. A location page with real jobs on it answers both.
 - **A sitemap listing every page, and a robots.txt that points to it.** Both generated.
@@ -45,7 +53,8 @@ them as an XML feed. A spreadsheet typed by hand works too.
 Candidates now ask an assistant "who is hiring near me and what do they pay". Whether
 the answer includes this employer depends on whether the assistant can read the site.
 
-- **The content has to be in the HTML.** Many AI crawlers do not run JavaScript, so a
+- **The content has to be in the HTML.** In a December 2024 study of AI crawlers, none
+  of the major ones rendered JavaScript (Google's and Apple's excepted), so a
   careers site rendered entirely in the browser can look like an empty page to them.
   Every job, location and answer is written into the HTML here; JavaScript only adds
   filtering. This is the most common failure on existing careers sites, and the audit

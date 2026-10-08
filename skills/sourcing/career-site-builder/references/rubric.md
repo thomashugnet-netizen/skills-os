@@ -21,6 +21,10 @@ failure.
 | `seo.canonical` | advisory | page | a canonical URL on every page |
 | `seo.jobposting_required` | blocking | page | JobPosting markup has every field Google requires |
 | `seo.jobposting_recommended` | advisory | page | JobPosting markup has pay, employment type, closing date and id |
+| `seo.jobposting_placement` | blocking | page | JobPosting markup only on a single job's own page, never on a list |
+| `seo.jobposting_title` | blocking | page | the JobPosting title is the job title only: no pay, place, code or company |
+| `seo.jobposting_matches_page` | blocking | page | the title and pay in the markup are visible on the page |
+| `seo.jobposting_expired` | blocking | page | no live page marks up a job whose closing date has passed |
 | `seo.job_pages` | advisory | site | each job has its own page with JobPosting markup |
 | `seo.location_pages` | advisory | site | a page per location people search for |
 | `seo.sitemap` | blocking | site | sitemap.xml lists every page |
@@ -47,6 +51,7 @@ failure.
 | `conv.home_search` | advisory | site | a job search form on the home page |
 | `conv.apply_link` | blocking | page | every job page has an Apply link |
 | `conv.pay_shown` | advisory | page | every job page shows pay as a number |
+| `conv.benefits_on_job` | advisory | page | every job page describes benefits, which several pay-transparency laws require |
 | `conv.schedule_shown` | advisory | page | every job page says what the hours are |
 | `conv.ats_handoff` | advisory | page | the jump to an external application site is explained |
 
@@ -61,6 +66,14 @@ failure.
 | `a11y.focus_visible` | blocking | site | focus is never hidden without a visible replacement |
 | `a11y.contrast` | blocking | site | text colour pairs meet 4.5:1 |
 | `a11y.reduced_motion` | advisory | site | motion switches off for people who ask for less |
+
+## Legal
+
+| Check | Severity | Scope | Passes when |
+|---|---|---|---|
+| `legal.privacy_link` | blocking | page | a candidate privacy notice is linked from every page |
+| `legal.accommodations` | blocking | page | every page says how to ask for an accommodation |
+| `legal.eeo_statement` | advisory | page | an equal-opportunity statement on every page |
 
 ## Honesty
 

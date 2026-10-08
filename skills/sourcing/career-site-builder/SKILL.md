@@ -50,7 +50,7 @@ From the tested starter in `references/starter/`: I set your brand in `css/token
 
 ### Step 5: Check, fix, check again
 
-`scripts/check_site.py --site <folder>` runs every check in `references/rubric.md`, including that every link goes somewhere and that the preview dialog is accessible. I fix what it finds and run it again. I do not hand over a page with a blocking finding.
+`scripts/check_site.py --site <folder>` runs every check in `references/rubric.md`: search engine rules taken from the search engine's own job-posting guidelines, AI visibility, conversion, accessibility, the legal basics (privacy notice, accommodations, equal opportunity), honesty and speed. I fix what it finds and run it again. I do not hand over a page with a blocking finding. What a checker cannot see, a large employer's legal, IT and brand teams will ask about; `references/launch-checklist.md` lists it, and `references/sources.md` says what each rule rests on and when it was checked.
 
 If I cannot run code in this conversation, I still write the page from the starter, but I tell you plainly that the generated parts and the checks were not run, and how to turn code execution on.
 
@@ -61,7 +61,7 @@ If I cannot run code in this conversation, I still write the page from the start
 3. **A preview**: the landing page as one self-contained file that opens styled, in this chat or by double-click.
 4. **The page as a zip**, ready for any static host. No build tools, no framework, no tracking scripts.
 5. **The check report.**
-6. **The launch list**: every fact marked for confirmation, the photos to supply, and the integrations behind each link that opens the dialog.
+6. **The launch list**: every fact marked for confirmation, the photos to supply, the integrations behind each link that opens the dialog, and the legal, IT and brand items from `references/launch-checklist.md` that apply to you.
 
 ## The preview dialog
 
@@ -85,7 +85,7 @@ I build and check static files. I do not host the page, connect it to your appli
 
 ## Verifying this yourself
 
-Run `python3 scripts/check_site.py --test`. It builds the demo landing page and a full site from the sample jobs, asserts that both pass every check, that the brief is filled word for word, and that switching modes leaves nothing stale. Then it breaks them thirty ways, one at a time: a link to nowhere, a dialog with no name, a JobPosting with no date, a JavaScript-only page, a low-contrast brand colour, an award nobody marked for confirmation, and more. Each must be caught for its named reason and nothing else.
+Run `python3 scripts/check_site.py --test`. It builds the demo landing page and a full site from the sample jobs, asserts that both pass every check, that the brief is filled word for word, and that switching modes leaves nothing stale. Then it breaks them thirty-nine ways, one at a time: a link to nowhere, a dialog with no name, job markup on a list page, pay in a job title, a closed job still marked up, a missing privacy link, a JavaScript-only page, a low-contrast brand colour, an award nobody marked for confirmation, and more. Each must be caught for its named reason and nothing else.
 
 It has caught two real defects. Job page titles ran past seventy characters, so search results would have cut off the city; titles now drop the brand first. And job pages built from an export copied the footer's dialog links without the dialog, so those links did nothing; every generated page now carries it.
 
