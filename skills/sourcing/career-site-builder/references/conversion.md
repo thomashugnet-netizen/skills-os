@@ -12,6 +12,18 @@ minutes. Each rule here removes a reason to leave.
 - **No dead ends.** Every page ends with a next step: a job search, a filtered list,
   or the talent community.
 
+## What the data says
+
+- Postings with an employer-provided salary drew 3.8 times more applications on Indeed,
+  and about 59% of US postings showed pay in May 2025. Leaving it out is now the
+  exception, and candidates notice.
+- Applications that take under five minutes convert several times better than those
+  that take more than fifteen, and most still take more than fifteen.
+- Website accessibility suits keep rising, and food service is among the most-sued
+  sectors: accessibility is a conversion issue and a legal one.
+
+Sources and dates are in `sources.md`.
+
 ## On every job page
 
 - **Pay as a number**, above the fold. "Competitive" is read as "low".

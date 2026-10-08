@@ -67,7 +67,7 @@ python3 scripts/check_site.py --page saved-careers-page.html        # audit one 
 
 ## What the checker looks at
 
-39 checks in six areas: search, AI visibility, conversion, accessibility, honesty and speed. Blocking checks include links that go nowhere, an inaccessible preview dialog, JobPosting required fields, one h1 per page, a mobile viewport, labelled form fields, visible focus, colour contrast, no lorem ipsum, a sitemap that lists every page, and content that exists in the HTML rather than only in JavaScript. The full list is in `references/rubric.md`.
+47 checks in seven areas: search, AI visibility, conversion, accessibility, legal, honesty and speed, with the evidence for each in `references/sources.md`. Blocking checks include links that go nowhere, an inaccessible preview dialog, JobPosting required fields, one h1 per page, a mobile viewport, labelled form fields, visible focus, colour contrast, no lorem ipsum, a sitemap that lists every page, and content that exists in the HTML rather than only in JavaScript. The full list is in `references/rubric.md`.
 
 It reports a count, not a score. A missing posting date is not worth a number of points, and nothing elsewhere makes up for a blocking failure.
 
@@ -77,7 +77,7 @@ It reports a count, not a score. A missing posting date is not worth a number of
 python3 scripts/check_site.py --test
 ```
 
-Builds the demo landing page and a full site, asserts both pass every check and that the brief is filled word for word, then breaks them 30 ways, one at a time, and asserts each break is caught for its named reason and nothing else.
+Builds the demo landing page and a full site, asserts both pass every check and that the brief is filled word for word, then breaks them 39 ways, one at a time, and asserts each break is caught for its named reason and nothing else.
 
 ## Where this stops
 

@@ -26,11 +26,20 @@ build is no longer what it builds by default.
 - **Two build modes.** `--examples roles.csv` (and `--demo`): job search over example
   roles, labelled as examples on the page. `--jobs export.csv`: one page per real job
   with JobPosting markup and one per location, as in 1.0.0.
-- **Two new blocking checks**, 39 in all: every link goes somewhere (a section, a page,
-  or the dialog), and the dialog has a name and a close button.
-- **47 tests**, up from 37. Both modes must pass clean, the brief must fill word for
-  word, switching modes must leave no stale pages, and 30 planted faults must each be
-  caught for their named reason. The suite caught a real defect on the way: job pages
+- **47 checks**, up from 37, grounded in sources listed in `references/sources.md`.
+  New: every link goes somewhere and the dialog is named and closable; four rules from
+  the search engine's own job-posting guidelines (markup only on a single job's page,
+  the title holding the job title only, markup matching the visible page, no closed job
+  left marked up, description as HTML); a Legal area (privacy notice linked, how to ask
+  for an accommodation, an equal-opportunity statement); benefits described on job
+  pages, which several pay-transparency laws require.
+- **`references/launch-checklist.md`**: what legal, IT and brand teams at a large
+  employer check that no automated check can, with a verification list.
+- **Job pages** gain a pay and benefits section, from an optional `benefits` column.
+- **56 tests**, up from 37. Both modes must pass clean, the brief must fill word for
+  word, switching modes must leave no stale pages, and 39 planted faults must each be
+  caught for their named reason. Sample dates are shifted at test time, so the suite
+  does not start failing when the calendar passes them. The suite caught a real defect on the way: job pages
   copied the footer's dialog links without the dialog itself.
 
 ## 1.0.0
