@@ -104,6 +104,7 @@ def owner_of(slug):
     photo = person.get("photo")
     return {"name": person["name"],
             "since": entry["since"],
+            "company": person.get("company"),
             # A finished URL, like every other link in this file, so the site
             # never assembles one from a repo path.
             "photo_url": f"{RAW}/{photo}" if photo else None}
