@@ -9,3 +9,5 @@ jobs:
         with: { python-version: "3.12" }
       - name: Audit skill library
         run: python3 tools/audit.py
+      - name: Every skill has an owner, CODEOWNERS is current
+        run: python3 tools/owners.py --check
