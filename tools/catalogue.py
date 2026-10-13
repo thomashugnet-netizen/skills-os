@@ -33,6 +33,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # finished URL removes the chance to get it wrong.
 RELEASE = ("https://github.com/thomashugnet-netizen/skills-os"
            "/releases/latest/download")
+# Files served straight from main, for the few things that are not release
+# assets (owner photos).
+RAW = "https://raw.githubusercontent.com/thomashugnet-netizen/skills-os/main"
 
 # Where "Import in Cue" goes. Cue identifies a skill by its slug -- the same
 # slug as the folder, the zip and the frontmatter name -- so there is no second
@@ -97,8 +100,13 @@ def owner_of(slug):
     entry = data.get("skills", {}).get(slug)
     if not entry:
         return None
-    return {"name": data["people"][entry["owner"]]["name"],
-            "since": entry["since"]}
+    person = data["people"][entry["owner"]]
+    photo = person.get("photo")
+    return {"name": person["name"],
+            "since": entry["since"],
+            # A finished URL, like every other link in this file, so the site
+            # never assembles one from a repo path.
+            "photo_url": f"{RAW}/{photo}" if photo else None}
 
 
 def skills():
