@@ -28,6 +28,28 @@ One line to remember, and it means a Merge button only gets clicked when it matt
    a branch never reaches the site. It needs no secret: GitHub issues the workflow
    its own token, and the site reads this repository's public URLs directly.
 
+## Who owns a skill
+
+Every skill has one owner, written in **`owners.json`** and nowhere else. The owner
+answers for it: reviews its pull requests, decides on changes, keeps it working.
+GitHub asks them for a review automatically on any PR that touches their skill,
+through `.github/CODEOWNERS`, which is generated from `owners.json`.
+
+Ownership rotates. To hand a skill over:
+
+1. in `owners.json`, change its `"owner"` and set `"since"` to today
+2. `python3 tools/owners.py`
+3. commit both files straight to `main` (it is tooling, not something people download)
+
+A new skill gets its owner in `owners.json` before its PR is merged; the audit
+fails on a skill with nobody's name on it. `python3 tools/owners.py --who` lists
+who owns what.
+
+Someone with no GitHub account yet has `"github": null`, and their reviews go to
+the fallback (Thomas). When they get one: fill in the username, regenerate, and
+give them **write access** to the repository (Settings > Collaborators), or GitHub
+ignores their line in CODEOWNERS without saying so.
+
 ## Changing a skill that people already have
 
 An installed skill never updates itself. Someone who downloaded v1.0.0 keeps it
@@ -56,6 +78,7 @@ Without those, the only honest thing to tell a user is "re-download and hope".
 | File | Made by | Where |
 |---|---|---|
 | `README.md` | `tools/gen_readme.py` | here |
+| `.github/CODEOWNERS` | `tools/owners.py` | here |
 | `catalogue.json` | `tools/catalogue.py` | `dist/`, then the release — not committed |
 | `dist/site-assets/` | `tools/site_assets.py` | built in CI, not committed |
 | the `latest` release | `publish.yml` | GitHub releases |
