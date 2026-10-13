@@ -81,6 +81,10 @@ def problems(data):
             fail.append(f"{slug}: owner '{entry.get('owner')}' is not in people")
         if not entry.get("since"):
             fail.append(f"{slug}: missing 'since'")
+    for pid, person in people.items():
+        photo = person.get("photo")
+        if photo and not os.path.exists(photo):
+            fail.append(f"{pid}: photo {photo} does not exist")
     disk = skills_on_disk()
     for slug, path in sorted(disk.items()):
         if slug not in data.get("skills", {}):
