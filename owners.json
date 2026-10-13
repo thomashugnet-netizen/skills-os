@@ -3,10 +3,10 @@
   "fallback": "thomas-hugnet",
   "people": {
     "thomas-hugnet":         { "name": "Thomas Hugnet",         "github": "thomashugnet-netizen" },
-    "salim-jernite":         { "name": "Salim Jernite",         "github": null },
-    "will-jensen":           { "name": "Will Jensen",           "github": null },
-    "hiyabel-tewoldemedhin": { "name": "Hiyabel Tewoldemedhin", "github": null },
-    "jonathan-sabbah":       { "name": "Jonathan Sabbah",       "github": null }
+    "salim-jernite":         { "name": "Salim Jernite",         "github": null, "photo": "assets/owners/salim-jernite.png" },
+    "will-jensen":           { "name": "Will Jensen",           "github": null, "photo": "assets/owners/will-jensen.png" },
+    "hiyabel-tewoldemedhin": { "name": "Hiyabel Tewoldemedhin", "github": null, "photo": "assets/owners/hiyabel-tewoldemedhin.png" },
+    "jonathan-sabbah":       { "name": "Jonathan Sabbah",       "github": null, "photo": "assets/owners/jonathan-sabbah.png" }
   },
   "skills": {
     "funnel-drop-off-analyst":     { "owner": "salim-jernite",         "since": "2026-10-13" },
