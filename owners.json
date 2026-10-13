@@ -3,10 +3,10 @@
   "fallback": "thomas-hugnet",
   "people": {
     "thomas-hugnet":         { "name": "Thomas Hugnet",         "github": "thomashugnet-netizen" },
-    "salim-jernite":         { "name": "Salim Jernite",         "github": null, "company": "Fountain", "photo": "assets/owners/salim-jernite.png" },
-    "will-jensen":           { "name": "Will Jensen",           "github": null, "company": "Fountain", "photo": "assets/owners/will-jensen.png" },
-    "hiyabel-tewoldemedhin": { "name": "Hiyabel Tewoldemedhin", "github": null, "company": "Fountain", "photo": "assets/owners/hiyabel-tewoldemedhin.png" },
-    "jonathan-sabbah":       { "name": "Jonathan Sabbah",       "github": null, "company": "Fountain", "photo": "assets/owners/jonathan-sabbah.png" }
+    "salim-jernite":         { "name": "Salim Jernite",         "github": null, "company": "Fountain", "photo": "assets/owners/salim-jernite.png", "linkedin": "https://www.linkedin.com/in/salimjernite/" },
+    "will-jensen":           { "name": "Will Jensen",           "github": null, "company": "Fountain", "photo": "assets/owners/will-jensen.png", "linkedin": "https://www.linkedin.com/in/williamjensen/" },
+    "hiyabel-tewoldemedhin": { "name": "Hiyabel Tewoldemedhin", "github": null, "company": "Fountain", "photo": "assets/owners/hiyabel-tewoldemedhin.png", "linkedin": "https://www.linkedin.com/in/hiyabel/" },
+    "jonathan-sabbah":       { "name": "Jonathan Sabbah",       "github": null, "company": "Fountain", "photo": "assets/owners/jonathan-sabbah.png", "linkedin": "https://www.linkedin.com/in/jonathansabbah/" }
   },
   "skills": {
     "funnel-drop-off-analyst":     { "owner": "salim-jernite",         "since": "2026-10-13" },
