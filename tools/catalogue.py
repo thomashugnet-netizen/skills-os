@@ -89,6 +89,18 @@ def rows(path):
         return max(sum(1 for _ in fh) - 1, 0)
 
 
+def owner_of(slug):
+    path = os.path.join(ROOT, "owners.json")
+    if not os.path.exists(path):
+        return None
+    data = json.load(open(path, encoding="utf-8"))
+    entry = data.get("skills", {}).get(slug)
+    if not entry:
+        return None
+    return {"name": data["people"][entry["owner"]]["name"],
+            "since": entry["since"]}
+
+
 def skills():
     paths = (sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*.md")))
              + sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*", "SKILL.md"))))
@@ -136,6 +148,11 @@ def skills():
             # URL to render it with. A rule nobody has to remember.
             "cue": ({"import_url": f"{CUE_IMPORT}/{slug}"}
                     if available else None),
+            # Who answers for this skill. Read from owners.json, the one place
+            # ownership is written down; tools/owners.py fails CI on a skill
+            # without one. Ownership rotates, so the site shows what this says
+            # at publish time and keeps no copy.
+            "owner": owner_of(slug),
         })
     return sorted(out, key=lambda s: (s["category"], s["slug"]))
 
