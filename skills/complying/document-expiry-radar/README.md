@@ -39,7 +39,9 @@ cp -r skills-os/skills/complying/document-expiry-radar ~/.claude/skills/
 
 ## What's supported
 
-- **Eight document types** recognised under their common names (DOT medical card, driver's licence and CDL, forklift evaluation, food handler card, food manager certificate, first aid and CPR, alcohol server permit, security guard licence). Anything else is kept, with the renewal time assumed and said so.
+- **Eleven document types** recognised under their common names: DOT medical card, driver's licence and CDL, forklift evaluation, food handler card, food manager certificate, first aid and CPR, alcohol server permit, security guard licence, vehicle insurance, vehicle registration, periodic background re-check. Anything else is kept, with the renewal time assumed and said so.
+- **Scheduled staff or contractors.** A schedule for shift workers, or a list of who is active for gig and independent contractors.
+- **Site minimums**, such as at least one certified food manager per restaurant, with the day each site drops below it.
 - **Your own renewal lead times** per role and document, which override the planning defaults.
 - **Renewed documents** sitting beside the old row: the later date wins.
 - **Crunch weeks**: five or more of one document expiring at one site in one week.
@@ -58,7 +60,18 @@ cp -r skills-os/skills/complying/document-expiry-radar ~/.claude/skills/
 python3 scripts/radar.py --test
 ```
 
-The sample company is planted with exactly what the radar should find: two drivers expired and still scheduled, one expired warehouse associate, five DOT cards past their start-by date, fourteen forklift evaluations from one training cohort expiring in the same week, three drivers with no medical card on file, one renewed card that must not be reported, one unreadable date and a trickle of six ordinary renewals. One station has nothing planted and must come back clean. The suite also covers lead-time edge cases, your own lead times overriding the defaults, unknown and misspelled document types, a clean file, and the edge cases an adversarial pass found before release: the expiry day itself, shifts already worked, one person with two expired documents, role and id spelling, people on the schedule but not in the export, non-UTF-8 files, and eighteen kinds of input that must be refused because they would put a name, a contact detail or a document number in the report.
+Three sample companies are planted with exactly what the radar should find. The delivery company: two drivers expired and still scheduled, one expired warehouse associate, five DOT cards past their start-by date, fourteen forklift evaluations from one training cohort expiring in the same week, three drivers with no medical card on file, one renewed card that must not be reported, one unreadable date and a trickle of six ordinary renewals. One station has nothing planted and must come back clean. The restaurant chain: one site with no certified food manager today, one losing its last in four weeks, expired manager certificates that must not stop the manager working, crew cards to renew, two new hires with no card, a hiring-event cohort, and one clean restaurant. The courier marketplace: two couriers active with expired insurance, one inactive, three renewals to start, and one active courier with no documents on file. The suite also covers lead-time edge cases, your own lead times overriding the defaults, unknown and misspelled document types, a clean file, and the edge cases an adversarial pass found before release: the expiry day itself, shifts already worked, one person with two expired documents, role and id spelling, people on the schedule but not in the export, non-UTF-8 files, and eighteen kinds of input that must be refused because they would put a name, a contact detail or a document number in the report.
+
+## Where it fits, and where it does not
+
+| Business | Fit | Why |
+|---|---|---|
+| Logistics and delivery (W2) | Strong | Medical cards, CDLs and forklift evaluations: an expired one means the person cannot legally drive or operate. |
+| Quick-service restaurants | Strong | Food handler cards for crew and a certified food manager per site, with turnover that keeps cards expiring all year. |
+| Gig and courier marketplaces | Good | Licence, insurance, registration and background re-checks, against who is active rather than who is scheduled. |
+| General retail | Limited | Most store roles need no document that expires. It earns its place for alcohol sales, deli and pharmacy counters, and stockroom forklifts, and will show little elsewhere. |
+
+The document types and sources are US-based.
 
 ## Who it's for
 

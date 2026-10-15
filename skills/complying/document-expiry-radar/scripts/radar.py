@@ -7,14 +7,15 @@ document, with its expiry date) and answers three questions in dates, not
 impressions: who cannot legally work today, who will lapse before a renewal
 can come through unless it starts now, and which shifts that puts at risk.
 
-    python3 radar.py --documents documents.csv [--shifts shifts.csv]
+    python3 radar.py --documents documents.csv [--shifts shifts.csv | --active active.csv]
                      [--requirements requirements.csv] [--as-of 2026-10-19]
                      [--horizon 90] [--html report.html] [--json out.json]
     python3 radar.py --test
 
 documents.csv   worker_id, site, role, doc_type, expires_on[, note]
-shifts.csv      worker_id, date, hours            (optional)
-requirements    role, doc_type[, lead_days]       (optional)
+shifts.csv      worker_id, date, hours            (optional, for scheduled staff)
+active.csv      worker_id                         (optional, for gig and contractors)
+requirements    role, doc_type[, lead_days][, per_site_min]   (optional)
 
 Opaque ids only. The engine refuses names, contact details, document numbers
 and work-authorisation documents. Standard library only.
@@ -214,6 +215,18 @@ def load_shifts(path):
     return out
 
 
+def load_active(path):
+    """Who is active on the platform, for workers who are not scheduled:
+    gig and independent contractors. One worker_id per row."""
+    if not path:
+        return set()
+    cols, rows = _read(path)
+    if "worker_id" not in cols:
+        raise Refusal("active file is missing column 'worker_id'.")
+    _check_identity(cols, rows, "active file")
+    return {_key(r["worker_id"]): r["worker_id"] for r in rows if r.get("worker_id")}
+
+
 def load_requirements(path, lookup, refused):
     if not path:
         return []
@@ -224,7 +237,10 @@ def load_requirements(path, lookup, refused):
     _check_identity(cols, rows, "requirements file")
     out = []
     for i, r in enumerate(rows, start=2):
-        if not r.get("role") or not r.get("doc_type"):
+        per_site = r.get("per_site_min", "")
+        if per_site and not per_site.isdigit():
+            raise Refusal(f"requirements row {i}: per_site_min must be a whole number.")
+        if not r.get("doc_type") or (not r.get("role") and not per_site):
             continue
         if is_refused(r["doc_type"], refused):
             raise Refusal(f"requirements row {i}: '{r['doc_type']}' is a work-authorisation document, "
@@ -233,7 +249,8 @@ def load_requirements(path, lookup, refused):
         lead = r.get("lead_days", "")
         if lead and not lead.isdigit():
             raise Refusal(f"requirements row {i}: lead_days must be a whole number of days.")
-        out.append({"role": _norm(r["role"]), "type": key, "lead": int(lead) if lead else None})
+        out.append({"role": _norm(r.get("role", "")), "type": key, "lead": int(lead) if lead else None,
+                    "per_site": int(per_site) if per_site else None})
     return out
 
 
@@ -254,10 +271,11 @@ def lead_for(key, role, types, reqs):
     return types["default_lead_days"], "assumed"
 
 
-def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90):
+def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90, active_path=None):
     types, lookup, refused = load_types()
     docs, unreadable, unknown_types = load_documents(doc_path, lookup, refused)
     shifts = load_shifts(shifts_path)
+    active = load_active(active_path)
     reqs = load_requirements(req_path, lookup, refused)
     today = as_of or date.today()
     end = today + timedelta(days=horizon)
@@ -293,11 +311,22 @@ def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90):
                 "days_left": days_left, "lead_days": lead, "lead_source": lead_src,
                 "start_by": start_by.isoformat(),
                 "shifts_at_risk": len(at_risk), "hours_at_risk": round(sum(s["hours"] for s in at_risk), 2),
-                "first_shift_at_risk": min((s["date"] for s in at_risk), default=None)}
+                "first_shift_at_risk": min((s["date"] for s in at_risk), default=None),
+                "active": d["key"] in active}
         if base["first_shift_at_risk"]:
             base["first_shift_at_risk"] = base["first_shift_at_risk"].isoformat()
-        if d["expires"] < today:
-            kind = "scheduled_while_expired" if at_risk else "expired"
+        # who needs this document: roles you named for it; if you named it only as a
+        # site minimum, nobody individually; if you never mentioned it, assume everyone
+        required_roles = {q["role"] for q in reqs if q["type"] == d["type"] and q["role"]}
+        site_only = any(q["type"] == d["type"] and q["per_site"] for q in reqs)
+        needed = (_norm(d["role"]) in required_roles) if required_roles else not site_only
+        if d["expires"] < today and not needed:
+            # held but not required for this role: it stops nobody working,
+            # though it may still count toward a site minimum
+            kind = "lapsed_not_required"
+        elif d["expires"] < today:
+            kind = ("scheduled_while_expired" if at_risk
+                    else "active_while_expired" if d["key"] in active else "expired")
         elif start_by <= today:
             kind = "start_now"
         elif d["expires"] <= end:
@@ -314,12 +343,13 @@ def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90):
     missing, unlisted = [], []
     people = {}
     for d in sorted(docs, key=lambda d: d["row"]):
-        p = people.setdefault(d["key"], {"worker": d["worker"], "site": d["site"], "roles": set()})
+        p = people.setdefault(d["key"], {"worker": d["worker"], "site": d["site"], "roles": set(), "names": {}})
         p["site"] = d["site"]                       # the latest row wins for the site
         if d["role"]:
             p["roles"].add(_norm(d["role"]))
+            p["names"][_norm(d["role"])] = d["role"]
     for u in unreadable:
-        people.setdefault(_key(u["worker_id"]), {"worker": u["worker_id"], "site": "", "roles": set()})
+        people.setdefault(_key(u["worker_id"]), {"worker": u["worker_id"], "site": "", "roles": set(), "names": {}})
     if reqs:
         have = {(d["key"], d["type"]) for d in records}
         have |= {(_key(u["worker_id"]), lookup.get(_norm(u["doc_type"]), "other:" + _norm(u["doc_type"])))
@@ -327,21 +357,40 @@ def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90):
         # a person who has held several roles is checked against all of them
         for k, p in sorted(people.items()):
             for q in reqs:
-                if q["role"] in p["roles"] and (k, q["type"]) not in have:
+                if q["role"] and q["role"] in p["roles"] and (k, q["type"]) not in have:
                     at_risk = shifts_by.get(k, [])
                     missing.append({"kind": "missing", "worker": p["worker"], "key": k, "site": p["site"],
-                                    "role": next((r for r in p["roles"] if r == q["role"]), q["role"]),
+                                    "role": p["names"].get(q["role"], q["role"]),
                                     "type": q["type"], "label": label_of(q["type"], types),
                                     "shifts_at_risk": len(at_risk),
                                     "hours_at_risk": round(sum(s["hours"] for s in at_risk), 2),
                                     "_at_risk": at_risk})
-    # on the schedule, absent from the documents export: the easiest one to miss
-    if shifts:
-        for k in sorted(set(shifts_by) - set(people)):
-            at_risk = shifts_by[k]
-            unlisted.append({"kind": "unlisted", "worker": at_risk[0]["worker"], "key": k,
-                             "shifts_at_risk": len(at_risk),
-                             "hours_at_risk": round(sum(s["hours"] for s in at_risk), 2), "_at_risk": at_risk})
+    # on the schedule or active, absent from the documents export: the easiest one to miss
+    for k in sorted((set(shifts_by) | set(active)) - set(people)):
+        at_risk = shifts_by.get(k, [])
+        unlisted.append({"kind": "unlisted", "worker": at_risk[0]["worker"] if at_risk else active[k], "key": k,
+                         "active": k in active, "shifts_at_risk": len(at_risk),
+                         "hours_at_risk": round(sum(s["hours"] for s in at_risk), 2), "_at_risk": at_risk})
+
+    # site minimums: "at least one certified food manager per restaurant" is a
+    # property of the site, and no per-person view can see it run out
+    coverage = []
+    sites = sorted({d["site"] for d in docs if d["site"]})
+    for q in [q for q in reqs if q["per_site"]]:
+        for site in sites:
+            held = sorted(d["expires"] for d in records
+                          if d["site"] == site and d["type"] == q["type"]
+                          and (not q["role"] or _norm(d["role"]) == q["role"]) and d["expires"] >= today)
+            base = {"site": site, "type": q["type"], "label": label_of(q["type"], types),
+                    "role": q["role"], "minimum": q["per_site"], "holders_today": len(held)}
+            if len(held) < q["per_site"]:
+                coverage.append({**base, "kind": "site_below_min", "from": today.isoformat()})
+            else:
+                # valid through the expiry day, so the count drops the day after
+                drop = held[len(held) - q["per_site"]] + timedelta(days=1)
+                if drop <= end:
+                    coverage.append({**base, "kind": "site_drops_below_min", "from": drop.isoformat(),
+                                     "start_by": (drop - timedelta(days=lead_for(q["type"], q["role"], types, reqs)[0] + 1)).isoformat()})
 
     # crunches: many expiries at one site in one week, usually one training cohort
     weekly = Counter()
@@ -364,13 +413,18 @@ def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90):
         "people": len({d["key"] for d in docs}),
         "documents": len(records),
         "cannot_work_today": len({f["worker"] for f in findings
-                                  if f["kind"] in ("expired", "scheduled_while_expired")}),
+                                  if f["kind"] in ("expired", "scheduled_while_expired", "active_while_expired")}),
+        "active_while_expired": len({f["key"] for f in findings if f["kind"] == "active_while_expired"}),
+        "sites_below_min_now": sum(1 for c in coverage if c["kind"] == "site_below_min"),
+        "sites_dropping_below_min": sum(1 for c in coverage if c["kind"] == "site_drops_below_min"),
         "scheduled_while_expired": len({f["key"] for f in findings if f["kind"] == "scheduled_while_expired"}),
         "start_renewal_now": by_kind["start_now"],
         "lapse_in_30_days": sum(1 for f in findings if f["band"] == "0-30"),
         "due_in_horizon": sum(1 for f in findings if 0 <= f["days_left"] <= horizon),
         "missing": len(missing),
         "not_in_documents": len(unlisted),
+        "has_shifts": bool(shifts),
+        "has_active": bool(active),
         "shifts_at_risk": len(unique_shifts),
         "hours_at_risk": round(sum(unique_shifts.values()), 2),
     }
@@ -381,6 +435,7 @@ def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90):
         "findings": findings,
         "missing": missing,
         "unlisted": unlisted,
+        "coverage": coverage,
         "clusters": clusters,
         "data": {"unreadable": unreadable, "superseded": superseded, "duplicates": duplicates,
                  "unknown_types": dict(unknown_types),
@@ -392,7 +447,8 @@ def analyse(doc_path, shifts_path=None, req_path=None, as_of=None, horizon=90):
 
 # ------------------------------------------------------------------ output
 
-PRIORITY = ["scheduled_while_expired", "expired", "start_now", "due"]
+PRIORITY = ["scheduled_while_expired", "active_while_expired", "expired", "start_now", "due",
+            "lapsed_not_required"]
 
 
 def ordered(r):
@@ -403,8 +459,14 @@ def sentence(f):
     if f["kind"] == "scheduled_while_expired":
         return (f"{f['worker']} ({f['site']}, {f['role']}): {f['label']} expired {f['expires']}, "
                 f"and {f['shifts_at_risk']} shift(s) are still scheduled from today, the first on {f['first_shift_at_risk']}.")
+    if f["kind"] == "active_while_expired":
+        return (f"{f['worker']} ({f['site']}, {f['role']}): {f['label']} expired {f['expires']}, "
+                "and they are still active on the platform.")
     if f["kind"] == "expired":
         return f"{f['worker']} ({f['site']}, {f['role']}): {f['label']} expired {f['expires']}."
+    if f["kind"] == "lapsed_not_required":
+        return (f"{f['worker']} ({f['site']}, {f['role']}): {f['label']} expired {f['expires']}. "
+                "Not required for this role, so it stops nobody working; renew it only if you rely on it.")
     if f["kind"] == "start_now":
         tail = (f". {f['shifts_at_risk']} scheduled shift(s) fall after the expiry" if f["shifts_at_risk"] else "")
         return (f"{f['worker']} ({f['site']}, {f['role']}): {f['label']} expires {f['expires']} "
@@ -414,17 +476,40 @@ def sentence(f):
             f"start the renewal by {f['start_by']}.")
 
 
+def coverage_sentence(c):
+    who = f"{c['role']} with a " if c["role"] else ""
+    if c["kind"] == "site_below_min":
+        return (f"{c['site']}: {c['holders_today']} {who}current {c['label']} today, "
+                f"below your minimum of {c['minimum']}.")
+    return (f"{c['site']}: drops below {c['minimum']} {who}current {c['label']} on {c['from']}. "
+            f"To avoid it, a renewal or a new holder has to start by {c['start_by']}.")
+
+
 def text_report(r):
     h = r["headline"]
-    out = [f"As of {h['as_of']}: {h['people']} people, {h['documents']} current documents.",
-           f"Cannot work today: {h['cannot_work_today']} ({h['scheduled_while_expired']} still on the schedule). "
-           f"Start renewal now: {h['start_renewal_now']}. Lapse in 30 days: {h['lapse_in_30_days']}. "
-           f"Missing a required document: {h['missing']}. "
-           + (f"On the schedule with no documents at all: {h['not_in_documents']}. " if h["not_in_documents"] else "")
-           + 
-           f"Shifts at risk: {h['shifts_at_risk']} ({h['hours_at_risk']:g} hours)."]
-    titles = {"scheduled_while_expired": "Expired and still scheduled", "expired": "Expired",
+    still = []
+    if h["has_shifts"]:
+        still.append(f"{h['scheduled_while_expired']} still on the schedule")
+    if h["has_active"]:
+        still.append(f"{h['active_while_expired']} still active")
+    parts = [f"Cannot work today: {h['cannot_work_today']}" + (f" ({', '.join(still)})" if still else "") + "."]
+    if h["sites_below_min_now"] or h["sites_dropping_below_min"]:
+        parts.append(f"Sites short of a minimum: {h['sites_below_min_now']} now, "
+                     f"{h['sites_dropping_below_min']} coming.")
+    parts += [f"Start renewal now: {h['start_renewal_now']}.", f"Lapse in 30 days: {h['lapse_in_30_days']}.",
+              f"Missing a required document: {h['missing']}."]
+    if h["not_in_documents"]:
+        parts.append(f"Working with no documents on file at all: {h['not_in_documents']}.")
+    if h["has_shifts"]:
+        parts.append(f"Shifts at risk: {h['shifts_at_risk']} ({h['hours_at_risk']:g} hours).")
+    out = [f"As of {h['as_of']}: {h['people']} people, {h['documents']} current documents.", " ".join(parts)]
+    titles = {"scheduled_while_expired": "Expired and still scheduled",
+              "active_while_expired": "Expired and still active", "expired": "Expired",
+              "lapsed_not_required": "Lapsed, not required for the role",
               "start_now": "Start the renewal now", "due": f"Due within {h['horizon_days']} days"}
+    if r["coverage"]:
+        out.append("\nSites short of your minimum")
+        out += ["  - " + coverage_sentence(c) for c in r["coverage"]]
     current = None
     for f in ordered(r):
         if f["kind"] != current:
@@ -437,9 +522,10 @@ def text_report(r):
             out.append(f"  - {m['worker']} ({m['site']}, {m['role']}): no {m['label']} on file"
                        + (f"; {m['shifts_at_risk']} shift(s) scheduled." if m["shifts_at_risk"] else "."))
     if r["unlisted"]:
-        out.append("\nOn the schedule but not in the documents export")
+        out.append("\nWorking, but not in the documents export")
         for u in r["unlisted"]:
-            out.append(f"  - {u['worker']}: {u['shifts_at_risk']} shift(s) scheduled, no documents on file at all.")
+            what = f"{u['shifts_at_risk']} shift(s) scheduled" if u["shifts_at_risk"] else "active on the platform"
+            out.append(f"  - {u['worker']}: {what}, no documents on file at all.")
     if r["clusters"]:
         out.append("\nCrunch weeks")
         for c in r["clusters"]:
@@ -489,14 +575,22 @@ def html_report(r, path, title="Document expiry radar"):
     rows = "".join(
         f"<tr><th>{e(s)}</th>{cell(expired_by_site[s], 'bad')}"
         + "".join(cell(grid[(s, w)]) for w in weeks) + "</tr>" for s in sites)
-    tiles = [("Cannot work today", h["cannot_work_today"]), ("Start renewal now", h["start_renewal_now"]),
-             ("Lapse in 30 days", h["lapse_in_30_days"]), ("Missing a document", h["missing"]),
-             ("Shifts at risk", h["shifts_at_risk"])]
+    tiles = [("Cannot work today", h["cannot_work_today"])]
+    if r["coverage"]:
+        tiles.append(("Sites short of a minimum", h["sites_below_min_now"] + h["sites_dropping_below_min"]))
+    tiles += [("Start renewal now", h["start_renewal_now"]), ("Lapse in 30 days", h["lapse_in_30_days"]),
+              ("Missing a document", h["missing"])]
+    tiles.append(("Active while expired", h["active_while_expired"]) if h["active_while_expired"]
+                 or any(u.get("active") for u in r["unlisted"]) else ("Shifts at risk", h["shifts_at_risk"]))
     tiles_html = "".join(f'<div class="tile"><div class="n">{v}</div><div class="l">{e(k)}</div></div>' for k, v in tiles)
 
-    titles = {"scheduled_while_expired": "Expired and still scheduled", "expired": "Expired",
+    titles = {"scheduled_while_expired": "Expired and still scheduled",
+              "active_while_expired": "Expired and still active", "expired": "Expired",
+              "lapsed_not_required": "Lapsed, not required for the role",
               "start_now": "Start the renewal now", "due": f"Due within {h['horizon_days']} days"}
     sections, cur = [], None
+    if r["coverage"]:
+        sections.append(("Sites short of your minimum", [coverage_sentence(c) for c in r["coverage"]]))
     for f in ordered(r):
         if f["kind"] != cur:
             cur = f["kind"]
@@ -506,8 +600,10 @@ def html_report(r, path, title="Document expiry radar"):
         sections.append(("No record of a required document",
                          [f"{m['worker']} ({m['site']}, {m['role']}): no {m['label']} on file" for m in r["missing"]]))
     if r["unlisted"]:
-        sections.append(("On the schedule but not in the documents export",
-                         [f"{u['worker']}: {u['shifts_at_risk']} shift(s) scheduled, no documents on file" for u in r["unlisted"]]))
+        sections.append(("Working, but not in the documents export",
+                         [f"{u['worker']}: " + (f"{u['shifts_at_risk']} shift(s) scheduled" if u["shifts_at_risk"]
+                                                 else "active on the platform") + ", no documents on file"
+                          for u in r["unlisted"]]))
     if r["clusters"]:
         sections.append(("Crunch weeks", [f"{c['site']}: {c['count']} {c['label']} expiries in the week of {c['week_of']}."
                                           for c in r["clusters"]]))
@@ -597,6 +693,38 @@ def run_tests():
     check("sample: nothing at STN-06 at all", not any(f["site"] == "STN-06" for f in r["findings"]))
     check("sample: hours at risk are counted", r["headline"]["hours_at_risk"] > 0)
     check("sample: no type assumed", not r["data"]["lead_assumed"] and not r["data"]["unknown_types"])
+
+    # QSR sample: the site minimum is the finding, not the individual manager
+    q = analyse(S("northline_kitchen_documents.csv"), S("northline_kitchen_shifts.csv"),
+                S("northline_kitchen_requirements.csv"), as_of)
+    qk = lambda k: sorted(f["worker"] for f in q["findings"] if f["kind"] == k)
+    check("qsr: R-07 has no certified food manager today",
+          [(c["site"], c["kind"]) for c in q["coverage"] if c["kind"] == "site_below_min"] == [("R-07", "site_below_min")])
+    check("qsr: R-04 loses its last one the day after 2026-11-12",
+          [(c["site"], c["from"]) for c in q["coverage"] if c["kind"] == "site_drops_below_min"] == [("R-04", "2026-11-13")])
+    check("qsr: expired manager certificates do not stop the manager working",
+          qk("lapsed_not_required") == ["M-0402", "M-0701", "M-0702"] and q["headline"]["cannot_work_today"] == 1)
+    check("qsr: one crew card expired and still scheduled", qk("scheduled_while_expired") == ["C-0508"])
+    check("qsr: three crew cards must start now", qk("start_now") == ["C-0104", "C-0310", "C-0612"])
+    check("qsr: two new crew with no food handler card",
+          sorted(m["worker"] for m in q["missing"]) == ["C-0519", "C-0520"]
+          and {m["role"] for m in q["missing"]} == {"Crew"})
+    check("qsr: the R-02 hiring-event cohort is a crunch week",
+          [(c["site"], c["count"]) for c in q["clusters"]] == [("R-02", 6)])
+    check("qsr: R-08 is clean", not any(f["site"] == "R-08" for f in q["findings"])
+          and not any(c["site"] == "R-08" for c in q["coverage"]))
+
+    # gig sample: active on the platform replaces scheduled
+    g = analyse(S("northline_couriers_documents.csv"), as_of=as_of, active_path=S("northline_couriers_active.csv"))
+    gk = lambda k: sorted(f["worker"] for f in g["findings"] if f["kind"] == k)
+    check("gig: two couriers active with expired insurance", gk("active_while_expired") == ["K-1004", "K-2011"])
+    check("gig: an inactive courier's expiry is plain 'expired'", gk("expired") == ["K-3019"])
+    check("gig: three must start now (registration and background re-check)",
+          gk("start_now") == ["K-1007", "K-2002", "K-3005"])
+    check("gig: an active courier with no documents at all is found",
+          [(u["worker"], u["active"]) for u in g["unlisted"]] == [("K-4001", True)])
+    check("gig: no shift language when there is no schedule",
+          "Shifts at risk" not in text_report(g) and "on the schedule" not in text_report(g))
 
     # the start-now rule turns on lead time, not on a fixed window
     t = analyse(F("lead_times.csv"), as_of=as_of)
@@ -724,6 +852,20 @@ def run_tests():
             check(f"refuses {name}", False)
         except Refusal:
             check(f"refuses {name}", True)
+    # who needs a document decides whether its expiry stops anyone working
+    d = write("n1.csv", H + "A1,S1,Driver,cdl,2026-10-01,\nA2,S1,Cook,cdl,2026-10-01,\nA3,S1,Cook,food handler,2026-10-01,\n")
+    e = analyse(d, as_of=as_of)
+    check("needs: with no requirements, every expiry stops someone", e["headline"]["cannot_work_today"] == 3)
+    e = analyse(d, req_path=write("n1r.csv", "role,doc_type\nDriver,cdl\n"), as_of=as_of)
+    kinds_n = {f["worker"]: f["kind"] for f in e["findings"]}
+    check("needs: a cook's lapsed CDL stops nobody; a driver's does; unmentioned types still count",
+          kinds_n == {"A1": "expired", "A2": "lapsed_not_required", "A3": "expired"})
+    e = analyse(write("n2.csv", H + "A1,S1,Lead,first aid,2026-12-01,\nA2,S1,Crew,first aid,2026-12-20,\n"
+                      "B1,S2,Lead,first aid,2027-06-01,\n"),
+                req_path=write("n2r.csv", "role,doc_type,lead_days,per_site_min\nLead,first aid,,1\n"), as_of=as_of)
+    check("site minimum by role: S1 drops when its only Lead lapses, the Crew holder does not count",
+          [(c["site"], c["from"]) for c in e["coverage"]] == [("S1", "2026-12-02")])
+
     import shutil
     shutil.rmtree(tmp, ignore_errors=True)
 
@@ -762,7 +904,7 @@ def main(argv):
     try:
         as_of = date.fromisoformat(opt("--as-of")) if opt("--as-of") else None
         r = analyse(opt("--documents"), opt("--shifts"), opt("--requirements"), as_of,
-                    int(opt("--horizon") or 90))
+                    int(opt("--horizon") or 90), opt("--active"))
     except Refusal as exc:
         print("REFUSED: " + str(exc))
         return 3

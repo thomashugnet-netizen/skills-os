@@ -137,6 +137,53 @@
       "renewal": "Through the state licensing body; some states require training hours before renewal.",
       "validity_shape": "Set by each state.",
       "source": null
+    },
+    "vehicle_insurance": {
+      "label": "Vehicle insurance",
+      "aliases": [
+        "auto insurance",
+        "car insurance",
+        "insurance",
+        "proof of insurance",
+        "insurance card",
+        "vehicle insurance policy"
+      ],
+      "lead_days": 7,
+      "renewal": "Renewed by the policy holder with their insurer; the employer or platform only needs the new proof on file.",
+      "validity_shape": "Set by the policy term, commonly six or twelve months.",
+      "source": null
+    },
+    "vehicle_registration": {
+      "label": "Vehicle registration",
+      "aliases": [
+        "registration",
+        "car registration",
+        "vehicle reg",
+        "tags",
+        "plates"
+      ],
+      "lead_days": 14,
+      "renewal": "Through the state motor vehicle agency, sometimes after an emissions or safety inspection.",
+      "validity_shape": "Set by each state, commonly one or two years.",
+      "source": null
+    },
+    "background_check": {
+      "label": "Background check (periodic re-check)",
+      "aliases": [
+        "background check",
+        "background screen",
+        "background rescreen",
+        "re-screen",
+        "rescreen",
+        "mvr",
+        "motor vehicle record",
+        "annual mvr",
+        "driving record check"
+      ],
+      "lead_days": 10,
+      "renewal": "A new check, which needs the person's fresh authorisation before it runs. Results can take days, longer when a county record has to be pulled by hand.",
+      "validity_shape": "Not an expiry in itself: the re-check date comes from your own policy or your platform's, and for regulated drivers an annual driving-record review is a federal requirement.",
+      "source": "https://www.law.cornell.edu/cfr/text/49/391.25"
     }
   },
   "refused": {

@@ -25,9 +25,10 @@ Essential:
 Better, if you have them:
 
 - **The schedule** for the next week or two: `worker_id`, `date`, `hours`. It turns "expires on the 25th" into "five shifts are booked after the 25th".
-- **What each role needs**: `role`, `doc_type`, and `lead_days` if your renewals take a different time from my defaults. It is the only way to find the person with no record at all, who is the one most likely to slip through.
+- **For gig and independent contractors, who are not scheduled:** a list of who is active on the platform, one `worker_id` per row, instead of a schedule.
+- **What each role needs**: `role`, `doc_type`, and `lead_days` if your renewals take a different time from my defaults. It is the only way to find the person with no record at all, who is the one most likely to slip through. Add `per_site_min` for a rule that belongs to the site rather than the person, such as at least one certified food manager per restaurant.
 
-**No file handy?** Ask for the demo. `references/sample/` holds a fictional six-station delivery company with its documents, schedule and requirements.
+**No file handy?** Ask for a demo. `references/sample/` holds three fictional companies, each with the files above: a six-station delivery company (drivers and warehouse), an eight-restaurant quick-service chain, and a courier marketplace in three cities.
 
 ## Before you export anything
 
@@ -47,16 +48,22 @@ Most exports keep the old card beside the renewed one. I keep the later date and
 
 For every record I work out the date its renewal had to start: the expiry minus the renewal lead time for that document, yours if you gave one, otherwise the planning default in `references/doc_types.json`. Then:
 
-1. **Expired and still scheduled.** The person cannot work and is booked to. Fix the schedule today.
-2. **Expired.** Not on the schedule, but not able to work either.
+1. **Expired and still scheduled,** or still active on the platform. The person cannot work and is booked to. Fix that today.
+2. **Expired.** Not working, but not able to either.
 3. **Start the renewal now.** Not expired yet, but the start-by date has passed.
 4. **Due** within the horizon, 90 days by default, with the start-by date.
+
+A document you told me a role does not need, or need only as a site minimum, is listed as lapsed and stops nobody working. If you give me no requirements, every expiry counts.
 
 ### Step 3: What it puts at risk
 
 Every scheduled shift from today onwards that falls after an expiry date is counted against it, in shifts and hours. A document counts as valid through the day it expires; if yours stops at the start of that day, set the lead time a day longer. Anyone on the schedule who is not in the documents export at all is listed on their own, because nobody is checking them.
 
-### Step 4: Crunch weeks
+### Step 4: Site minimums
+
+For a `per_site_min` rule I count the current holders at each site and find the day the count drops below your minimum: today, or the day after the last holder's document expires. On the restaurant sample, one site has no certified food manager today and another loses its only one in four weeks. No list sorted by person shows either.
+
+### Step 5: Crunch weeks
 
 Five or more of the same document expiring at one site in one week is almost always one training cohort coming due together. Fourteen forklift evaluations in one week is a scheduling problem for the evaluator before it is a compliance problem.
 
@@ -75,6 +82,7 @@ python3 scripts/radar.py --documents documents.csv --shifts shifts.csv --require
 - **"It expires next month, we're fine."** Not if the renewal takes longer than the time left. The start-by date is the deadline.
 - **Letting someone work "just this week" on an expired card.** I will not size that as a cost to weigh. It is the finding.
 - **Chasing people individually for a cohort.** When fourteen people trained on the same day, book one session.
+- **Running contractors like a schedule.** For gig workers I report who is active with an expired document and nothing about hours or availability. What a platform may require of an independent contractor, and how, is its own legal question.
 
 ## Verify before you rely on it
 
