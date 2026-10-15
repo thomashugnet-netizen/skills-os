@@ -1,0 +1,4 @@
+person,role,date,start,end,break_minutes,confidence,note
+Eve,Cashier,2026-10-19,09:00,17:00,,high,
+Eve,Cashier,2026-10-19,09:00,17:00,,high,
+Fay,Stock,2026-10-19,05:00,24:00,60,high,

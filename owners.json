@@ -15,6 +15,7 @@
     "careers-site-advisor":        { "owner": "hiyabel-tewoldemedhin", "since": "2026-10-13" },
     "time-to-hire-analyst":        { "owner": "jonathan-sabbah",       "since": "2026-10-13" },
     "turnover-analyst":            { "owner": "will-jensen",           "since": "2026-10-13" },
-    "candidate-message-sequencer": { "owner": "will-jensen",           "since": "2026-10-13" }
+    "candidate-message-sequencer": { "owner": "will-jensen",           "since": "2026-10-13" },
+    "schedule-photo-to-roster":    { "owner": "thomas-hugnet",         "since": "2026-10-15" }
   }
 }

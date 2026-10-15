@@ -1,0 +1,8 @@
+person,role,date,start,end,break_minutes,confidence,note
+Bo,Cashier,2026-10-19,08:00,18:00,0,high,
+Cy,Cashier,2026-10-19,07:00,20:00,0,high,
+Di,Cashier,2026-10-19,08:00,17:00,0,high,
+Di,Cashier,2026-10-20,08:00,17:00,0,high,
+Di,Cashier,2026-10-21,08:00,17:00,0,high,
+Di,Cashier,2026-10-22,08:00,17:00,0,high,
+Di,Cashier,2026-10-23,08:00,17:00,0,high,

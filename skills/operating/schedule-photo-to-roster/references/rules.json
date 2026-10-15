@@ -1,0 +1,134 @@
+{
+  "about": "Thresholds the engine checks a schedule against. Each entry describes the shape of a rule and names the official source to read; none of it is legal advice. Coverage (which employers and workers a local rule applies to) is summarised in 'covers' and must be confirmed at the source. Premiums, notice periods and penalties are deliberately not recorded here: they change, and this file does not.",
+  "checked": "2026-10-15",
+  "jurisdictions": {
+    "none": {
+      "label": "No local rule chosen (conservative default)",
+      "weekly_overtime_hours": 40,
+      "daily_overtime_hours": null,
+      "daily_double_time_hours": null,
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": false,
+      "covers": "Not a legal rule. A gap under 10 hours between a close and the next open is flagged because it is a fatigue and early-quit risk, wherever you are.",
+      "source": null
+    },
+    "federal": {
+      "label": "US federal (FLSA)",
+      "weekly_overtime_hours": 40,
+      "daily_overtime_hours": null,
+      "daily_double_time_hours": null,
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": false,
+      "covers": "Overtime after 40 hours in a workweek for non-exempt employees. Federal law sets no minimum rest between shifts; the 10-hour flag is the conservative default.",
+      "source": "https://www.dol.gov/whd/regs/compliance/whdfs23.htm"
+    },
+    "california": {
+      "label": "California (state)",
+      "inherits": "federal",
+      "daily_overtime_hours": 8,
+      "daily_double_time_hours": 12,
+      "covers": "Daily overtime past 8 hours and double time past 12 hours in a workday for non-exempt employees, on top of weekly overtime; seventh-consecutive-day rules also apply and are not computed here. No statewide minimum rest between shifts.",
+      "source": "https://www.dir.ca.gov/iwc/Summary2000.pdf"
+    },
+    "oregon": {
+      "label": "Oregon predictive scheduling (statewide)",
+      "inherits": "federal",
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": true,
+      "covers": "Retail, hospitality and food service employers with 500 or more employees worldwide; workers whose duties relate to those operations.",
+      "source": "https://www.oregon.gov/boli/workers/pages/predictive-scheduling.aspx"
+    },
+    "seattle": {
+      "label": "Seattle Secure Scheduling",
+      "inherits": "federal",
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": true,
+      "covers": "Hourly employees of retail and food service businesses with 500 or more employees worldwide; full-service restaurants also need 40 or more full-service locations.",
+      "source": "https://www.seattle.gov/laborstandards/ordinances/secure-scheduling"
+    },
+    "chicago": {
+      "label": "Chicago Fair Workweek",
+      "inherits": "federal",
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": true,
+      "covers": "Covered industries (including retail, restaurants, hotels, warehouses, healthcare, manufacturing, building services) above employer-size thresholds, for employees under an earnings ceiling the city updates each year.",
+      "source": "https://www.chicago.gov/city/en/depts/bacp/supp_info/fairworkweek.html"
+    },
+    "evanston": {
+      "label": "Evanston Fair Workweek",
+      "inherits": "federal",
+      "min_rest_hours": 11,
+      "rest_is_legal_rule": true,
+      "covers": "Hospitality, retail, warehouse, manufacturing and building services employers above employer-size thresholds; food service has its own thresholds.",
+      "source": "https://cityofevanston.org/departments/city_managers_office/economic_development/fair_workweek.php"
+    },
+    "nyc-fast-food": {
+      "label": "New York City Fair Workweek (fast food)",
+      "inherits": "federal",
+      "min_rest_hours": 11,
+      "rest_is_legal_rule": true,
+      "covers": "Fast food chains with 30 or more locations nationally. The retail part of the law has no rest rule.",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/FAQs-FairWorkweek-FastFood.pdf"
+    },
+    "nyc-retail": {
+      "label": "New York City Fair Workweek (retail)",
+      "inherits": "federal",
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": false,
+      "covers": "Retail employers with 20 or more workers in New York City. No minimum rest rule; the 10-hour flag is the conservative default.",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/FAQs-FairWorkweek-Retail.pdf"
+    },
+    "philadelphia": {
+      "label": "Philadelphia Fair Workweek",
+      "inherits": "federal",
+      "min_rest_hours": 9,
+      "rest_is_legal_rule": true,
+      "covers": "Retail, hospitality and food service employers with 250 or more employees and 30 or more locations, including chains and franchises.",
+      "source": "https://www.phila.gov/media/20191218103134/Fair-Workweek-Law.pdf"
+    },
+    "los-angeles-city": {
+      "label": "Los Angeles City Fair Work Week (retail)",
+      "inherits": "california",
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": true,
+      "covers": "Retail employers with 300 or more employees globally, for work in the City of Los Angeles.",
+      "source": "https://wagesla.lacity.gov/fair-work-week-information"
+    },
+    "los-angeles-county": {
+      "label": "Los Angeles County Fair Workweek (unincorporated areas, retail)",
+      "inherits": "california",
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": true,
+      "covers": "Retail employers with 300 or more employees globally, for work in unincorporated Los Angeles County.",
+      "source": "https://dcba.lacounty.gov/fairworkweek/"
+    },
+    "berkeley": {
+      "label": "Berkeley Fair Workweek",
+      "inherits": "california",
+      "min_rest_hours": 11,
+      "rest_is_legal_rule": true,
+      "covers": "Several industries, including retail, restaurants, hotels and warehouses, above local and global employer-size thresholds.",
+      "source": "https://berkeleyca.gov/sites/default/files/documents/Fair%20Workweek%20FAQ_Rev.08.23.24.pdf"
+    },
+    "emeryville": {
+      "label": "Emeryville Fair Workweek",
+      "inherits": "california",
+      "min_rest_hours": 11,
+      "rest_is_legal_rule": true,
+      "covers": "Retail and fast food employers above global or local employer-size thresholds.",
+      "source": "https://www.emeryville.org/Services/Business/Labor-Standards/Fair-Workweek-Ordinance"
+    },
+    "san-francisco": {
+      "label": "San Francisco Formula Retail Employee Rights",
+      "inherits": "california",
+      "min_rest_hours": 10,
+      "rest_is_legal_rule": false,
+      "covers": "Formula retail with 40 or more locations worldwide and 20 or more employees in San Francisco. No minimum rest rule; the 10-hour flag is the conservative default.",
+      "source": "https://www.sf.gov/information--formula-retail-employee-rights-ordinance"
+    }
+  },
+  "sources_checked": [
+    "Each official page above, as linked, on 2026-10-15; Oregon BOLI and Seattle Labor Standards read directly.",
+    "Cross-checked against two employer guides published in 2026 that summarise the same ordinances."
+  ]
+}
