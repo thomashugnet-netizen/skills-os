@@ -1,0 +1,181 @@
+{
+  "about": "Document types the radar recognises, the names people write them under, and a planning default for how many days a renewal takes from booking to having the new document in hand. Lead times are operational estimates, not legal facts: override them per role in requirements.csv. Validity periods are described in shape only and point to the source; the radar never computes an expiry, it reads the one you give it.",
+  "checked": "2026-10-19",
+  "default_lead_days": 14,
+  "types": {
+    "dot_medical_card": {
+      "label": "DOT medical card",
+      "aliases": [
+        "dot medical",
+        "medical card",
+        "med card",
+        "medical examiner's certificate",
+        "mec",
+        "dot physical",
+        "dot medical certificate",
+        "dot med card",
+        "medical certificate",
+        "dot medical cert",
+        "dot card"
+      ],
+      "lead_days": 21,
+      "renewal": "Book an exam with a certified medical examiner, then get the new certificate on file. Some drivers are certified for less than the maximum period, so their next date can come sooner than expected.",
+      "validity_shape": "A medical examiner's certificate is issued for up to 24 months, and can be shorter when the examiner decides so.",
+      "source": "https://www.fmcsa.dot.gov/safety/research-and-analysis/effect-length-medical-certification-safety"
+    },
+    "driver_license": {
+      "label": "Driver's licence (incl. CDL)",
+      "aliases": [
+        "drivers license",
+        "driver's license",
+        "driving licence",
+        "license",
+        "licence",
+        "cdl",
+        "commercial driver's license",
+        "drivers licence",
+        "driver licence",
+        "driver license",
+        "cdl a",
+        "cdl b",
+        "cdl class a",
+        "cdl class b",
+        "class a cdl",
+        "class b cdl"
+      ],
+      "lead_days": 30,
+      "renewal": "Renewal goes through the state licensing agency; appointment availability varies widely by state and by season.",
+      "validity_shape": "Set by each state.",
+      "source": null
+    },
+    "forklift_certification": {
+      "label": "Forklift operator evaluation",
+      "aliases": [
+        "forklift",
+        "forklift cert",
+        "forklift certification",
+        "pit",
+        "powered industrial truck",
+        "forklift license",
+        "forklift licence"
+      ],
+      "lead_days": 14,
+      "renewal": "A performance evaluation by someone with the knowledge and experience to train and evaluate, scheduled on site.",
+      "validity_shape": "Operator performance is evaluated at least once every three years, and sooner after an incident or a near miss.",
+      "source": "https://osha.gov/laws-regs/standardinterpretations/2005-08-01"
+    },
+    "food_handler_card": {
+      "label": "Food handler card",
+      "aliases": [
+        "food handler",
+        "food handlers card",
+        "food handler permit",
+        "food safety card",
+        "servsafe food handler",
+        "food handler's card",
+        "food handlers permit"
+      ],
+      "lead_days": 7,
+      "renewal": "Usually a short course and test, often online.",
+      "validity_shape": "Set by the state or county; commonly a few years.",
+      "source": null
+    },
+    "food_manager_certificate": {
+      "label": "Food protection manager certificate",
+      "aliases": [
+        "food manager",
+        "servsafe manager",
+        "certified food protection manager",
+        "cfpm"
+      ],
+      "lead_days": 21,
+      "renewal": "A proctored exam that has to be booked.",
+      "validity_shape": "Set by the certifying body and local rules; commonly several years.",
+      "source": null
+    },
+    "first_aid_cpr": {
+      "label": "First aid / CPR",
+      "aliases": [
+        "first aid",
+        "cpr",
+        "first aid cpr",
+        "first aid/cpr",
+        "aed",
+        "cpr first aid",
+        "cpr/first aid",
+        "first aid and cpr",
+        "cpr and first aid"
+      ],
+      "lead_days": 21,
+      "renewal": "A class that runs on fixed dates; seats go quickly before peak season.",
+      "validity_shape": "Set by the training provider; commonly two years.",
+      "source": null
+    },
+    "alcohol_server_permit": {
+      "label": "Alcohol server permit",
+      "aliases": [
+        "alcohol server",
+        "tabc",
+        "rbs",
+        "responsible beverage service",
+        "bartender license"
+      ],
+      "lead_days": 7,
+      "renewal": "Usually a short course and test.",
+      "validity_shape": "Set by the state or county.",
+      "source": null
+    },
+    "security_guard_license": {
+      "label": "Security guard licence",
+      "aliases": [
+        "guard card",
+        "security license",
+        "security licence",
+        "guard license"
+      ],
+      "lead_days": 30,
+      "renewal": "Through the state licensing body; some states require training hours before renewal.",
+      "validity_shape": "Set by each state.",
+      "source": null
+    }
+  },
+  "refused": {
+    "about": "Work-authorisation documents are deliberately out of scope. Their reverification rules are specific, and tracking them ahead of time in a spreadsheet is how employers end up asking for documents they are not allowed to ask for. Use the employment-verification process and advice built for that. Matching is on the whole document name, so a safety 'hot work permit' or a 'food passport' is not caught.",
+    "aliases": [
+      "work permit",
+      "work authorization",
+      "work authorisation",
+      "ead",
+      "ead card",
+      "employment authorization",
+      "employment authorisation",
+      "visa",
+      "work visa",
+      "green card",
+      "permanent resident card",
+      "i-9",
+      "i9",
+      "right to work",
+      "passport",
+      "e-verify",
+      "everify"
+    ],
+    "prefixes": [
+      "i 9",
+      "e verify",
+      "everify",
+      "employment authorization",
+      "employment authorisation",
+      "work authorization",
+      "work authorisation",
+      "ead",
+      "green card",
+      "permanent resident",
+      "right to work",
+      "work visa",
+      "visa renewal",
+      "passport renewal",
+      "work permit renewal"
+    ]
+  }
+}
