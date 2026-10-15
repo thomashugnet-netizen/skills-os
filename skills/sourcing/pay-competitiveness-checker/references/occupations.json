@@ -1,0 +1,321 @@
+{
+  "about": "Frontline occupations the wage table keeps (2018 SOC codes, as used by OEWS), and the job titles employers commonly post them under. A title maps to a code only when it is listed here or the user confirms the mapping; the checker never guesses one silently.",
+  "occupations": {
+    "35-3023": {
+      "title": "Fast food and counter workers",
+      "titles": [
+        "crew member",
+        "crew",
+        "team member qsr",
+        "counter attendant",
+        "cashier qsr",
+        "barista",
+        "fast food worker",
+        "front counter",
+        "drive thru",
+        "drive-thru",
+        "restaurant team member",
+        "food service worker"
+      ]
+    },
+    "35-2011": {
+      "title": "Cooks, fast food",
+      "titles": [
+        "fast food cook",
+        "grill cook",
+        "fry cook",
+        "kitchen crew"
+      ]
+    },
+    "35-2014": {
+      "title": "Cooks, restaurant",
+      "titles": [
+        "line cook",
+        "cook",
+        "prep cook restaurant",
+        "restaurant cook"
+      ]
+    },
+    "35-2015": {
+      "title": "Cooks, short order",
+      "titles": [
+        "short order cook"
+      ]
+    },
+    "35-2021": {
+      "title": "Food preparation workers",
+      "titles": [
+        "prep cook",
+        "food prep",
+        "kitchen assistant",
+        "deli associate",
+        "food prep worker"
+      ]
+    },
+    "35-3031": {
+      "title": "Waiters and waitresses",
+      "titles": [
+        "server",
+        "waiter",
+        "waitress"
+      ]
+    },
+    "35-3011": {
+      "title": "Bartenders",
+      "titles": [
+        "bartender"
+      ]
+    },
+    "35-9021": {
+      "title": "Dishwashers",
+      "titles": [
+        "dishwasher",
+        "dish washer"
+      ]
+    },
+    "35-9031": {
+      "title": "Hosts and hostesses",
+      "titles": [
+        "host",
+        "hostess"
+      ]
+    },
+    "35-9011": {
+      "title": "Dining room and cafeteria attendants and bartender helpers",
+      "titles": [
+        "busser",
+        "bus person",
+        "dining room attendant"
+      ]
+    },
+    "35-1012": {
+      "title": "First-line supervisors of food preparation and serving workers",
+      "titles": [
+        "shift manager",
+        "shift lead qsr",
+        "kitchen manager",
+        "restaurant shift lead",
+        "crew leader",
+        "shift supervisor restaurant"
+      ]
+    },
+    "41-2011": {
+      "title": "Cashiers",
+      "titles": [
+        "cashier",
+        "checker",
+        "front end associate",
+        "front-end associate",
+        "checkout"
+      ]
+    },
+    "41-2031": {
+      "title": "Retail salespersons",
+      "titles": [
+        "sales associate",
+        "retail associate",
+        "store associate",
+        "retail sales associate",
+        "sales floor associate"
+      ]
+    },
+    "41-1011": {
+      "title": "First-line supervisors of retail sales workers",
+      "titles": [
+        "retail supervisor",
+        "store shift lead",
+        "assistant store manager",
+        "keyholder",
+        "department supervisor"
+      ]
+    },
+    "53-7065": {
+      "title": "Stockers and order fillers",
+      "titles": [
+        "stocker",
+        "stock associate",
+        "order filler",
+        "picker",
+        "order picker",
+        "overnight stocker",
+        "replenishment associate",
+        "stock clerk"
+      ]
+    },
+    "53-7062": {
+      "title": "Laborers and freight, stock, and material movers, hand",
+      "titles": [
+        "warehouse associate",
+        "warehouse worker",
+        "material handler",
+        "package handler",
+        "loader",
+        "unloader",
+        "dock worker",
+        "warehouse laborer"
+      ]
+    },
+    "53-7064": {
+      "title": "Packers and packagers, hand",
+      "titles": [
+        "packer",
+        "packager",
+        "picker packer",
+        "pick pack"
+      ]
+    },
+    "53-7051": {
+      "title": "Industrial truck and tractor operators",
+      "titles": [
+        "forklift operator",
+        "forklift driver",
+        "reach truck operator",
+        "pit operator",
+        "equipment operator warehouse"
+      ]
+    },
+    "53-3032": {
+      "title": "Heavy and tractor-trailer truck drivers",
+      "titles": [
+        "cdl driver",
+        "class a driver",
+        "truck driver",
+        "otr driver",
+        "regional driver",
+        "tractor trailer driver"
+      ]
+    },
+    "53-3033": {
+      "title": "Light truck drivers",
+      "titles": [
+        "delivery driver",
+        "van driver",
+        "route driver",
+        "courier driver",
+        "last mile driver",
+        "box truck driver"
+      ]
+    },
+    "53-3031": {
+      "title": "Driver/sales workers",
+      "titles": [
+        "driver sales",
+        "pizza delivery driver",
+        "route sales driver"
+      ]
+    },
+    "43-5071": {
+      "title": "Shipping, receiving, and inventory clerks",
+      "titles": [
+        "receiving clerk",
+        "shipping clerk",
+        "inventory clerk",
+        "receiver",
+        "inventory associate"
+      ]
+    },
+    "53-1047": {
+      "title": "First-line supervisors of transportation and material moving workers",
+      "titles": [
+        "warehouse supervisor",
+        "warehouse lead",
+        "shift lead warehouse",
+        "dock supervisor",
+        "transportation supervisor"
+      ]
+    },
+    "37-2011": {
+      "title": "Janitors and cleaners",
+      "titles": [
+        "janitor",
+        "custodian",
+        "cleaner",
+        "porter",
+        "maintenance porter"
+      ]
+    },
+    "37-2012": {
+      "title": "Maids and housekeeping cleaners",
+      "titles": [
+        "housekeeper",
+        "room attendant",
+        "housekeeping attendant",
+        "maid"
+      ]
+    },
+    "33-9032": {
+      "title": "Security guards",
+      "titles": [
+        "security guard",
+        "security officer",
+        "guard"
+      ]
+    },
+    "43-4051": {
+      "title": "Customer service representatives",
+      "titles": [
+        "customer service representative",
+        "call center agent",
+        "customer service agent",
+        "csr"
+      ]
+    },
+    "51-9111": {
+      "title": "Packaging and filling machine operators and tenders",
+      "titles": [
+        "machine operator packaging",
+        "packaging operator",
+        "filler operator"
+      ]
+    },
+    "49-9071": {
+      "title": "Maintenance and repair workers, general",
+      "titles": [
+        "maintenance technician",
+        "maintenance tech",
+        "facilities technician",
+        "maintenance worker"
+      ]
+    },
+    "53-7061": {
+      "title": "Cleaners of vehicles and equipment",
+      "titles": [
+        "car wash attendant",
+        "vehicle cleaner",
+        "lot attendant"
+      ]
+    },
+    "39-9011": {
+      "title": "Childcare workers",
+      "titles": [
+        "childcare worker",
+        "daycare teacher assistant"
+      ]
+    },
+    "31-1131": {
+      "title": "Nursing assistants",
+      "titles": [
+        "cna",
+        "nursing assistant",
+        "certified nursing assistant"
+      ]
+    },
+    "31-1122": {
+      "title": "Personal care aides",
+      "titles": [
+        "caregiver",
+        "personal care aide",
+        "home care aide"
+      ]
+    },
+    "51-2090": {
+      "title": "Miscellaneous assemblers and fabricators",
+      "titles": [
+        "assembler",
+        "production associate",
+        "assembly associate",
+        "line worker"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+job_title,pay,city,state,site,openings
+Cashier,14.50,Dallas,TX,Store 101,6
+Cashier,16.00,Dallas,TX,Store 103,4
+Cashier,14.50,Phoenix,AZ,Store 201,8
+Cashier,14.50,Atlanta,GA,Store 301,5
+Cashier,14.50,Columbus,OH,Store 401,5
+Overnight Stocker,16.00,Dallas,TX,Store 101,4
+Overnight Stocker,16.00,Phoenix,AZ,Store 201,4
+Overnight Stocker,16.00,Atlanta,GA,Store 301,3
+Overnight Stocker,16.00,Columbus,OH,Store 401,3
+Crew Member (Deli),13.00,Dallas,TX,Store 101,3
+Crew Member (Deli),13.00,Phoenix,AZ,Store 201,3
+Crew Member (Deli),13.00,Atlanta,GA,Store 301,2
+Crew Member (Deli),13.00,Columbus,OH,Store 401,2
+Warehouse Associate,17.50,Dallas,TX,DC 1,20
+Forklift Operator,18.00,Dallas,TX,DC 1,6
+Delivery Driver,19.00,Dallas,TX,DC 1,5
+Assistant Store Manager,21.00,Dallas,TX,Store 101,1
+Assistant Store Manager,21.00,Phoenix,AZ,Store 201,1
+Assistant Store Manager,"$46,000/yr",Columbus,OH,Store 401,1
+Store Ambassador,15.00,Atlanta,GA,Store 301,2
+Cashier,14.50,Plano,TX,Store 105,4
