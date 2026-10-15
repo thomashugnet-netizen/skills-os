@@ -1,0 +1,4 @@
+person,role,date,start,end,break_minutes,confidence,note
+Al,Cashier,2026-10-19,07:00,13:00,0,high,
+Bea,Cashier,2026-10-19,14:00,18:00,0,high,
+Cole,Cashier,2026-10-19,15:00,18:00,0,high,
