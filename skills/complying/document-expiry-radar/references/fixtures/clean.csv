@@ -1,0 +1,4 @@
+worker_id,site,role,doc_type,expires_on,note
+D1,S1,Driver,dot medical,2027-06-01,
+D2,S1,Driver,cdl,2028-01-01,
+D3,S2,Cook,food handler card,2027-09-01,
