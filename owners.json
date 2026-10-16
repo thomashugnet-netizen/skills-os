@@ -18,6 +18,6 @@
     "candidate-message-sequencer": { "owner": "will-jensen",           "since": "2026-10-13" },
     "schedule-photo-to-roster":    { "owner": "will-jensen",           "since": "2026-10-15" },
     "document-expiry-radar":       { "owner": "will-jensen",           "since": "2026-10-15" },
-    "pay-competitiveness-checker": { "owner": "thomas-hugnet",         "since": "2026-10-15" }
+    "pay-competitiveness-checker": { "owner": "will-jensen",           "since": "2026-10-16" }
   }
 }
