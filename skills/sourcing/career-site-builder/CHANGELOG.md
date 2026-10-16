@@ -6,6 +6,46 @@ whether the version you are running is the current one.
 
 The version you have is in `SKILL.md`'s frontmatter.
 
+## 2.0.0
+
+The default output changes, so this is a major version: what 1.0.0 told you it would
+build is no longer what it builds by default.
+
+- **"Redo our careers page" now starts from a fixed brief.** `references/brief.md` holds
+  the brief word for word with four blanks (company, brand colour, talent segments,
+  segment pages). `scripts/fill_brief.py` fills them and the filled brief is shown
+  before anything else, ready to copy.
+- **Direction is approved before building**, as the brief asks. The fast path, building
+  straight after one screen of direction, now applies only to the demo.
+- **The default output is one landing page** in the employer's brand, not a multi-page
+  site. The separate FAQ, hiring process and career-area pages are now sections of the
+  landing page, or links.
+- **A preview dialog replaces missing pages.** Links to supporting pages, jobs,
+  locations, application status and the talent community open an accessible dialog
+  that says what the full version adds. Its copy lives at the top of `js/site.js`.
+- **Two build modes.** `--examples roles.csv` (and `--demo`): job search over example
+  roles, labelled as examples on the page. `--jobs export.csv`: one page per real job
+  with JobPosting markup and one per location, as in 1.0.0.
+- **47 checks**, up from 37, grounded in sources listed in `references/sources.md`.
+  New: every link goes somewhere and the dialog is named and closable; four rules from
+  the search engine's own job-posting guidelines (markup only on a single job's page,
+  the title holding the job title only, markup matching the visible page, no closed job
+  left marked up, description as HTML); a Legal area (privacy notice linked, how to ask
+  for an accommodation, an equal-opportunity statement); benefits described on job
+  pages, which several pay-transparency laws require.
+- **`references/launch-checklist.md`**: what legal, IT and brand teams at a large
+  employer check that no automated check can, with a verification list.
+- **Job pages** gain a pay and benefits section, from an optional `benefits` column.
+- **`scripts/advise.py` and `references/recommendations.json`**: after the check, the
+  three things to do first and a full plan by owner (must, should, could), from a
+  catalogue in which every check has a recommendation and every fact-based must cites
+  a source. Shared word for word with `careers-site-advisor`.
+- **82 tests**, up from 37: 26 for the advice and 56 for the site. Both modes must pass clean, the brief must fill word for
+  word, switching modes must leave no stale pages, and 39 planted faults must each be
+  caught for their named reason. Sample dates are shifted at test time, so the suite
+  does not start failing when the calendar passes them. The suite caught a real defect on the way: job pages
+  copied the footer's dialog links without the dialog itself.
+
 ## 1.0.0
 
 First release.

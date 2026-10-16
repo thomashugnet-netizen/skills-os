@@ -22,7 +22,9 @@ p { margin: 0 0 var(--space-3); }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
 
 .wrap { width: min(100% - 2rem, var(--max)); margin-inline: auto; }
-.section { padding-block: var(--space-6); }
+.section { padding-block: var(--space-6); scroll-margin-top: 4rem; }
+.job-list + .btn { margin-top: var(--space-3); }
+[hidden] { display: none !important; }
 .section--warm { background: var(--surface-warm); color: var(--ink); }
 .section--brand { background: var(--brand-soft); color: var(--ink); }
 .section--dark { background: var(--surface-dark); color: var(--on-dark); }
@@ -188,3 +190,13 @@ mark.confirm::after { content: " (to confirm)"; font-size: 0.75em; font-weight: 
   .js .reveal { opacity: 1; transform: none; }
 }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Preview dialog: what a link would open in the full version */
+.upsell {
+  border: 0; border-radius: var(--radius-lg); padding: 0; width: min(100% - 2rem, 32rem);
+  background: var(--surface); color: var(--ink); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.upsell::backdrop { background: rgba(20, 22, 25, 0.55); }
+.upsell-inner { padding: var(--space-5) var(--space-4) var(--space-4); display: grid; gap: var(--space-2); }
+.upsell-note { font-size: var(--step--1); color: var(--ink-muted); border-top: 1px solid var(--line); padding-top: var(--space-3); }
+.upsell-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
