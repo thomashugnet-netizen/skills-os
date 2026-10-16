@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**6 ready now. 38 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**7 ready now. 35 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -19,6 +19,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 |---|---|---|
 | [`funnel-drop-off-analyst`](skills/analysing/funnel-drop-off-analyst/) | Finds where candidates leave your hiring funnel, separates correlation from cause, and ranks the fixes by how many hires they would recover. | needs a CSV export, 0.3 MB |
 | [`document-expiry-radar`](skills/complying/document-expiry-radar/) | Reads a list of the licences, cards and certificates your people need to work, with their expiry dates, and shows who cannot work today, whose renewal has to start now to avoid a lapse, and which scheduled shifts that puts at risk. | no data needed, 43 KB |
+| [`structured-interview-guide`](skills/interviewing/structured-interview-guide/) | Builds a fifteen-minute frontline interview a store or site manager can run the same way every time, without training, and checks the questions managers ask today for the ones that are a legal risk or predict nothing. | no data needed, 39 KB |
 | [`schedule-photo-to-roster`](skills/operating/schedule-photo-to-roster/) | Turns a photo or screenshot of a shift schedule into a clean roster, then shows where the week is short-staffed, who is heading into overtime, who closes and opens with too little rest, and which hours could move. | no data needed, 0.2 MB |
 | [`career-site-builder`](skills/sourcing/career-site-builder/) | Builds or audits a careers site, career page or jobs page for an hourly, multi-site employer, with job pages that search engines and AI assistants can read, pay on every listing, and a checker that proves it before handover. | no data needed, 57 KB |
 | [`pay-competitiveness-checker`](skills/sourcing/pay-competitiveness-checker/) | Places every posted hourly rate on the local wage ladder for the same job, from official US government wage data, and shows which postings pay less than most employers in that metro, what it would cost to fix, and where your own sites pay differently for the same job. | no data needed, 0.4 MB |
@@ -55,15 +56,12 @@ Written, not yet through their gate. They ship when they pass it.
 - `bias-language-checker` — Reviews job ads and screening questions for exclusionary wording and adverse-impact risk, and rewrites the lines that carry it.
 - `knockout-logic-auditor` — Reviews your existing screening rules against funnel data and finds the questions quietly killing your applicant flow. *(needs a CSV export)*
 - `resume-free-triage-rubric` — Builds a triage rubric for hourly roles where most applicants have no resume, scoring availability, reliability signals, travel and certifications instead of work history.
-- `scorecard-designer` — Builds a role scorecard with behavioural anchors that a site manager who has never interviewed can score during the conversation.
 
 **Interviewing — run by non-recruiters**
 
 - `interview-no-show-playbook` — Diagnoses why booked interviews get missed from your funnel data, then writes the confirm, remind and reschedule sequence and the slot rules that fix it. *(needs a CSV export)*
 - `interview-panel-calibrator` — Gets multiple interviewers onto the same bar and proves it with a calibration exercise, then reads the disagreement to find what actually needs fixing.
-- `interview-question-bank` — Builds a role-family question bank with follow-up probes, scoring notes and safe alternatives to the questions managers should not ask.
 - `phone-screen-script` — Writes a five-minute phone screen that leads with availability, decides on the call, and ends with a booked next step.
-- `structured-interview-guide` — Builds a fifteen-minute frontline interview guide a store or site manager can run consistently, without training.
 
 **Analysing — where the numbers are**
 

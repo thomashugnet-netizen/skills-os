@@ -1,0 +1,3770 @@
+{
+  "about": "Each case says what the checker must find and what it must not. The must-not half is what keeps the checker from flagging every question that mentions a child, a church street or a Visa card. The second half comes from an adversarial pass: everyday phrasings of risky questions that must be caught, and job questions that mention a customer's child, a church down the road or a pallet discharge that must not be.",
+  "cases": [
+    {
+      "q": "Do you have kids?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you married?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you pregnant?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How old are you?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "When did you graduate from high school?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you go to church on Sundays?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Where are you from originally?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your native language?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you take any medications?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Any health problems we should know about?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever been arrested?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What were you making at your last job?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you in a union?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How tall are you?",
+      "level": "caution",
+      "must": [
+        "height_weight"
+      ],
+      "must_not": [
+        "health"
+      ]
+    },
+    {
+      "q": "What's your credit score?",
+      "level": "caution",
+      "must": [
+        "finance"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What kind of discharge did you get from the army?",
+      "level": "caution",
+      "must": [
+        "military"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you own a car?",
+      "level": "caution",
+      "must": [
+        "transport_proxy"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you worked in the children's department before?",
+      "level": "weak",
+      "must": [
+        "yes_no"
+      ],
+      "must_not": [
+        "family"
+      ]
+    },
+    {
+      "q": "Can you handle Visa and Mastercard payments at the register?",
+      "level": "weak",
+      "must": [
+        "yes_no"
+      ],
+      "must_not": [
+        "origin"
+      ]
+    },
+    {
+      "q": "Is Union Station close to you?",
+      "level": "weak",
+      "must": [
+        "yes_no"
+      ],
+      "must_not": [
+        "union"
+      ]
+    },
+    {
+      "q": "Our store is on Temple Street. How would you get here for a 6am start?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "religion"
+      ]
+    },
+    {
+      "q": "This role involves lifting 40 pounds all shift. Can you do that, with or without a reasonable accommodation?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "health",
+        "yes_no"
+      ]
+    },
+    {
+      "q": "Are you legally authorized to work in the United States?",
+      "level": "weak",
+      "must": [
+        "yes_no"
+      ],
+      "must_not": [
+        "origin"
+      ]
+    },
+    {
+      "q": "Have you handled customer prescriptions in a pharmacy before?",
+      "level": "weak",
+      "must": [
+        "yes_no"
+      ],
+      "must_not": [
+        "health"
+      ]
+    },
+    {
+      "q": "We serve customers in Spanish and English. Are you comfortable doing that?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "origin"
+      ]
+    },
+    {
+      "q": "If you were an animal, what would you be?",
+      "level": "weak",
+      "must": [
+        "brainteaser"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What do you know about us? Why do you want to work here?",
+      "level": "weak",
+      "must": [
+        "double_barrel"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Tell me about yourself.",
+      "level": "weak",
+      "must": [
+        "open_ended_intro"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your biggest weakness?",
+      "level": "weak",
+      "must": [
+        "weakness"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Tell me about a time you had to stay late to finish a job. What happened?",
+      "level": "ok",
+      "must": [],
+      "must_not": []
+    },
+    {
+      "q": "Tell me about a time a customer was angry with you. What did you do?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "family",
+        "origin"
+      ]
+    },
+    {
+      "q": "3. Can you work weekends?",
+      "level": "weak",
+      "must": [
+        "yes_no"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "- How would you get here for a 6am start?",
+      "level": "ok",
+      "must": [],
+      "must_not": []
+    },
+    {
+      "q": "Who watches your kids while you work?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Is your husband ok with nights?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What year were you born?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "You look young, are you in school?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Any plans to have a baby?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you on any meds?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Ever filed a workers comp claim?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you need any time off for religious reasons?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Is English your first language?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What country is your accent from?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever been in trouble with the police?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a record?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your hourly rate now?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How much are you on at the moment?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have any disabilities?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How many sick days did you take last year?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a US citizen?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What does your wife do?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a single mom?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you rent?",
+      "level": "caution",
+      "must": [
+        "finance"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you belong to a union?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you drink alcohol?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Tell me about your family",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How old are your kids?",
+      "level": "blocking",
+      "must": [
+        "age",
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a kid?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Got any little ones at home?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a mom?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a parent?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you pregnant or planning to be?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you plan on starting a family soon?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Is your partner ok with you working nights?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you engaged?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you divorced?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What does your girlfriend think of the hours?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have someone to pick up the kiddos?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How old r u?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "H0w old are you?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "how 0ld are you",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your DOB?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "When were you born?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What year did you finish high school?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you over 40?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you still in college or retired?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "You seem a bit older, can you keep up?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have any health problems?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever had surgery?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you diabetic?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you take any medicine?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you take medication?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you been to rehab?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you use marijuana?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you HIV positive?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have any medical issues?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Any illnesses we should know about?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever been hurt on the job?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Ever had a work injury?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you see a therapist?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How many days did you call out sick last year?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What do you do on Sundays?",
+      "level": "caution",
+      "must": [
+        "religion_proxy"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you go to church?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you celebrate Christmas?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you Muslim?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you Christian?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you Jewish?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you wear a hijab at work?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you observe Ramadan?",
+      "level": "blocking",
+      "must": [
+        "religion"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Where's your family from originally?",
+      "level": "blocking",
+      "must": [
+        "family",
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Where are you originally from?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Where'd you grow up?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your background?",
+      "level": "caution",
+      "must": [
+        "origin_proxy"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Is that a Spanish name?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What is your ethnicity?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What nationality are you?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a citizen?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you an American citizen?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Were you born here?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you legal?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have papers?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a green card or visa?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How long have you lived in this country?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What language do you speak at home?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Your English is good, where did you learn it?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever been convicted of a crime?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever done time?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Ever been locked up?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you been in trouble with the law?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a criminal record?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a DUI?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Any run-ins with the cops?",
+      "level": "blocking",
+      "must": [
+        "criminal"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your current salary?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What did your last employer pay you?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How much did they pay you at Walmart?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What do you earn now?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your current hourly?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you own your home?",
+      "level": "caution",
+      "must": [
+        "finance"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a car loan?",
+      "level": "caution",
+      "must": [
+        "finance"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a lot of debt?",
+      "level": "caution",
+      "must": [
+        "finance"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever filed for bankruptcy?",
+      "level": "caution",
+      "must": [
+        "finance"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a union member?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Were you in the union at your last job?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How do you feel about unions?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you ever been in a union?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What do you think about the Teamsters?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you gay?",
+      "level": "blocking",
+      "must": [
+        "orientation"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a boyfriend?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you straight",
+      "level": "blocking",
+      "must": [
+        "orientation"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What are your pronouns",
+      "level": "blocking",
+      "must": [
+        "orientation"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Is this really a job for a woman?",
+      "level": "blocking",
+      "must": [
+        "orientation"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Can a girl like you lift this?",
+      "level": "blocking",
+      "must": [
+        "orientation"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What's your sexual preference?",
+      "level": "blocking",
+      "must": [
+        "orientation"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a veteran with an honorable discharge?",
+      "level": "caution",
+      "must": [
+        "military"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How much do you weigh?",
+      "level": "caution",
+      "must": [
+        "height_weight"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What is your weight?",
+      "level": "caution",
+      "must": [
+        "height_weight"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Can I see your Facebook?",
+      "level": "caution",
+      "must": [
+        "photo_social"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have a car?",
+      "level": "caution",
+      "must": [
+        "transport_proxy"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you smoke?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you vape?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you drink?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you in recovery?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a single mother?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Who will take care of your children if they get sick?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What does your husband do for work?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you married or single?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have kids",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do u have kids?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "d0 you have kids?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have chldren?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you married",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Can you work Sunday shifts?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Our store is near First Baptist Church; how would you get here?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Are you at least 18, as required to sell alcohol?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Can you lift 50 pounds?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you helped a customer with a disability find something",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Do you have a valid driver's license?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you handle a customer asking about medication in the pharmacy aisle?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "This job requires a background check after the offer, is that ok?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What age group of customers have you served?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you worked a register with credit card payments?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How did you get along with your union rep?",
+      "level": "blocking",
+      "must": [
+        "union"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Which shifts work best around your other commitments?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time a customer's kids were running around the store. What did you do?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you help a parent whose children were lost in the store?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you dealt with an arrest or shoplifter at your last store.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if you saw a shoplifter? Would you call for an arrest?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you handle a customer who is upset about the price of baby formula?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a customer asked where the pregnancy tests are?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you handled a customer complaint about the race car toys.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How do you handle the race to finish a truck before opening?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you worked in the kids section before?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about stocking the children's books aisle.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "This job requires stocking shelves at a height of seven feet. Can you do that?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you worked through a busy holiday season.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Can you work Christmas Eve?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a customer wanted to return a Facebook Marketplace item?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How do you handle the discharge of a pallet from the truck?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a delivery driver asked you to sign for a damaged pallet with a debt note?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about the age verification process you followed for alcohol sales.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you check a customer's age for a tobacco sale?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you handled a customer's medical emergency in store.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a coworker was injured on the job?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about your experience with workers who needed help.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How did you handle the generation of end-of-day reports?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Can you work the Temple Street location?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Our store is on Temple Road; can you get here by 6am?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Our location is near the synagogue on Main; how would you get here?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you helped a customer who spoke a different first language.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a customer with a strong accent was hard to understand?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about how you dealt with anxiety in customers during a recall.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you calm a customer showing signs of anxiety?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you tell a customer asking about prescriptions at the pharmacy counter?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What do you know about our team's pay structure? The rate is $17; does that work for you?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me how you handled your current rate of picking errors.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What do you think about our current pay rate of $17?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you handle a customer who asks to pay with a gift card from their bank account?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you ever worked on a team with mixed generation employees?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you worked with a teammate whose husband dropped them off late",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Do you have experience operating a pallet jack?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you deal with a drunk customer — do you drink on shift ever?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Tell me about a time you had to follow food safety rules.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How did you prepare for a big holiday like Easter at your last store?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a customer said they were praying in the aisle?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about stocking the baby aisle.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Are you available weekends?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about your last job.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What's your availability?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Can you start at 0600 on Mondays?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Are there any conditions on your availability?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you had to stay late to finish a truck.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How do you stay engaged on a long overnight shift?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you worked as a delivery partner before?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Who takes care of closing the store at your last job?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you handle a customer with diabetes asking for sugar-free options?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a coworker got hurt on the job?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you ever had to report an unsafe ladder?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "If you need to call out sick, you text the lead before the shift. Does that work for you?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "You get five sick days a year. Any questions about that?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "We offer a retirement plan after 90 days.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What's your pay expectation for this role?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about the busiest holiday you worked.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Where would you be coming from for the 6am start?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you get here from the bus station?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What is your availability on Saturdays?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How many years have you worked in retail?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How old is the oldest forklift you have driven?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a shopper asked about the race car aisle?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Can you lift over 50 pounds repeatedly?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you worked over 40 hours in a week.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you used a scanner gun to count stock?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you deal with a customer shouting in a different language?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What experience do you have with cash handling?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about a time you trained a new teammate.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How would you handle a customer who says they are a single mom and needs help carrying bags?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a child was lost in the store?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Is Temple Road easy for you to reach?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you ever done time-sensitive deliveries?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Did you ever have to deal with a customer having a medical emergency?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me about your last job.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What do you do when the line gets long?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "How do you keep track of time on a long shift?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you served time-critical orders at a restaurant?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What did your training at your last job cover?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What did you like about your last manager?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Are you comfortable working alone at night?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Are you available on holidays like Thanksgiving?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Are you a people person?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Tell me how you handle a straight twelve-hour shift.",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What's your favorite part of working with the public?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you ever handled a credit card dispute at the register?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Would you be okay working in the baby aisle?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "What would you do if a teammate told you they were pregnant and needed help lifting?",
+      "level": "ok",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you ever been fired for drugs?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you ever been fired?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Have you ever failed a drug test?",
+      "level": "weak",
+      "must": [],
+      "must_not": [
+        "age",
+        "family",
+        "health",
+        "height_weight",
+        "religion",
+        "religion_proxy",
+        "origin",
+        "origin_proxy",
+        "orientation",
+        "criminal",
+        "pay_history",
+        "finance",
+        "union",
+        "military",
+        "photo_social",
+        "transport_proxy"
+      ]
+    },
+    {
+      "q": "Do you suffer from any conditions?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Have you had back surgery?",
+      "level": "blocking",
+      "must": [
+        "health"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have bad credit?",
+      "level": "caution",
+      "must": [
+        "finance"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you old enough to be a grandparent?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Do you have anyone at home who depends on you?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Is your wife going to mind the late nights?",
+      "level": "blocking",
+      "must": [
+        "family"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "What year did you leave school?",
+      "level": "blocking",
+      "must": [
+        "age"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Where were your parents born?",
+      "level": "blocking",
+      "must": [
+        "origin"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "How much were you getting paid at Target?",
+      "level": "blocking",
+      "must": [
+        "pay_history"
+      ],
+      "must_not": []
+    },
+    {
+      "q": "Are you a man or a woman?",
+      "level": "blocking",
+      "must": [
+        "orientation"
+      ],
+      "must_not": []
+    }
+  ]
+}
