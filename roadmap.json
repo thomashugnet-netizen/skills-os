@@ -80,24 +80,10 @@
       "needs_dataset": false
     },
     {
-      "slug": "interview-question-bank",
-      "title": "Interview Question Bank",
-      "category": "interviewing",
-      "description": "Builds a role-family question bank with follow-up probes, scoring notes and safe alternatives to the questions managers should not ask.",
-      "needs_dataset": false
-    },
-    {
       "slug": "phone-screen-script",
       "title": "Phone Screen Script",
       "category": "interviewing",
       "description": "Writes a five-minute phone screen that leads with availability, decides on the call, and ends with a booked next step.",
-      "needs_dataset": false
-    },
-    {
-      "slug": "structured-interview-guide",
-      "title": "Structured Interview Guide",
-      "category": "interviewing",
-      "description": "Builds a fifteen-minute frontline interview guide a store or site manager can run consistently, without training.",
       "needs_dataset": false
     },
     {
@@ -224,13 +210,6 @@
       "title": "Resume-Free Triage Rubric",
       "category": "screening",
       "description": "Builds a triage rubric for hourly roles where most applicants have no resume, scoring availability, reliability signals, travel and certifications instead of work history.",
-      "needs_dataset": false
-    },
-    {
-      "slug": "scorecard-designer",
-      "title": "Scorecard Designer",
-      "category": "screening",
-      "description": "Builds a role scorecard with behavioural anchors that a site manager who has never interviewed can score during the conversation.",
       "needs_dataset": false
     },
     {

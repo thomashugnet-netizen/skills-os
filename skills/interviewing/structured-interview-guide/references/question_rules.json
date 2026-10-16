@@ -1,0 +1,452 @@
+{
+  "about": "What the checker looks for in an interview question. Each rule describes the shape of a risk and names an official source where one exists; none of it is legal advice. 'patterns' match wherever they appear. 'personal' patterns are single words that are only a risk when the question is about the candidate, so they are skipped when the question is about a customer, a teammate or a place (see 'third_party'). Rules that vary by state or city are described in shape and flagged everywhere, because the safe question is the same in every state and the risky one predicts nothing about the job. The rules are written for English.",
+  "checked": "2026-10-16",
+  "third_party": "\\b(customers?|customer's|shoppers?|shopper's|guests?|clients?|patients?|patrons?|visitors?|residents?|members of the public|teammates?|teammate's|co-?workers?|co-?worker's|colleagues?|colleague's|employees|staff|workers|shoplifters?|thie(f|ves)|drivers?|a parent|parents|someone|somebody|people|kids section|children's)\\b|\\b(a|the) (lost |young |small )?(child|kid) (was|is|who|that|gets|got|goes|went|runs|ran)\\b|\\blost (child|children|kids?)\\b|\\b(near|next to|across from|opposite|beside|behind|past|by) (the |a |first |st\\.? )?[\\w.']*\\s?(church|mosque|synagogue|temple)\\b|\\b(church|mosque|synagogue|temple) (on|at|in) \\w+",
+  "rules": [
+    {
+      "id": "age",
+      "level": "blocking",
+      "topic": "Age",
+      "patterns": [
+        "\\bhow old\\b(?! (is|are) (the|this|that|our|a) )",
+        "\\byour age\\b",
+        "^(and )?(what'?s |what is )?(your )?age\\??$",
+        "\\bdate of birth\\b",
+        "\\bdob\\b",
+        "\\bbirth ?(day|date|year)\\b",
+        "\\b(when|what year|which year) were you born\\b",
+        "\\b(when|what year|which year) did you (graduate|finish|leave)\\b",
+        "\\bgraduation year\\b",
+        "\\b(close to|near|nearing|thinking about|planning to|planning on) retir",
+        "\\bare you (still )?(in|at) (school|college|high school|university)\\b",
+        "\\b(are|were) you retired\\b|\\bor retired\\b",
+        "\\b(are you|you're|you are|is (he|she|they)|if (they|he|she) (is|are)) (over|under|older than|younger than) ([4-9]0|[4-9]5)\\b(?!\\s*(pounds|lbs?|kg|kilos|minutes|mins|hours|hrs|feet|ft|inches|boxes|items|cases|pallets|customers|people|%|percent|degrees))",
+        "\\byou (look|seem|sound) (so |very |really |pretty |quite |a bit |a little |kind of )?(young|old|older|younger|mature|experienced for your age)\\b",
+        "\\bwhat generation\\b|\\bgeneration are you\\b",
+        "\\b(young|old|older|younger) (men|women|guys|girls|people|person|workers|candidates?|applicants?) only\\b"
+      ],
+      "personal": [
+        "\\b(too )?(young|elderly)\\b(?! (customers?|shoppers?|people|children|kids|families))",
+        "\\bover ([4-9]0|[4-9]5)\\b(?!\\s*(pounds|lbs?|kg|kilos|minutes|mins|hours|hrs|feet|ft|inches|boxes|items|cases|pallets|customers|people|%|percent|degrees))",
+        "\\bretire(d|e|es|ment)\\b(?! (plan|plans|savings|account|accounts|benefits?|contributions?|match|401k))"
+      ],
+      "why": "Age, and questions that reveal it such as a graduation year or whether someone is retired, have no bearing on whether someone can do the job, and asking invites a discrimination claim.",
+      "instead": "If there is a legal minimum age for the role or for a task such as serving alcohol: \"This role requires you to be at least 18. Can you confirm you are?\"",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "family",
+      "level": "blocking",
+      "topic": "Marriage, children, pregnancy, caring",
+      "patterns": [
+        "\\b(are|r) you (married|engaged|divorced|separated|widowed|single|seeing anyone|in a relationship)\\b",
+        "\\bmarital\\b",
+        "\\b(married|single|engaged|divorced) or (single|married|not)\\b",
+        "\\b(do|have) you (got |have )?(any |a |an )?(kids?|children|chldren|childs|child|kiddos|little ones|babies|baby|family)\\b",
+        "\\bgot (any )?(kids|children|little ones|kiddos)\\b",
+        "\\bhave (any |a )?(kids|children|little ones|kiddos) at home\\b",
+        "\\byour (kids?|children|child|kiddos|little ones|son|daughter|baby|family|husband|wife|spouse|partner|boyfriend|girlfriend|fianc(e|é|ee)|other half|family situation|home life|home situation)\\b",
+        "\\bare you (a |an )?(single )?(mom|mum|mother|dad|father|parent|grandparent|grandma|grandmother|grandpa|grandfather|carer|caregiver|stay-at-home)\\b",
+        "\\b(plan|plans|planning|thinking|thought|want|wanting|hoping|intend|intending)( on| to| of| about)? (have|having|start|starting)( a| any| more)? (baby|babies|family|kids|children)\\b",
+        "\\b(have|having|start|starting) a (baby|family)\\b",
+        "\\bare you (pregnant|expecting)\\b",
+        "\\bchild ?care\\b",
+        "\\bbabysitter\\b|\\bbabysit\\b|\\bnanny\\b",
+        "\\bmaternity\\b(?! (section|department|dept|wear|clothing|aisle))",
+        "\\bpaternity\\b",
+        "\\bcare (for|of) (a|your|an) (elderly |sick )?(parent|relative|mother|father|mom|dad|grandparent)\\b",
+        "\\bmaiden name\\b",
+        "\\b(depends|depend|relies|rely|relying|depending) on you\\b",
+        "\\b(any |your )?dependa?(e|a)nts\\b",
+        "\\bold enough to be a (grand)?(parent|mother|father|mom|dad)\\b",
+        "\\bwho (watches|looks after|takes care of|picks up|minds|will watch|will look after|will take care of|would watch|would look after) (your|the) (kids|children|child|kiddos|little ones|baby|family|parents?|mom|dad|mother|father)\\b",
+        "\\b(pick up|drop off|collect) (the |your )?(kids|children|kiddos|little ones)\\b"
+      ],
+      "personal": [
+        "\\bhusband\\b",
+        "\\bwife\\b",
+        "\\bspouse\\b",
+        "\\bboyfriend\\b",
+        "\\bgirlfriend\\b",
+        "\\bfianc(e|é|ee)\\b",
+        "(?<!delivery )(?<!business )(?<!sales )(?<!trading )(?<!channel )(?<!training )\\bpartner\\b(?! (stores?|companies|brands?|agency|agencies|program|app))",
+        "\\b(kid|kids|kiddos|children|chldren|child|little ones)\\b(?!'|’)(?! (section|department|dept|wear|clothing|books|menu|aisle|toys|meals?|area))",
+        "\\bpregnan(?!cy tests?)",
+        "\\b(married|divorced|widowed)\\b",
+        "\\bsingle (mom|mum|mother|dad|father|parent)\\b",
+        "\\bsingle\\b(?=\\s*(\\?|$|,|\\.|and|or|with no|with kids|mom|mother|dad|father|parent))"
+      ],
+      "why": "Questions about marriage, children or caring duties are used to screen out women and parents, and the answer says nothing about whether someone will turn up for a shift.",
+      "instead": "\"This role works Saturday and Sunday mornings, starting at 6am. Can you work those shifts?\" Ask everyone, in the same words.",
+      "source": "https://www.eeoc.gov/pre-employment-inquiries-and-marital-status-or-number-children"
+    },
+    {
+      "id": "health",
+      "level": "blocking",
+      "topic": "Disability, health, medical history",
+      "patterns": [
+        "\\b(do you have|have you got|you have|any|your) (a |any )?disabilit",
+        "\\bare you disabled\\b",
+        "\\bhealth (problems?|issues?|conditions?|concerns?|history)\\b",
+        "\\bmedical (condition|conditions|history|problems?|issues?|reasons)\\b",
+        "\\bany (injuries|illnesses|illness|allergies)\\b",
+        "\\bmental health\\b",
+        "\\bsuffer(s|ed|ing)? (from|with)\\b",
+        "\\b(back|knee|hip|heart|shoulder|brain|spine|spinal) (surgery|operation)\\b",
+        "\\bworkers'? ?comp",
+        "\\bworkman'?s comp",
+        "\\b(how many|your|take|took|taken|used|use|missed) (any )?sick (days?|leave|time)\\b",
+        "\\bsick (days?|leave|time) (did|have|had|were) you\\b",
+        "\\bhow (many|often)\\b.*\\bsick\\b",
+        "\\b(did|have|do) you (ever |often )?(call|called|calling) (out|in)( sick)?\\b",
+        "\\bhow many days (did you miss|were you sick|off sick|did you take off|were you off)\\b",
+        "\\bin good health\\b|\\bhealthy enough\\b",
+        "\\bphysical(ly)? (problems|limitations|issues|conditions)\\b",
+        "\\b(back|knee|heart|joint|breathing) (problems?|issues?|trouble|injur)",
+        "\\b(have|had|did|were) you (ever )?(been |get |got |gotten )?(hurt|injured)\\b",
+        "\\b(take|taking|on|use|using|need|your|any) (any )?(medicine|medicines|medication|medications|meds|pills|prescriptions?|insulin)\\b",
+        "\\b(had|have|need|needed|having) (any )?(surgery|surgeries|an operation|operations|treatment)\\b",
+        "\\bare you (diabetic|epileptic|asthmatic|bipolar|autistic|deaf|blind|hiv|hiv positive|on the spectrum|in recovery|in treatment)\\b",
+        "\\b(see|seeing|saw|been to|go to|in) (a |any )?(therapist|therapy|counsell?or|counsell?ing|psychiatrist|psychologist|shrink)\\b",
+        "\\b(in recovery|been to rehab|go to rehab|in rehab|rehab\\b)",
+        "\\bdo you (drink|smoke|vape|use drugs|use marijuana|use cannabis|use weed|smoke weed|smoke pot|get high|take drugs)\\b",
+        "\\b(use|used|using|smoke) (marijuana|cannabis|weed|pot|drugs)\\b",
+        "\\bhow (much|often) do you drink\\b"
+      ],
+      "personal": [
+        "\\bdisabilit",
+        "\\bdisabled\\b",
+        "\\bhandicap",
+        "\\bdepress(ed|ion)\\b",
+        "\\banxiety\\b",
+        "\\binjur(y|ies|ed)\\b",
+        "\\billness(es)?\\b",
+        "\\bhurt (on|at) (the |your |a )?(job|work)\\b",
+        "\\bever (been |got |gotten )?(hurt|injured)\\b",
+        "\\b(diabetes|diabetic|epilep|hiv\\b|cancer|asthma|bipolar|adhd|autism|autistic|ptsd)",
+        "\\b(therapist|therapy|rehab|recovery from)\\b(?! (dog|dogs|animal))",
+        "\\bmedical leave\\b"
+      ],
+      "why": "Employers are prohibited from asking about disability before an offer. Questions about health, injuries, medication, treatment or past sick leave are disability questions in another form.",
+      "instead": "Describe the job, then ask about the job: \"This role involves lifting boxes of up to 40 pounds throughout a shift. Can you do that, with or without a reasonable accommodation?\"",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "height_weight",
+      "level": "caution",
+      "topic": "Height and weight",
+      "patterns": [
+        "\\bhow tall\\b(?! (is|are) (the|this|that|our|a) )",
+        "\\byour (height|weight|size)\\b",
+        "\\bhow much do you weigh\\b",
+        "\\bwhat do you weigh\\b"
+      ],
+      "personal": [
+        "\\bheight\\b(?! of)",
+        "\\b(over|under)weight\\b"
+      ],
+      "why": "Height and weight requirements tend to screen out women and some ethnic groups, and are lawful only when the job genuinely needs them.",
+      "instead": "Ask about the task: \"This role stocks shelves up to seven feet high using a step stool. Can you do that, with or without a reasonable accommodation?\"",
+      "source": "https://www.eeoc.gov/pre-employment-inquiries-and-height-weight"
+    },
+    {
+      "id": "religion",
+      "level": "blocking",
+      "topic": "Religion",
+      "patterns": [
+        "\\breligio",
+        "\\b(go|going|went|attend|attending) to (church|mosque|temple|synagogue|services|mass|worship)\\b",
+        "\\bare you (a |an )?(muslim|christian|jewish|jew|hindu|buddhist|sikh|catholic|mormon|atheist|protestant|baptist|orthodox|evangelical|pagan|agnostic|born again|devout|observant)\\b",
+        "\\b(observe|observing|celebrate|celebrating|keep|keeping|fast for|fast during|fasting for|fasting during) (the )?(ramadan|christmas|easter|passover|diwali|eid|yom kippur|lent|hanukkah|chanukah|sabbath|shabbat|holidays|holy days)\\b",
+        "\\b(do|will) you fast\\b",
+        "\\b(wear|wearing|wears) (a |your |the )?(hijab|turban|headscarf|head scarf|yarmulke|kippah|veil|niqab|burqa|religious)\\b",
+        "\\bholy days?\\b",
+        "\\bsabbath\\b",
+        "\\bshabbat\\b",
+        "\\bwhat holidays do you (celebrate|observe)\\b",
+        "\\bbelieve in god\\b",
+        "\\bwhat (church|faith|denomination)\\b",
+        "\\byour (church|faith|pastor|priest|imam|rabbi|congregation)\\b"
+      ],
+      "personal": [
+        "\\bchurch\\b",
+        "\\bmosque\\b",
+        "\\bsynagogue\\b",
+        "\\btemple\\b(?! (st|street|ave|avenue|rd|road|square|university|run|bar))",
+        "\\bpray(ing|er|ers)?\\b",
+        "\\bhijab\\b",
+        "\\bturban\\b"
+      ],
+      "why": "Religion has no bearing on the job. If scheduling around observance matters, the question to ask is about the schedule.",
+      "instead": "\"The schedule includes Friday evenings and Sundays. Can you work those?\" If the answer is no for any reason, discuss accommodation after an offer.",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "religion_proxy",
+      "level": "caution",
+      "topic": "Religion, asked indirectly",
+      "patterns": [
+        "\\bwhat do you (usually |normally )?do on (sundays|saturdays|friday nights|friday evenings|sunday mornings)\\b",
+        "\\bwhere do you spend (your )?sundays\\b"
+      ],
+      "personal": [],
+      "why": "Asked open-ended, this invites an answer about religious observance. If the schedule includes those days, ask about the schedule.",
+      "instead": "\"The schedule includes Sunday mornings. Can you work those?\"",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "origin",
+      "level": "blocking",
+      "topic": "National origin, race, citizenship",
+      "patterns": [
+        "\\bwhere('s| is| are| were|'re|'d)? (you|your (family|parents|folks|people|accent|name|last name|surname))( originally| really)? (from|born)\\b",
+        "\\bwhere are you (from|originally from|really from)\\b",
+        "\\boriginally from\\b",
+        "\\bwhere (did|'d) you grow up\\b|\\bwhere'?d you grow up\\b",
+        "\\bwhere were you born\\b",
+        "\\bwere you born (here|in|abroad|overseas|outside)\\b",
+        "\\bcountry of (birth|origin)\\b",
+        "\\bnationality\\b",
+        "\\bethnic",
+        "\\bwhat race\\b",
+        "\\byour race\\b",
+        "\\bnative (language|tongue)\\b",
+        "\\bmother tongue\\b",
+        "\\bhow long have you (lived|been|been living) (in|here in) (this country|the us|the u s|the united states|america|the states|here)\\b",
+        "\\bhow long have you been (in|here in) (this country|the us|america|the states)\\b",
+        "\\b(language|languages) (do you|you) speak at home\\b|\\bspeak at home\\b",
+        "\\bwhere did you learn (your )?english\\b|\\byour english is\\b|\\bhow is your english\\b",
+        "\\bare you (a |an )?(us |u s |american |legal |illegal )?(citizen|immigrant|legal|illegal|undocumented|alien)\\b",
+        "\\b(do you have|have you got|got) (your )?(papers|a green card|green card|a visa|a passport)\\b",
+        "\\bgreen card\\b",
+        "\\bimmigra",
+        "\\b(work |student |h-?1b |your |a )visa\\b(?! (card|cards|payment|payments|debit|credit))",
+        "\\bvisa status\\b",
+        "\\bis that (a|an) (?!(brand|product|store|company|user|screen|code|file|street|business)\\b)\\w+ name\\b|\\bwhat kind of (a )?name\\b|\\bwhere does your name come from\\b|\\bwhere('s| is) that name from\\b",
+        "\\bwhat (are|is) you(r)? (nationality|ethnicity|heritage)\\b",
+        "\\bwhat are you\\?$"
+      ],
+      "personal": [
+        "\\bfirst language\\b",
+        "\\baccent\\b",
+        "\\bheritage\\b",
+        "\\brace\\b(?! (car|cars|to|against|track|day|for|course|horse))"
+      ],
+      "why": "Where someone is from, their accent or their citizenship are not job requirements. Work authorisation is verified after hire through the official process, the same way for everyone.",
+      "instead": "\"Are you legally authorised to work in the United States?\" asked of every candidate. If a language is needed for the job: \"This role serves customers in Spanish and English. Are you comfortable doing that?\"",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "origin_proxy",
+      "level": "caution",
+      "topic": "Background, asked open-ended",
+      "patterns": [
+        "\\bwhat'?s your background\\b|\\bwhat is your background\\b|\\btell me about your background\\b"
+      ],
+      "personal": [],
+      "why": "\"Your background\" invites an answer about family, origin or religion. Ask about the work experience you mean.",
+      "instead": "\"Tell me about your last job. What did a normal shift look like?\"",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "orientation",
+      "level": "blocking",
+      "topic": "Sex, sexual orientation, gender identity",
+      "patterns": [
+        "\\bsexual (orientation|preference|preferences)\\b",
+        "\\bsexuality\\b",
+        "\\bare you (gay|lesbian|straight|bi|bisexual|trans|transgender|queer|a man or a woman|a boy or a girl|male or female)\\b",
+        "\\btransgender\\b",
+        "\\bgender identity\\b",
+        "\\bpronouns?\\b",
+        "\\b(a )?(man|men|woman|women|girl|girls|guy|guys|lady|ladies)'?s? (job|work)\\b",
+        "\\bjob for a (woman|man|girl|guy|lady)\\b",
+        "\\b(girl|woman|lady|guy|little thing|young lady) like you\\b",
+        "\\b(men|women|males?|females?|guys|girls|ladies) only\\b",
+        "\\bstrong enough for a (woman|girl|lady)\\b"
+      ],
+      "personal": [
+        "\\bgay\\b",
+        "\\blesbian\\b",
+        "\\bstraight\\b(?=\\s*(\\?|$|or|\\.))"
+      ],
+      "why": "None of these bear on the job, and asking about them is evidence of intent to discriminate.",
+      "instead": "Ask about the work itself. Let candidates share how they want to be addressed if they choose to; do not ask.",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "criminal",
+      "level": "blocking",
+      "topic": "Arrests and criminal history before an offer",
+      "patterns": [
+        "\\b(ever )?been arrested\\b",
+        "\\byour arrests?\\b",
+        "\\bget arrested\\b",
+        "\\bcriminal (record|history|background|past|convictions?)\\b",
+        "\\b(do you have|have you got|got|you have) (a |any )?(police |criminal )?record\\b(?! of)",
+        "\\bconvicted\\b",
+        "\\bconvictions?\\b",
+        "\\bfelon(y|ies|s)?\\b",
+        "\\bmisdemeanou?r",
+        "\\bjail\\b",
+        "\\bprison\\b",
+        "\\blocked up\\b",
+        "\\b(done|did|serve|served|serving|doing) (any )?time\\b(?!-)(?! (management|off|sheet|clock|card|for the|to|on|in|at))",
+        "\\b(in )?trouble with the (law|police|cops)\\b",
+        "\\b(run-?ins?|problems|issues) with the (law|police|cops)\\b",
+        "\\bon (probation|parole)\\b",
+        "\\bparole\\b",
+        "\\b(a |any |your )?(dui|dwi|owi)s?\\b",
+        "\\bever been charged\\b"
+      ],
+      "personal": [
+        "\\barrest(s|ed)?\\b"
+      ],
+      "why": "An arrest is not proof of anything, and many states and cities bar asking about criminal history at all until a conditional offer has been made. Where a record matters for the job, it is assessed later, case by case, through the background-check process.",
+      "instead": "Leave it out of the interview. If the role legitimately requires a background check, say so: \"If we make you an offer, it will be conditional on a background check.\"",
+      "source": "https://www.eeoc.gov/laws/guidance/enforcement-guidance-consideration-arrest-and-conviction-records-employment-decisions"
+    },
+    {
+      "id": "pay_history",
+      "level": "blocking",
+      "topic": "Pay history",
+      "patterns": [
+        "\\b(what|how much) (do|did|are|were) you (make|making|earn|earning|get paid|getting paid|paid|bring home)\\b",
+        "\\bhow much are you on\\b",
+        "\\b(what|how much) (did|does|do) (they|your (last |old |previous |current )?(employer|boss|job|company|manager|store)|\\w+) pay you\\b",
+        "\\bpay you (at|there|now)\\b",
+        "\\b(what'?s|what is|what was|what were) your (current |last |previous |old |present )?(hourly|rate|pay|salary|wage|wages|pay rate|hourly rate|income|paycheck|take-home)\\b(?! (expectation|expectations|requirement|requirements|range|of))",
+        "\\byour (current |last |previous |old |present )?(hourly|rate|pay|salary|wage|wages|pay rate|hourly rate)( is)? (now|at the moment|currently|there)\\b",
+        "(?<!\\bour )\\bcurrent (pay|salary|wage|wages|rate|hourly|pay rate)\\b(?! of)",
+        "\\bprevious (pay|salary|wage|rate)\\b",
+        "\\bpay history\\b",
+        "\\bsalary history\\b",
+        "\\b(what|how much) (were|are) you (paid|making|earning)\\b",
+        "(?<!\\bour )\\blast (pay|salary|wage|rate|paycheck)\\b",
+        "\\b(making|earning|paid) (now|at the moment|currently|at your (last|current|old|previous) (job|store|place))\\b"
+      ],
+      "personal": [],
+      "why": "A growing number of states and cities prohibit asking about pay history, and it anchors an offer to someone else's pay decision instead of the job's rate.",
+      "instead": "State the rate. If you want to know what they expect: \"The rate for this role is $17 an hour. Does that work for you?\"",
+      "source": "https://california.public.law/codes/labor_code_section_432.3"
+    },
+    {
+      "id": "finance",
+      "level": "caution",
+      "topic": "Personal finances",
+      "patterns": [
+        "\\b(your )?credit (score|history|check|rating|report|record)\\b",
+        "\\b(bad|good|poor) credit\\b",
+        "\\bbankrupt",
+        "\\bgarnish",
+        "\\bdebts?\\b(?! note)",
+        "\\bown (a|your) (home|house|place|condo|apartment)\\b",
+        "\\bown your own (home|house|place)\\b",
+        "\\brent or own\\b|\\bown or rent\\b|\\bdo you rent\\b|\\bare you renting\\b",
+        "\\b(car|student|home|personal|payday|title) loans?\\b",
+        "\\b(your|have a|got a) bank account\\b",
+        "\\b(struggling|trouble|problems) (with|paying) (money|bills|rent)\\b"
+      ],
+      "personal": [],
+      "why": "Personal finances rarely bear on a frontline job, and several states and cities restrict credit checks in hiring.",
+      "instead": "Leave it out unless the job handles money in a way your policy and local law say justifies a check, and then do it after an offer.",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "union",
+      "level": "blocking",
+      "topic": "Union membership and views",
+      "patterns": [
+        "\\bunion (member|members|membership|views|activity|activities|organi[sz]ing|dues|card)\\b",
+        "\\bjoin(ed|ing)? (a|the) union\\b",
+        "\\bunionis",
+        "\\bcollective bargaining\\b",
+        "\\b(in|part of|member of|belong to|belonged to|with) (a|the|any) union\\b",
+        "\\b(feel|think|thoughts|opinion|views?|stance|position) (about|on|of|towards?) (unions?|the union|organi[sz]ing|the teamsters)\\b",
+        "\\bteamsters\\b",
+        "\\byour union\\b",
+        "\\bpro-?union\\b|\\banti-?union\\b"
+      ],
+      "personal": [
+        "\\bunions\\b"
+      ],
+      "why": "Questioning applicants about union membership or views can be unlawful under federal labor law.",
+      "instead": "Leave it out.",
+      "source": "https://www.nlrb.gov/rights-we-protect/whats-law/employers/interfering-employee-rights-Section-7-8a1"
+    },
+    {
+      "id": "military",
+      "level": "caution",
+      "topic": "Military discharge",
+      "patterns": [
+        "\\b(honou?rable|dishonou?rable|general|medical|other than honou?rable|bad conduct|military|kind of|type of) discharge\\b",
+        "\\bdishonou?rabl",
+        "\\bdischarged (from|out of) (the )?(army|navy|military|marines|air force|service)\\b"
+      ],
+      "personal": [],
+      "why": "The type of discharge can reveal protected information and is rarely relevant. Asking about relevant experience is fine.",
+      "instead": "\"Tell me about experience, military or civilian, that is relevant to this role.\"",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "photo_social",
+      "level": "caution",
+      "topic": "Photos and social media",
+      "patterns": [
+        "\\b(send|attach|provide|share|upload) (a|your|us a) (photo|picture|selfie)\\b",
+        "\\bsocial media (password|login|account|accounts|profile)\\b",
+        "\\b(your|see your|look at your|check your|follow your|add you on) (facebook|instagram|insta|tiktok|socials|twitter|snapchat|social media)\\b",
+        "\\bare you on (facebook|instagram|tiktok|social media|snapchat)\\b"
+      ],
+      "personal": [],
+      "why": "A photo reveals protected characteristics before any decision. Asking for social media access is restricted in many states.",
+      "instead": "Leave it out; a photo for an ID badge is taken after hire.",
+      "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+    },
+    {
+      "id": "transport_proxy",
+      "level": "caution",
+      "topic": "Car ownership",
+      "patterns": [
+        "\\b(do you|you) (own|have|got) (a|your own) (car|vehicle|truck)\\b(?! (loan|payment|note|insurance|title))",
+        "\\bown a (car|vehicle)\\b(?! (loan|payment))"
+      ],
+      "personal": [],
+      "why": "Car ownership is not the requirement. Getting to the shift is, and asking about the car screens out people who would get there another way.",
+      "instead": "\"The shift starts at 6am at our Elm Street store. How would you get here for that start?\" If driving is part of the job, ask about a valid licence instead.",
+      "source": null
+    }
+  ],
+  "weak": [
+    {
+      "id": "yes_no",
+      "pattern": "^(do|are|can|will|would|have|is|did|could|r|got)\\b",
+      "advice": "A yes/no question gets a yes. If it is about the job (shifts, tasks, safety), ask for a time they did it: \"Tell me about a time you...\". If it is about their life outside work, do not reword it: leave it out."
+    },
+    {
+      "id": "brainteaser",
+      "pattern": "\\b(if you were an? (animal|fruit|colou?r|car)|how many .* (fit|are there) in|why are manhole)\\b",
+      "advice": "Puzzles and personality riddles predict nothing about shift work. Replace with a question about the job."
+    },
+    {
+      "id": "open_ended_intro",
+      "pattern": "^tell me (a bit |a little )?about yourself\\b",
+      "advice": "Unstructured and hard to score, and the easiest place for a protected topic to come up unasked. Open with what they did in their last job, or skip it."
+    },
+    {
+      "id": "weakness",
+      "pattern": "\\b(biggest|greatest) weakness\\b",
+      "advice": "It produces rehearsed answers. Ask how they handled a specific hard moment at work."
+    },
+    {
+      "id": "five_years",
+      "pattern": "\\bfive years\\b|\\b5 years\\b",
+      "advice": "Rarely useful for an hourly role. If progression matters, ask what they want to be doing next."
+    },
+    {
+      "id": "double_barrel",
+      "pattern": "\\?.*\\?",
+      "advice": "Two questions in one: the candidate answers the easier half. Split it."
+    }
+  ]
+}

@@ -71,7 +71,11 @@ Without those, the only honest thing to tell a user is "re-download and hope".
 1. build it here as a folder skill with its own tests
 2. **delete it there** — otherwise it is announced as coming soon *and* available
 3. `python3 tools/roadmap.py --from <private repo>/skills`, and commit the new
-   `roadmap.json`
+   `roadmap.json`. Without the private repo at hand, `python3 tools/roadmap.py --refilter`
+   drops whatever is now published, held or absorbed from the existing file.
+
+A skill whose job a published skill now does is listed in `ABSORBED` in
+`tools/roadmap.py`, with the skill that absorbed it, so it is never announced again.
 
 ## Generated files — never edit these
 
