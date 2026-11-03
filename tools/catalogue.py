@@ -102,16 +102,24 @@ def owner_of(slug):
         return None
     person = data["people"][entry["owner"]]
     photo = person.get("photo")
+    logo = person.get("company_logo")
     return {"name": person["name"],
             "since": entry["since"],
+            # Where the owner works and what they do there. For an HR Expert
+            # this is the skill's credential: "Senior Recruiter, Massive" says
+            # who stands behind it. Read at every publish, so a job change is
+            # a one-line edit to owners.json, never a new version of the skill.
+            "title": person.get("title"),
             "company": person.get("company"),
             # "HR Expert" for an outside practitioner who co-brands the skill;
             # absent for Fountain staff.
             "role": person.get("role"),
             "linkedin": person.get("linkedin"),
-            # A finished URL, like every other link in this file, so the site
-            # never assembles one from a repo path.
-            "photo_url": f"{RAW}/{photo}" if photo else None}
+            # Finished URLs, like every other link in this file, so the site
+            # never assembles one from a repo path. The logo is a 96 px square
+            # tile on white (assets/logos/<company>.png), legible at 20 px.
+            "photo_url": f"{RAW}/{photo}" if photo else None,
+            "company_logo_url": f"{RAW}/{logo}" if logo else None}
 
 
 def skills():

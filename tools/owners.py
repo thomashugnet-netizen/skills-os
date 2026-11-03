@@ -13,7 +13,10 @@ Ownership rotates, so handing a skill over is a one-line edit to owners.json
 What --check refuses:
   - a skill on disk with no owner        -> every skill has someone answering for it
   - an owner who is not in "people"      -> a typo would silently orphan a skill
+  - a photo or company_logo not on disk  -> the site would show a broken image
   - a CODEOWNERS that does not match     -> it is generated, never edited by hand
+It warns, without failing, about an HR Expert with no title, company,
+company_logo or photo: those are what the site shows as their credential.
 A slug in owners.json with no folder on this branch is only a warning: owners
 are assigned before the skill's pull request is merged.
 
@@ -82,9 +85,18 @@ def problems(data):
         if not entry.get("since"):
             fail.append(f"{slug}: missing 'since'")
     for pid, person in people.items():
-        photo = person.get("photo")
-        if photo and not os.path.exists(photo):
-            fail.append(f"{pid}: photo {photo} does not exist")
+        for field in ("photo", "company_logo"):
+            path = person.get(field)
+            if path and not os.path.exists(path):
+                fail.append(f"{pid}: {field} {path} does not exist")
+        # An HR Expert's name is on the skill: the site shows their title,
+        # company and logo as the reason to trust it. Say what is missing,
+        # but do not block -- a pick can be announced before the details land.
+        if person.get("role") == "HR Expert":
+            missing = [f for f in ("title", "company", "company_logo", "photo")
+                       if not person.get(f)]
+            if missing:
+                warn.append(f"{pid}: HR Expert without {', '.join(missing)}")
     disk = skills_on_disk()
     for slug, path in sorted(disk.items()):
         if slug not in data.get("skills", {}):
