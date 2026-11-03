@@ -185,13 +185,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "rehire-campaign-planner",
-      "title": "Rehire Campaign Planner",
-      "category": "sourcing",
-      "description": "Plans a re-engagement campaign against your own past applicants and former workers, covering who you may contact, how to segment them, the messages, and what to do with the replies.",
-      "needs_dataset": false
-    },
-    {
       "slug": "attendance-policy-writer",
       "title": "Attendance Policy Writer",
       "category": "writing",

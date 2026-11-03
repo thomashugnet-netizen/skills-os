@@ -1,0 +1,16 @@
+{
+ "_about": "What the demo must produce on frontline_pipeline_sample.csv with northline_policy.json. Counted from the export by the rules in taxonomy.json and checked by hand on the reason codes: other roles blocked because the policy has not decided; records older than 9 months before 2026-09-01 are a deletion job; the three stocker sites are night sites; 404 people were lost to a missing interview slot or a recruiter who never followed up.",
+ "groups": {
+  "former_worker": 80,
+  "late_deep": 752,
+  "late_screened": 703,
+  "other_role": 0
+ },
+ "deletion_job": 4429,
+ "night_sites": [
+  "LOC-03",
+  "LOC-22",
+  "LOC-41"
+ ],
+ "our_fault": 404
+}
