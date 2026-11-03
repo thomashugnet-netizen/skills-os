@@ -4,6 +4,9 @@
 # Everything without a more specific owner.
 * @thomashugnet-netizen
 
+# bias-language-checker: Kristi Kennebrew (since 2026-11-03) -- no GitHub account yet, routed to the fallback
+/skills/*/bias-language-checker/ @thomashugnet-netizen
+
 # candidate-message-sequencer: Will Jensen (since 2026-10-13) -- no GitHub account yet, routed to the fallback
 /skills/*/candidate-message-sequencer/ @thomashugnet-netizen
 
