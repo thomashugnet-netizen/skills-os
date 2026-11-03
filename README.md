@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**9 ready now. 33 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**10 ready now. 32 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -18,6 +18,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | Skill | What it does | |
 |---|---|---|
 | [`funnel-drop-off-analyst`](skills/analysing/funnel-drop-off-analyst/) | Finds where candidates leave your hiring funnel, separates correlation from cause, and ranks the fixes by how many hires they would recover. | needs a CSV export, 0.3 MB |
+| [`source-roi-analyst`](skills/analysing/source-roi-analyst/) | Joins channel spend to hiring outcomes and prices every source per start and per hire still there at 30 days, not per application. Reconciles the two files first, prices screening time if you give it, checks the ranking is not just role, site or season mix, and proposes a bounded budget move with a check date and a stop rule. | needs a CSV export, 0.3 MB |
 | [`document-expiry-radar`](skills/complying/document-expiry-radar/) | Reads a list of the licences, cards and certificates your people need to work, with their expiry dates, and shows who cannot work today, whose renewal has to start now to avoid a lapse, and which scheduled shifts that puts at risk. | no data needed, 43 KB |
 | [`interview-panel-calibrator`](skills/interviewing/interview-panel-calibrator/) | Gets several interviewers onto the same bar. Builds a twenty-minute calibration exercise from your own anchors, then reads the scores to say whether each disagreement comes from the anchor wording or from a person, and which person is lenient, severe or not separating strong answers from weak ones. | no data needed, 27 KB |
 | [`structured-interview-guide`](skills/interviewing/structured-interview-guide/) | Builds a fifteen-minute frontline interview a store or site manager can run the same way every time, without training, and checks the questions managers ask today for the ones that are a legal risk or predict nothing. | no data needed, 39 KB |
@@ -67,7 +68,6 @@ Written, not yet through their gate. They ship when they pass it.
 **Analysing — where the numbers are**
 
 - `no-show-pattern-finder` — Finds out why hires don't turn up for their first shift, and which single change would recover the most starts. *(needs a CSV export)*
-- `source-roi-analyst` — Joins channel spend to hiring outcomes to produce cost per start and cost per retained hire, rather than cost per application. *(needs a CSV export)*
 - `time-to-hire-analyst` — Breaks hiring cycle time down stage by stage and names the one stage actually holding the queue, rather than the one that looks slowest. *(needs a CSV export)*
 - `turnover-analyst` — Breaks down 30, 60 and 90-day attrition by location, manager, source and role, and separates which of them is actually driving it. *(needs a CSV export)*
 

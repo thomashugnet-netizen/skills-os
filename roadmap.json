@@ -10,13 +10,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "source-roi-analyst",
-      "title": "Source ROI Analyst",
-      "category": "analysing",
-      "description": "Joins channel spend to hiring outcomes to produce cost per start and cost per retained hire, rather than cost per application.",
-      "needs_dataset": true
-    },
-    {
       "slug": "time-to-hire-analyst",
       "title": "Time-to-Hire Analyst",
       "category": "analysing",
