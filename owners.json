@@ -3,14 +3,17 @@
   "fallback": "thomas-hugnet",
   "people": {
     "thomas-hugnet":         { "name": "Thomas Hugnet",         "github": "thomashugnet-netizen" },
+    "coleman-coffey":        { "name": "Coleman Coffey",        "github": null, "role": "HR Expert", "linkedin": null },
+    "emily-paik":            { "name": "Emily Paik",            "github": null, "role": "HR Expert", "linkedin": null },
+    "madelyn-rovellada":     { "name": "Madelyn Rovellada",     "github": null, "role": "HR Expert", "linkedin": null },
     "salim-jernite":         { "name": "Salim Jernite",         "github": null, "company": "Fountain", "photo": "assets/owners/salim-jernite.png", "linkedin": "https://www.linkedin.com/in/salimjernite/" },
     "will-jensen":           { "name": "Will Jensen",           "github": null, "company": "Fountain", "photo": "assets/owners/will-jensen.png", "linkedin": "https://www.linkedin.com/in/williamjensen/" },
     "hiyabel-tewoldemedhin": { "name": "Hiyabel Tewoldemedhin", "github": null, "company": "Fountain", "photo": "assets/owners/hiyabel-tewoldemedhin.png", "linkedin": "https://www.linkedin.com/in/hiyabel/" },
     "jonathan-sabbah":       { "name": "Jonathan Sabbah",       "github": null, "company": "Fountain", "photo": "assets/owners/jonathan-sabbah.png", "linkedin": "https://www.linkedin.com/in/jonathansabbah/" }
   },
   "skills": {
-    "funnel-drop-off-analyst":     { "owner": "salim-jernite",         "since": "2026-10-13" },
-    "job-ad-writer":               { "owner": "will-jensen",           "since": "2026-10-13" },
+    "funnel-drop-off-analyst":     { "owner": "madelyn-rovellada",         "since": "2026-11-03" },
+    "job-ad-writer":               { "owner": "coleman-coffey",           "since": "2026-11-03" },
     "career-site-builder":         { "owner": "hiyabel-tewoldemedhin", "since": "2026-10-13" },
     "careers-site-advisor":        { "owner": "hiyabel-tewoldemedhin", "since": "2026-10-13" },
     "time-to-hire-analyst":        { "owner": "jonathan-sabbah",       "since": "2026-10-13" },
@@ -18,7 +21,7 @@
     "candidate-message-sequencer": { "owner": "will-jensen",           "since": "2026-10-13" },
     "schedule-photo-to-roster":    { "owner": "will-jensen",           "since": "2026-10-15" },
     "document-expiry-radar":       { "owner": "will-jensen",           "since": "2026-10-15" },
-    "pay-competitiveness-checker": { "owner": "will-jensen",           "since": "2026-10-16" },
-    "structured-interview-guide":  { "owner": "hiyabel-tewoldemedhin", "since": "2026-10-16" }
+    "pay-competitiveness-checker": { "owner": "emily-paik",           "since": "2026-11-03" },
+    "structured-interview-guide":  { "owner": "coleman-coffey", "since": "2026-11-03" }
   }
 }
