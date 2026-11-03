@@ -1,0 +1,9 @@
+stage: offer accepted, no documents uploaded
+channel: sms
+stop_when: the candidate sends their details
+
+[day 0, 10:00]
+Hi {first_name}, it's {employer}. To set up your pay, reply with your national insurance number and sort code. Reply STOP to opt out.
+
+[day 3, 10:00]
+{first_name}, {employer} here. We still need your bank details before {start_date}. Send them here.

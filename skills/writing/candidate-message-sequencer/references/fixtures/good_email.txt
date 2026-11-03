@@ -1,0 +1,12 @@
+stage: offer accepted, no documents uploaded
+channel: email
+stop_when: the candidate uploads their documents, or tells us they are not starting
+
+[day 0, 09:00]
+Hi {first_name}, welcome to {employer}. Before your first shift on {start_date} we need two documents. Upload them here: {link}. It takes about five minutes on a phone.
+
+[day 3, 10:00]
+Hi {first_name}. Your {employer} start date is {start_date}, and we still need your documents to confirm it. Upload them here: {link}. If something is in the way, reply and tell us.
+
+[day 7, 11:00]
+{first_name}, your shift on {start_date} is still held for you at {employer}. We need the documents by {deadline_date} to keep it. Upload here: {link}

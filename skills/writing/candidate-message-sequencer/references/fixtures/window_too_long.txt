@@ -1,0 +1,12 @@
+stage: start date set, no first shift yet
+channel: sms
+stop_when: the candidate works their first shift
+
+[day 0, 10:00]
+Hi {first_name}, it's {employer}. Your start date is {start_date}. Reply YES to confirm it. Reply STOP to opt out.
+
+[day 10, 10:00]
+{first_name}, {employer} here. Your first shift at {site} is on the rota. Reply YES if it still works.
+
+[day 25, 10:00]
+{first_name}, this is {employer}. We have new shifts at {site} next month. Pick one here: {link}

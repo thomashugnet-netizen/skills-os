@@ -1,0 +1,6 @@
+stage: applied, no screening call booked
+channel: sms
+stop_when: the candidate books a call
+
+[day 0, 10:00]
+Hi {first_name}, it's {employer}. URGENT ACTION REQUIRED! Book your call NOW!! {link}. Reply STOP to opt out.

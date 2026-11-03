@@ -1,0 +1,9 @@
+stage: applied, no screening call booked
+channel: sms
+stop_when: the candidate books a call
+
+[day 0, 10:00]
+Hi {first_name}, it's {employer}. Thanks for applying for {role}. Book a 10-min call here: {link}
+
+[day 3, 10:00]
+{first_name}, {employer} again. Slots for {role} are open Thu and Fri: {link}
