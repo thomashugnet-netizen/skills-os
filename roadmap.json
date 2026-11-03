@@ -66,13 +66,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "phone-screen-script",
-      "title": "Phone Screen Script",
-      "category": "interviewing",
-      "description": "Writes a five-minute phone screen that leads with availability, decides on the call, and ends with a booked next step.",
-      "needs_dataset": false
-    },
-    {
       "slug": "day-one-readiness-checklist",
       "title": "Day-One Readiness Checklist",
       "category": "onboarding",

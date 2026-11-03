@@ -1,0 +1,19 @@
+{
+ "about": "Answers planted by generate_calls.py. The engine must find them; see the docstring there.",
+ "max_attempts": 3,
+ "best_daypart": "evening",
+ "heavy_poor_daypart": "afternoon",
+ "caller_flags": [
+  [
+   "C3",
+   "unbooked"
+  ],
+  [
+   "C4",
+   "no_decision"
+  ]
+ ],
+ "limbo": 46,
+ "over_max": 14,
+ "candidates": 1300
+}

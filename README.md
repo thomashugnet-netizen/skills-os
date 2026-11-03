@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**13 ready now. 29 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**14 ready now. 28 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -21,6 +21,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | [`source-roi-analyst`](skills/analysing/source-roi-analyst/) | Joins channel spend to hiring outcomes and prices every source per start and per hire still there at 30 days, not per application. Reconciles the two files first, prices screening time if you give it, checks the ranking is not just role, site or season mix, and proposes a bounded budget move with a check date and a stop rule. | needs a CSV export, 0.3 MB |
 | [`document-expiry-radar`](skills/complying/document-expiry-radar/) | Reads a list of the licences, cards and certificates your people need to work, with their expiry dates, and shows who cannot work today, whose renewal has to start now to avoid a lapse, and which scheduled shifts that puts at risk. | no data needed, 43 KB |
 | [`interview-panel-calibrator`](skills/interviewing/interview-panel-calibrator/) | Gets several interviewers onto the same bar. Builds a twenty-minute calibration exercise from your own anchors, then reads the scores to say whether each disagreement comes from the anchor wording or from a person, and which person is lenient, severe or not separating strong answers from weak ones. | no data needed, 27 KB |
+| [`phone-screen-script`](skills/interviewing/phone-screen-script/) | Writes and checks a five-minute phone screen for an hourly role, with availability asked first and shift by shift against the real rota gaps, three gates that decide on the call, and a booked interview before hanging up, plus the voicemail, text and attempt rule; then reads the call log for what a better script cannot fix. | no data needed, 62 KB |
 | [`structured-interview-guide`](skills/interviewing/structured-interview-guide/) | Builds a fifteen-minute frontline interview a store or site manager can run the same way every time, without training, and checks the questions managers ask today for the ones that are a legal risk or predict nothing. | no data needed, 39 KB |
 | [`recruiter-capacity-planner`](skills/operating/recruiter-capacity-planner/) | Measures what each recruiter actually carries week by week, finds the load at which screening starts to slow down, tells a capacity problem from a process, upstream or individual one, and ranks automation by hours a month returned, so a headcount request rests on the number that survives. | needs a CSV export, 0.4 MB |
 | [`schedule-photo-to-roster`](skills/operating/schedule-photo-to-roster/) | Turns a photo or screenshot of a shift schedule into a clean roster, then shows where the week is short-staffed, who is heading into overtime, who closes and opens with too little rest, and which hours could move. | no data needed, 0.2 MB |
@@ -61,7 +62,6 @@ Written, not yet through their gate. They ship when they pass it.
 **Interviewing — run by non-recruiters**
 
 - `interview-no-show-playbook` — Diagnoses why booked interviews get missed from your funnel data, then writes the confirm, remind and reschedule sequence and the slot rules that fix it. *(needs a CSV export)*
-- `phone-screen-script` — Writes a five-minute phone screen that leads with availability, decides on the call, and ends with a booked next step.
 
 **Analysing — where the numbers are**
 
