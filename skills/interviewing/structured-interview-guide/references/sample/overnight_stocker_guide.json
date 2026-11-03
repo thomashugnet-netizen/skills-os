@@ -1,0 +1,100 @@
+{
+  "role": "Overnight Stocker",
+  "employer": "Northline Market (fictional)",
+  "minutes": 15,
+  "interviewer": "Store manager or overnight lead",
+  "format": "in person or by phone",
+  "opening": "Thanks for coming in. I'm going to ask you five questions, the same ones I ask everybody, and I'll make a few notes as we go. It takes about fifteen minutes, and there's time at the end for your questions.",
+  "closing": "That's everything from me. We decide within two days, and I'll text you either way. The rate is $16 an hour, nights from 10pm to 6:30am. Is there anything you want to ask before you go?",
+  "questions": [
+    {
+      "id": "q1",
+      "purpose": "reliability",
+      "text": "Tell me about a job or commitment where you had to be somewhere on time, every time. How did you make sure you were?",
+      "minutes": 3,
+      "anchors": {
+        "1": "No example, or an example where being late was common and they did not change anything.",
+        "2": "A real example with a general answer, such as setting an alarm, but no plan for when something goes wrong.",
+        "3": "A specific example with a backup plan they actually used, such as a second bus or a neighbour on call."
+      },
+      "probes": ["What happened the one time it went wrong?", "What did you do the next day?"]
+    },
+    {
+      "id": "q2",
+      "purpose": "preview",
+      "text": "The hardest part of this job is working through the night on your feet, lifting boxes for eight hours. When have you done tiring physical work, and how did you get through the last hours?",
+      "minutes": 3,
+      "anchors": {
+        "1": "Has not thought about nights or physical work, or says it will be easy.",
+        "2": "Some physical or late work, but no idea how they kept going at the end of a shift.",
+        "3": "Describes long physical shifts and something concrete they do to keep pace, such as breaks or food."
+      },
+      "probes": ["What was the worst shift like?", "What would make you stop doing a job like that?"]
+    },
+    {
+      "id": "q3",
+      "purpose": "availability",
+      "text": "Your application says you can work Sunday to Thursday nights, 10pm to 6:30am. Is that still right for the next six months?",
+      "minutes": 2,
+      "anchors": {
+        "1": "Hesitates, or names nights they now cannot do.",
+        "2": "Confirms with one change that would need agreeing first.",
+        "3": "Confirms all five nights out loud, without conditions."
+      },
+      "probes": ["Is anything coming up that would change that?"]
+    },
+    {
+      "id": "q4",
+      "purpose": "reliability",
+      "text": "How would you get to our Elm Street store for a 10pm start, and home again at 6:30 in the morning?",
+      "minutes": 2,
+      "anchors": {
+        "1": "Has no plan, or a plan that relies on someone else every night.",
+        "2": "A plan for getting here but not for getting home, or no backup.",
+        "3": "A plan both ways and a backup they could use if it fails."
+      },
+      "probes": ["And if that falls through one night?"]
+    },
+    {
+      "id": "q5",
+      "purpose": "role_behaviour",
+      "text": "Tell me about a time you noticed something unsafe at work, like a blocked exit or a spill. What did you do?",
+      "minutes": 2,
+      "anchors": {
+        "1": "No example, or they left it for someone else.",
+        "2": "Reported it, but did not make the area safe in the meantime.",
+        "3": "Made it safe right away and reported it, and can say how."
+      },
+      "probes": ["What did your manager say?"]
+    },
+    {
+      "id": "q6",
+      "purpose": "their_questions",
+      "text": "What would you like to know about the job?",
+      "minutes": 1,
+      "probes": []
+    }
+  ],
+  "decision": {
+    "advance_at": 12,
+    "reject_below": 8,
+    "middle": "8 to 11: invite them for a paid one-hour trial shift before deciding."
+  },
+  "red_flags": [
+    "Cannot say how they will get home at 6:30am.",
+    "Names two or more of the five nights they cannot work.",
+    "Describes leaving a job without notice and does not say what they would do differently."
+  ],
+  "green_flags": [
+    "Has a backup way to get here and has used it.",
+    "Asks about the shift pattern, breaks or progression to overnight lead.",
+    "Gives a specific example of making an unsafe area safe."
+  ],
+  "do_not_ask": [
+    {"question": "Do you have kids at home at night?", "instead": "This role works Sunday to Thursday nights, 10pm to 6:30am. Can you work those shifts?"},
+    {"question": "Any back problems?", "instead": "This role lifts boxes of up to 40 pounds all night. Can you do that, with or without a reasonable accommodation?"},
+    {"question": "What were you making at your last job?", "instead": "The rate for this role is $16 an hour. Does that work for you?"},
+    {"question": "Have you ever been arrested?", "instead": "If we make you an offer, it will be conditional on a background check."},
+    {"question": "Do you own a car?", "instead": "How would you get here for a 10pm start, and home at 6:30am?"}
+  ]
+}

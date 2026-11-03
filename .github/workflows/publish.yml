@@ -40,6 +40,10 @@ on:
       - "data/**"
       - "tools/**"
       - "roadmap.json"
+      # owners.json and the owner photos are published in the catalogue
+      # (skills[].owner), so changing an owner has to republish too
+      - "owners.json"
+      - "assets/**"
       - ".github/workflows/publish.yml"
   workflow_dispatch:
 

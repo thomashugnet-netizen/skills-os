@@ -1,0 +1,40 @@
+id,type,uses,text
+AD-STOCKER-NIGHT,ad,38,"Overnight Stocker, Northline Dayton. $17.50/hr, paid weekly. Shifts 10pm to 6:30am, four nights a week.
+Must have own car. Must be flexible.
+Recent graduates welcome! Apply in 2 minutes at northline.jobs."
+AD-STOCKER-DAY,ad,22,"Day Stocker, Northline Toledo. $16.75/hr. Shifts 6am to 2:30pm.
+Must have own car. Must be flexible.
+You'll be on your feet and lift boxes up to 35 lbs."
+AD-CASHIER,ad,41,"Cashier, Northline Columbus. $15.75/hr, paid weekly.
+Join our young and energetic team! Must have own car.
+Professional appearance required. No experience needed, we train you."
+AD-WAREHOUSE,ad,25,"Warehouse Associate, Northline DC Lima. $18.25/hr.
+On your feet for 10-hour shifts; lift cases up to 50 lbs.
+Must have own car. 2+ years of warehouse experience required.
+Applicants must be physically fit."
+AD-DRIVER,ad,12,"Delivery Driver, Northline Home Delivery. $21/hr plus mileage reimbursement.
+Drive your own car on local routes. Carry grocery totes up to 30 lbs to the door.
+Valid driver's license and clean driving record required. Must have own car with insurance."
+AD-SUPERVISOR,ad,9,"Shift Supervisor, Northline Akron. $22/hr.
+We need a rockstar who closes like a salesman. Native English speaker required.
+Lead a crew of 8 on the evening shift."
+Q-APPLICATION,question,940,"Are you 18 or older?
+What year did you graduate high school?
+Are you legally authorized to work in the United States?
+Are you a US citizen?
+Any restrictions on your availability? Please explain.
+Have you ever been arrested?
+What is your current hourly rate?"
+SMS-INVITE,message,600,"Hi {{first_name}}, thanks for applying to Northline! Can you come in Tuesday at 10am for a 15-minute interview? Reply YES to confirm. Bring a photo ID."
+SMS-INVITE-ES,message,300,"Hola {{first_name}}, gracias por aplicar a Northline. ¿Puedes venir el martes a las 10am para una entrevista de 15 minutos? Responde SÍ para confirmar."
+EMAIL-DECLINE,message,410,"Thanks for your interest in Northline. After reviewing your application, we decided to move forward with candidates who are a better culture fit for the team."
+OFFER-STOCKER,offer,210,"Congratulations! We are pleased to offer you the role of Overnight Stocker at $17.50/hr.
+He will report to the overnight supervisor.
+A background check is completed after you accept this offer. Your first shift is Monday at 10pm."
+GUIDE-PHONE-SCREEN,guide,80,"1. Do you have childcare sorted for nights?
+2. Where are you from originally?
+3. Tell me about a time a customer was upset with you.
+4. Can you start within two weeks?"
+PAGE-CAREERS,page,1,"Work at Northline. We hire people of all backgrounds and experience levels.
+Northline is an equal opportunity employer and hires without regard to race, religion, sex, national origin, age or disability.
+Reasonable accommodations are available on request."

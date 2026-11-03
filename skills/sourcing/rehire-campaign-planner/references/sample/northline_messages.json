@@ -1,0 +1,48 @@
+{
+ "sender": "Northline",
+ "channel": "sms",
+ "segments": {
+  "LATE-DEEP-0-3M": [
+   {
+    "day": 0,
+    "text": "Hi {{first_name}}, it's Northline. You applied with us in {{applied_month}} and got as far as an interview. We're hiring {{role}} at {{site}} now. Pick a time here: {{booking_link}} Reply STOP to opt out."
+   },
+   {
+    "day": 1,
+    "text": "Northline here again: {{role}} at {{site}} now pays ${{rate}}/hr, and interviews are booked online the same day. Your slot: {{booking_link}} Reply STOP to opt out."
+   },
+   {
+    "day": 3,
+    "text": "Last message from Northline about {{role}} at {{site}}: if it suits you, book here {{booking_link}}. We won't text you again about it. Reply STOP to opt out."
+   }
+  ],
+  "LATE-SCREENED-0-3M": [
+   {
+    "day": 0,
+    "text": "Hi {{first_name}}, it's Northline. You applied in {{applied_month}} and we never got you an interview slot. That's on us. {{role}} at {{site}} is open: {{booking_link}} Reply STOP to opt out."
+   },
+   {
+    "day": 1,
+    "text": "Northline again: interviews for {{role}} at {{site}} are now booked online the same day, and pay is ${{rate}}/hr. {{booking_link}} Reply STOP to opt out."
+   },
+   {
+    "day": 3,
+    "text": "Last message from Northline: {{role}} at {{site}}, book here if it works for you {{booking_link}}. This is the last text. Reply STOP to opt out."
+   }
+  ],
+  "FORMER-WORKER-0-3M": [
+   {
+    "day": 0,
+    "text": "Hi {{first_name}}, it's Northline. You worked with us at {{site}} and we'd be glad to have you back as {{role}}. Want a quick call? {{booking_link}} Reply STOP to opt out."
+   },
+   {
+    "day": 1,
+    "text": "Northline here: {{role}} at {{site}} now pays ${{rate}}/hr, and returning staff skip the interview. {{booking_link}} Reply STOP to opt out."
+   },
+   {
+    "day": 3,
+    "text": "Last message from Northline about coming back to {{site}}: {{booking_link}} if you'd like to. We won't text again about it. Reply STOP to opt out."
+   }
+  ]
+ }
+}

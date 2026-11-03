@@ -10,13 +10,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "source-roi-analyst",
-      "title": "Source ROI Analyst",
-      "category": "analysing",
-      "description": "Joins channel spend to hiring outcomes to produce cost per start and cost per retained hire, rather than cost per application.",
-      "needs_dataset": true
-    },
-    {
       "slug": "time-to-hire-analyst",
       "title": "Time-to-Hire Analyst",
       "category": "analysing",
@@ -73,31 +66,10 @@
       "needs_dataset": true
     },
     {
-      "slug": "interview-panel-calibrator",
-      "title": "Interview Panel Calibrator",
-      "category": "interviewing",
-      "description": "Gets multiple interviewers onto the same bar and proves it with a calibration exercise, then reads the disagreement to find what actually needs fixing.",
-      "needs_dataset": false
-    },
-    {
-      "slug": "interview-question-bank",
-      "title": "Interview Question Bank",
-      "category": "interviewing",
-      "description": "Builds a role-family question bank with follow-up probes, scoring notes and safe alternatives to the questions managers should not ask.",
-      "needs_dataset": false
-    },
-    {
       "slug": "phone-screen-script",
       "title": "Phone Screen Script",
       "category": "interviewing",
       "description": "Writes a five-minute phone screen that leads with availability, decides on the call, and ends with a booked next step.",
-      "needs_dataset": false
-    },
-    {
-      "slug": "structured-interview-guide",
-      "title": "Structured Interview Guide",
-      "category": "interviewing",
-      "description": "Builds a fifteen-minute frontline interview guide a store or site manager can run consistently, without training.",
       "needs_dataset": false
     },
     {
@@ -150,13 +122,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "recruiter-capacity-planner",
-      "title": "Recruiter Capacity Planner",
-      "category": "operating",
-      "description": "Measures real recruiter load rather than req count, finds the load level where your process starts to slow down, and ranks automation by hours returned.",
-      "needs_dataset": true
-    },
-    {
       "slug": "stalled-applicant-triage",
       "title": "Stalled Applicant Triage",
       "category": "operating",
@@ -169,13 +134,6 @@
       "category": "operating",
       "description": "Builds a weekly hiring pack of four or five leading indicators with exception reporting, plus the meeting agenda that turns it into decisions.",
       "needs_dataset": true
-    },
-    {
-      "slug": "check-in-designer",
-      "title": "Check-In Designer",
-      "category": "retaining",
-      "description": "Writes day 1, day 7 and day 30 check-in scripts for new hourly hires, with escalation rules for whatever comes back.",
-      "needs_dataset": false
     },
     {
       "slug": "coverage-risk-scorer",
@@ -206,13 +164,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "bias-language-checker",
-      "title": "Bias Language Checker",
-      "category": "screening",
-      "description": "Reviews job ads and screening questions for exclusionary wording and adverse-impact risk, and rewrites the lines that carry it.",
-      "needs_dataset": false
-    },
-    {
       "slug": "knockout-logic-auditor",
       "title": "Knockout Logic Auditor",
       "category": "screening",
@@ -224,20 +175,6 @@
       "title": "Resume-Free Triage Rubric",
       "category": "screening",
       "description": "Builds a triage rubric for hourly roles where most applicants have no resume, scoring availability, reliability signals, travel and certifications instead of work history.",
-      "needs_dataset": false
-    },
-    {
-      "slug": "scorecard-designer",
-      "title": "Scorecard Designer",
-      "category": "screening",
-      "description": "Builds a role scorecard with behavioural anchors that a site manager who has never interviewed can score during the conversation.",
-      "needs_dataset": false
-    },
-    {
-      "slug": "rehire-campaign-planner",
-      "title": "Rehire Campaign Planner",
-      "category": "sourcing",
-      "description": "Plans a re-engagement campaign against your own past applicants and former workers, covering who you may contact, how to segment them, the messages, and what to do with the replies.",
       "needs_dataset": false
     },
     {

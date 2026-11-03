@@ -1,0 +1,95 @@
+{
+ "_about": "What Northline may send and what it is hiring for. contact.other_roles is null on purpose: nobody has decided whether the privacy notice covers contacting people about a different job, so that group is blocked until someone does.",
+ "as_of": "2026-09-01",
+ "retention_months": 9,
+ "contact": {
+  "past_applicants": true,
+  "former_workers": true,
+  "other_roles": null
+ },
+ "channel": "sms",
+ "match": "location",
+ "hiring_now": [
+  {
+   "location_id": "LOC-03",
+   "role": "Stocker",
+   "shift": "nights",
+   "openings": 4
+  },
+  {
+   "location_id": "LOC-22",
+   "role": "Stocker",
+   "shift": "nights",
+   "openings": 4
+  },
+  {
+   "location_id": "LOC-41",
+   "role": "Stocker",
+   "shift": "nights",
+   "openings": 4
+  },
+  {
+   "location_id": "LOC-01",
+   "role": "Sales Associate",
+   "shift": "days",
+   "openings": 3
+  },
+  {
+   "location_id": "LOC-07",
+   "role": "Sales Associate",
+   "shift": "days",
+   "openings": 3
+  },
+  {
+   "location_id": "LOC-12",
+   "role": "Sales Associate",
+   "shift": "days",
+   "openings": 3
+  },
+  {
+   "location_id": "LOC-19",
+   "role": "Sales Associate",
+   "shift": "days",
+   "openings": 3
+  },
+  {
+   "location_id": "LOC-25",
+   "role": "Sales Associate",
+   "shift": "days",
+   "openings": 3
+  },
+  {
+   "location_id": "LOC-33",
+   "role": "Sales Associate",
+   "shift": "days",
+   "openings": 3
+  },
+  {
+   "location_id": "LOC-36",
+   "role": "Sales Associate",
+   "shift": "days",
+   "openings": 3
+  },
+  {
+   "location_id": "LOC-15",
+   "role": "Cashier",
+   "shift": "evenings",
+   "openings": 2
+  },
+  {
+   "location_id": "LOC-28",
+   "role": "Cashier",
+   "shift": "evenings",
+   "openings": 2
+  }
+ ],
+ "news": [
+  "Overnight stocker pay is now $18.50 an hour, up from $17.50",
+  "Interviews are now booked online the same day, no phone tag",
+  "Cashier shifts end by 10pm, no more close-to-open"
+ ],
+ "changed_patterns": [
+  "Cashier"
+ ],
+ "reply_capacity_hours_per_day": 3
+}

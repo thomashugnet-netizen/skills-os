@@ -1,0 +1,627 @@
+{
+ "_about": "Each 'flag' case must raise its named rule; each 'pass' case must raise nothing; each 'not_english' case must be reported as not checked, never passed.",
+ "flag": [
+  {
+   "text": "We're hiring a salesman for the electronics department.",
+   "type": "ad",
+   "rule": "gendered_title"
+  },
+  {
+   "text": "Waitress needed for weekend brunch.",
+   "type": "ad",
+   "rule": "gendered_title"
+  },
+  {
+   "text": "Seeking a handyman for store maintenance.",
+   "type": "ad",
+   "rule": "gendered_title"
+  },
+  {
+   "text": "Stock boy wanted, nights.",
+   "type": "ad",
+   "rule": "gendered_title"
+  },
+  {
+   "text": "Our foreman will train you.",
+   "type": "ad",
+   "rule": "gendered_title"
+  },
+  {
+   "text": "He will report to the store manager.",
+   "type": "offer",
+   "rule": "gendered_pronoun"
+  },
+  {
+   "text": "The ideal hire knows his duties from day one.",
+   "type": "ad",
+   "rule": "gendered_pronoun"
+  },
+  {
+   "text": "He/she must be able to work weekends.",
+   "type": "ad",
+   "rule": "gendered_pronoun"
+  },
+  {
+   "text": "Are you a rockstar cashier?",
+   "type": "ad",
+   "rule": "hype_coded"
+  },
+  {
+   "text": "We want aggressive closers.",
+   "type": "ad",
+   "rule": "hype_coded"
+  },
+  {
+   "text": "Must thrive in a competitive environment.",
+   "type": "ad",
+   "rule": "hype_coded"
+  },
+  {
+   "text": "Work hard, play hard!",
+   "type": "ad",
+   "rule": "hype_coded"
+  },
+  {
+   "text": "Looking for a bubbly personality at the front desk.",
+   "type": "ad",
+   "rule": "feminine_coded"
+  },
+  {
+   "text": "We decided to go with candidates who are a better culture fit.",
+   "type": "message",
+   "rule": "culture_fit"
+  },
+  {
+   "text": "Recent graduates welcome to apply.",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "Join our young and energetic team!",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "Young, dynamic crew wanted.",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "Digital natives preferred.",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "Candidates must be under 35.",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "No more than 5 years of experience.",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "You may be overqualified for this role.",
+   "type": "message",
+   "rule": "age_coded"
+  },
+  {
+   "text": "Please enter your date of birth.",
+   "type": "question",
+   "rule": "age_question"
+  },
+  {
+   "text": "What year did you graduate high school?",
+   "type": "question",
+   "rule": "age_question"
+  },
+  {
+   "text": "How old are you?",
+   "type": "guide",
+   "rule": "age_question"
+  },
+  {
+   "text": "Graduation year:",
+   "type": "question",
+   "rule": "age_question"
+  },
+  {
+   "text": "Are you a US citizen?",
+   "type": "question",
+   "rule": "citizenship"
+  },
+  {
+   "text": "Must be a U.S. citizen.",
+   "type": "ad",
+   "rule": "citizenship"
+  },
+  {
+   "text": "Where are you from originally?",
+   "type": "guide",
+   "rule": "citizenship"
+  },
+  {
+   "text": "What is your nationality?",
+   "type": "question",
+   "rule": "citizenship"
+  },
+  {
+   "text": "Do you have a green card?",
+   "type": "question",
+   "rule": "citizenship"
+  },
+  {
+   "text": "Native English speaker required.",
+   "type": "ad",
+   "rule": "language_origin"
+  },
+  {
+   "text": "Must speak perfect English.",
+   "type": "ad",
+   "rule": "language_origin"
+  },
+  {
+   "text": "No accent, please; this is a phone role.",
+   "type": "ad",
+   "rule": "language_origin"
+  },
+  {
+   "text": "English only on the floor.",
+   "type": "page",
+   "rule": "language_origin"
+  },
+  {
+   "text": "Must be able-bodied.",
+   "type": "ad",
+   "rule": "health_disability"
+  },
+  {
+   "text": "Applicants must be physically fit.",
+   "type": "ad",
+   "rule": "health_disability"
+  },
+  {
+   "text": "Must be in good physical health.",
+   "type": "ad",
+   "rule": "health_disability"
+  },
+  {
+   "text": "Do you have any medical conditions we should know about?",
+   "type": "question",
+   "rule": "health_disability"
+  },
+  {
+   "text": "Have you ever filed a workers' comp claim?",
+   "type": "question",
+   "rule": "health_disability"
+  },
+  {
+   "text": "What medications are you taking?",
+   "type": "guide",
+   "rule": "health_disability"
+  },
+  {
+   "text": "How many sick days did you take last year?",
+   "type": "guide",
+   "rule": "health_disability"
+  },
+  {
+   "text": "Do you have childcare sorted for nights?",
+   "type": "guide",
+   "rule": "family"
+  },
+  {
+   "text": "Are you married?",
+   "type": "question",
+   "rule": "family"
+  },
+  {
+   "text": "Are you pregnant or planning to have kids soon?",
+   "type": "guide",
+   "rule": "family"
+  },
+  {
+   "text": "Is ur daycare ok with these hours?",
+   "type": "message",
+   "rule": "family"
+  },
+  {
+   "text": "No family commitments that would interfere with shifts.",
+   "type": "ad",
+   "rule": "family_requirement"
+  },
+  {
+   "text": "Will this clash with your church on Sunday?",
+   "type": "guide",
+   "rule": "religion"
+  },
+  {
+   "text": "What religious holidays do you observe?",
+   "type": "question",
+   "rule": "religion"
+  },
+  {
+   "text": "Do you pray during the day?",
+   "type": "guide",
+   "rule": "religion"
+  },
+  {
+   "text": "Female applicants preferred for this role.",
+   "type": "ad",
+   "rule": "sex_preference"
+  },
+  {
+   "text": "Men only, heavy lifting.",
+   "type": "ad",
+   "rule": "sex_preference"
+  },
+  {
+   "text": "Minimum height 5'8\".",
+   "type": "ad",
+   "rule": "height_weight"
+  },
+  {
+   "text": "How much do you weigh?",
+   "type": "guide",
+   "rule": "height_weight"
+  },
+  {
+   "text": "Have you ever been arrested?",
+   "type": "question",
+   "rule": "arrest"
+  },
+  {
+   "text": "Have you ever been convicted of a felony?",
+   "type": "question",
+   "rule": "criminal_history_early"
+  },
+  {
+   "text": "Clean criminal record required.",
+   "type": "ad",
+   "rule": "criminal_history_early"
+  },
+  {
+   "text": "What is your current salary?",
+   "type": "question",
+   "rule": "pay_history"
+  },
+  {
+   "text": "How much did you make at your last job?",
+   "type": "guide",
+   "rule": "pay_history"
+  },
+  {
+   "text": "Must have own car.",
+   "type": "ad",
+   "rule": "own_car"
+  },
+  {
+   "text": "Reliable transportation required.",
+   "type": "ad",
+   "rule": "own_car"
+  },
+  {
+   "text": "Valid driver's license required.",
+   "type": "ad",
+   "rule": "drivers_license"
+  },
+  {
+   "text": "Must be flexible.",
+   "type": "ad",
+   "rule": "flexibility"
+  },
+  {
+   "text": "Open availability required.",
+   "type": "ad",
+   "rule": "flexibility"
+  },
+  {
+   "text": "Must be available for all shifts, including holidays.",
+   "type": "ad",
+   "rule": "flexibility"
+  },
+  {
+   "text": "Any restrictions on your availability? Please explain.",
+   "type": "question",
+   "rule": "availability_free_text"
+  },
+  {
+   "text": "Is there anything that might prevent you from working here?",
+   "type": "question",
+   "rule": "availability_free_text"
+  },
+  {
+   "text": "Professional appearance required.",
+   "type": "ad",
+   "rule": "appearance"
+  },
+  {
+   "text": "Must be clean-shaven.",
+   "type": "ad",
+   "rule": "appearance"
+  },
+  {
+   "text": "No dreadlocks or braids.",
+   "type": "ad",
+   "rule": "appearance"
+  },
+  {
+   "text": "Must be well-groomed and presentable.",
+   "type": "ad",
+   "rule": "appearance"
+  },
+  {
+   "text": "No gaps in employment history.",
+   "type": "ad",
+   "rule": "employment_gaps"
+  },
+  {
+   "text": "Must be currently employed.",
+   "type": "ad",
+   "rule": "employment_gaps"
+  },
+  {
+   "text": "Immediate start only.",
+   "type": "ad",
+   "rule": "immediate_start"
+  },
+  {
+   "text": "2+ years of warehouse experience required.",
+   "type": "ad",
+   "rule": "experience_years"
+  },
+  {
+   "text": "Minimum 3 years in retail.",
+   "type": "ad",
+   "rule": "experience_years"
+  },
+  {
+   "text": "Tell us about yourself.",
+   "type": "question",
+   "rule": "tell_me_about_yourself"
+  },
+  {
+   "text": "Please list any disabilities.",
+   "type": "question",
+   "rule": "health_disability"
+  },
+  {
+   "text": "r u a citizen",
+   "type": "message",
+   "rule": "citizenship"
+  },
+  {
+   "text": "Must own a vehicle.",
+   "type": "ad",
+   "rule": "own_car"
+  },
+  {
+   "text": "Looking for energetic young people to join the crew.",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "We prefer candidates aged between 18 and 30.",
+   "type": "ad",
+   "rule": "age_coded"
+  },
+  {
+   "text": "Applicants with no criminal background only.",
+   "type": "ad",
+   "rule": "criminal_history_early"
+  },
+  {
+   "text": "Must have a valid drivers license and a car.",
+   "type": "ad",
+   "rule": "drivers_license"
+  },
+  {
+   "text": "Explain any gaps in your work history.",
+   "type": "question",
+   "rule": "employment_gaps"
+  }
+ ],
+ "pass": [
+  {
+   "text": "Must be 18 or older.",
+   "type": "ad"
+  },
+  {
+   "text": "Are you 18 or older?",
+   "type": "question"
+  },
+  {
+   "text": "Are you legally authorized to work in the United States?",
+   "type": "question"
+  },
+  {
+   "text": "Bilingual Spanish a plus.",
+   "type": "ad"
+  },
+  {
+   "text": "Competitive pay and weekly paychecks.",
+   "type": "ad"
+  },
+  {
+   "text": "We offer competitive wages and benefits.",
+   "type": "ad"
+  },
+  {
+   "text": "Delivery Driver: valid driver's license and clean driving record required. You'll drive a company van and carry totes up to 30 lbs.",
+   "type": "ad"
+  },
+  {
+   "text": "Courier role. Must have own car; mileage reimbursement paid weekly.",
+   "type": "ad"
+  },
+  {
+   "text": "Northline is an equal opportunity employer and hires without regard to race, religion, sex, national origin, age or disability.",
+   "type": "page"
+  },
+  {
+   "text": "Reasonable accommodations are available on request; ask your recruiter.",
+   "type": "page"
+  },
+  {
+   "text": "A customer's kids were running in the aisle; what would you do?",
+   "type": "guide"
+  },
+  {
+   "text": "Did a shopper's child get lost tonight?",
+   "type": "message"
+  },
+  {
+   "text": "Our store is next to First Baptist Church; park in the back lot.",
+   "type": "page"
+  },
+  {
+   "text": "Shifts start at 5am at our Dayton store; bus route 17 stops outside.",
+   "type": "ad"
+  },
+  {
+   "text": "We offer flexible schedules for students.",
+   "type": "ad"
+  },
+  {
+   "text": "Flexible hours available.",
+   "type": "ad"
+  },
+  {
+   "text": "Background check after a conditional offer.",
+   "type": "ad"
+  },
+  {
+   "text": "A background check is completed after you accept the offer.",
+   "type": "offer"
+  },
+  {
+   "text": "Uniform provided; hair tied back in food areas.",
+   "type": "ad"
+  },
+  {
+   "text": "No experience needed, we train you.",
+   "type": "ad"
+  },
+  {
+   "text": "2 years of experience preferred, but we'll train the right person.",
+   "type": "ad"
+  },
+  {
+   "text": "You will report to your store manager, Dana.",
+   "type": "offer"
+  },
+  {
+   "text": "Your supervisor, Luis, he will walk you through the first shift.",
+   "type": "message"
+  },
+  {
+   "text": "Lift cases up to 40 lbs, about 50 times a shift.",
+   "type": "ad"
+  },
+  {
+   "text": "Can you lift up to 50 pounds with or without a reasonable accommodation?",
+   "type": "question"
+  },
+  {
+   "text": "Which of these blocks can you work: weekday mornings, evenings, nights, Saturdays, Sundays?",
+   "type": "question"
+  },
+  {
+   "text": "Health insurance, dental and vision from day one.",
+   "type": "ad"
+  },
+  {
+   "text": "Join our health and safety committee.",
+   "type": "page"
+  },
+  {
+   "text": "We serve young families and seniors every day.",
+   "type": "page"
+  },
+  {
+   "text": "Our customers range from students to retirees.",
+   "type": "page"
+  },
+  {
+   "text": "Sales associate, server, host and busser roles open.",
+   "type": "ad"
+  },
+  {
+   "text": "Tell me about a time a customer was upset with you.",
+   "type": "guide"
+  },
+  {
+   "text": "The store opens at 6am sharp.",
+   "type": "ad"
+  },
+  {
+   "text": "Pay: $17.50 an hour, paid weekly.",
+   "type": "ad"
+  },
+  {
+   "text": "You'll stock the cooler, which runs at 34°F.",
+   "type": "ad"
+  },
+  {
+   "text": "Welcome aboard! Your first shift is Monday at 9.",
+   "type": "message"
+  },
+  {
+   "text": "We hire people of all backgrounds and experience levels.",
+   "type": "page"
+  },
+  {
+   "text": "Can you start within two weeks?",
+   "type": "question"
+  },
+  {
+   "text": "A government-issued photo ID or driver's license is needed on your first day for Form I-9.",
+   "type": "offer"
+  },
+  {
+   "text": "What would you do if a customer asked where the baby formula is?",
+   "type": "guide"
+  },
+  {
+   "text": "Our team includes parents, students and retirees.",
+   "type": "page"
+  },
+  {
+   "text": "Under 30 minutes from downtown by bus.",
+   "type": "ad"
+  },
+  {
+   "text": "Shifts are under 8 hours.",
+   "type": "ad"
+  },
+  {
+   "text": "Our competitive edge is our people.",
+   "type": "page"
+  },
+  {
+   "text": "Northline will never ask about your age, religion or family.",
+   "type": "page"
+  },
+  {
+   "text": "He will be your trainer for the first week.",
+   "type": "message"
+  },
+  {
+   "text": "Customers with kids love our store.",
+   "type": "page"
+  },
+  {
+   "text": "Please bring your Social Security card or other I-9 documents on your first day.",
+   "type": "offer"
+  },
+  {
+   "text": "Pick, pack and ship orders in our warehouse; lift up to 25 lbs.",
+   "type": "ad"
+  }
+ ],
+ "not_english": [
+  "Hola, gracias por aplicar a Northline. ¿Puedes venir el martes a las diez para una entrevista?",
+  "Bonjour, merci pour votre candidature. Pouvez-vous venir mardi à dix heures pour un entretien?"
+ ]
+}

@@ -33,6 +33,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # finished URL removes the chance to get it wrong.
 RELEASE = ("https://github.com/thomashugnet-netizen/skills-os"
            "/releases/latest/download")
+# Files served straight from main, for the few things that are not release
+# assets (owner photos).
+RAW = "https://raw.githubusercontent.com/thomashugnet-netizen/skills-os/main"
 
 # Where "Import in Cue" goes. Cue identifies a skill by its slug -- the same
 # slug as the folder, the zip and the frontmatter name -- so there is no second
@@ -89,6 +92,36 @@ def rows(path):
         return max(sum(1 for _ in fh) - 1, 0)
 
 
+def owner_of(slug):
+    path = os.path.join(ROOT, "owners.json")
+    if not os.path.exists(path):
+        return None
+    data = json.load(open(path, encoding="utf-8"))
+    entry = data.get("skills", {}).get(slug)
+    if not entry:
+        return None
+    person = data["people"][entry["owner"]]
+    photo = person.get("photo")
+    logo = person.get("company_logo")
+    return {"name": person["name"],
+            "since": entry["since"],
+            # Where the owner works and what they do there. For an HR Expert
+            # this is the skill's credential: "Senior Recruiter, Massive" says
+            # who stands behind it. Read at every publish, so a job change is
+            # a one-line edit to owners.json, never a new version of the skill.
+            "title": person.get("title"),
+            "company": person.get("company"),
+            # "HR Expert" for an outside practitioner who co-brands the skill;
+            # absent for Fountain staff.
+            "role": person.get("role"),
+            "linkedin": person.get("linkedin"),
+            # Finished URLs, like every other link in this file, so the site
+            # never assembles one from a repo path. The logo is a 96 px square
+            # tile on white (assets/logos/<company>.png), legible at 20 px.
+            "photo_url": f"{RAW}/{photo}" if photo else None,
+            "company_logo_url": f"{RAW}/{logo}" if logo else None}
+
+
 def skills():
     paths = (sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*.md")))
              + sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*", "SKILL.md"))))
@@ -136,6 +169,11 @@ def skills():
             # URL to render it with. A rule nobody has to remember.
             "cue": ({"import_url": f"{CUE_IMPORT}/{slug}"}
                     if available else None),
+            # Who answers for this skill. Read from owners.json, the one place
+            # ownership is written down; tools/owners.py fails CI on a skill
+            # without one. Ownership rotates, so the site shows what this says
+            # at publish time and keeps no copy.
+            "owner": owner_of(slug),
         })
     return sorted(out, key=lambda s: (s["category"], s["slug"]))
 

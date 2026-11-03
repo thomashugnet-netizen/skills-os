@@ -40,6 +40,15 @@ HELD = {
     "sourcing-gap-plan",
 }
 
+# Skills that will not ship on their own because a published skill now does
+# their job. Kept here, with what absorbed them, so regenerating from the
+# private repo does not announce them again, and so nobody has to delete
+# their drafts to keep the roadmap honest.
+ABSORBED = {
+    "interview-question-bank": "structured-interview-guide",
+    "scorecard-designer": "structured-interview-guide",
+}
+
 DATA_BLOCK_MARKER = ("**If your file contains a column that looks nominative, I will "
                      "stop and ask you to re-export rather than analyse it.**")
 
@@ -66,7 +75,7 @@ def scan(skills_dir):
         folder = os.path.dirname(path)
         slug = (os.path.basename(folder) if os.path.basename(path) == "SKILL.md"
                 else parts[-1][:-3])
-        if slug in HELD or slug in live:
+        if slug in HELD or slug in live or slug in ABSORBED:
             continue
         text = open(path, encoding="utf-8").read()
         description = re.search(r"^description:\s*(.+)$", text, re.M)
@@ -85,7 +94,23 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--from", dest="src",
                     help="the private repo's skills/ directory to read")
+    ap.add_argument("--refilter", action="store_true",
+                    help="re-apply HELD, ABSORBED and what is published to the existing roadmap.json, "
+                         "without the private repo")
     args = ap.parse_args()
+
+    if args.refilter:
+        with open(OUT, encoding="utf-8") as fh:
+            doc = json.load(fh)
+        live = published()
+        before = len(doc["coming_soon"])
+        doc["coming_soon"] = [e for e in doc["coming_soon"]
+                              if e["slug"] not in HELD and e["slug"] not in ABSORBED and e["slug"] not in live]
+        with open(OUT, "w", encoding="utf-8") as fh:
+            json.dump(doc, fh, indent=2, ensure_ascii=False)
+            fh.write("\n")
+        print(f"roadmap.json  {len(doc['coming_soon'])} coming soon  ({before - len(doc['coming_soon'])} removed)")
+        return 0
 
     if args.src:
         entries = scan(args.src)

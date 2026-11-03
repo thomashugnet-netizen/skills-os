@@ -1,0 +1,17 @@
+{
+  "about": "The planted levels for references/sample/manager_questions.txt: twelve questions a fictional store manager asks today.",
+  "levels": [
+    "weak",
+    "blocking",
+    "blocking",
+    "weak",
+    "blocking",
+    "blocking",
+    "blocking",
+    "ok",
+    "caution",
+    "weak",
+    "ok",
+    "blocking"
+  ]
+}

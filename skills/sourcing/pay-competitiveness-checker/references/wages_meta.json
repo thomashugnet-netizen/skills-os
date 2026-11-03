@@ -1,0 +1,14 @@
+{
+  "source": "U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics (OEWS)",
+  "dataset": "Metropolitan and nonmetropolitan area estimates, all industries",
+  "reference_period": "May 2025",
+  "released": "2026-05-15",
+  "reference_date": "2025-05-15",
+  "page": "https://www.bls.gov/oes/2025/may/oessrcma.htm",
+  "file": "oesm25ma.zip (BOS_M2025_dl.xlsx, MSA_M2025_dl.xlsx)",
+  "built": "2026-10-15",
+  "rows": 16968,
+  "areas": 530,
+  "licence": "Public domain. BLS asks to be cited as the source: https://www.bls.gov/opub/copyright-information.htm",
+  "note": "Hourly wages. Estimates BLS does not publish (too few responses, or over the top-coded value) are left blank and reported as such."
+}
