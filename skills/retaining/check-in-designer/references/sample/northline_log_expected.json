@@ -1,0 +1,23 @@
+{
+ "_about": "Planted in the sample log: Canton runs few day-7 check-ins (staffing, not the script); Lima answers its act-within-24-hours items late; Dayton has a week item open for weeks; Akron logged a supervisor's conduct as a theme instead of routing it to the grievance owner; the most common theme is the schedule being posted late.",
+ "as_of": "2026-11-02",
+ "flags": [
+  [
+   "low_completion",
+   "Canton"
+  ],
+  [
+   "misrouted",
+   "Akron"
+  ],
+  [
+   "overdue",
+   "Dayton"
+  ],
+  [
+   "slow_24h",
+   "Lima"
+  ]
+ ],
+ "top_theme": "schedule posted late"
+}

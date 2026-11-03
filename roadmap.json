@@ -150,13 +150,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "check-in-designer",
-      "title": "Check-In Designer",
-      "category": "retaining",
-      "description": "Writes day 1, day 7 and day 30 check-in scripts for new hourly hires, with escalation rules for whatever comes back.",
-      "needs_dataset": false
-    },
-    {
       "slug": "coverage-risk-scorer",
       "title": "Coverage Risk Scorer",
       "category": "retaining",
