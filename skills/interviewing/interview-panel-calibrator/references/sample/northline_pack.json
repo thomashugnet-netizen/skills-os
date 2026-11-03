@@ -1,0 +1,48 @@
+{
+  "title": "Northline, overnight stocker",
+  "scale": "1-3",
+  "questions": [
+    {
+      "id": "Q1",
+      "text": "Tell me about a time something got in the way of you getting to work or school on time. What did you do?",
+      "anchors": {
+        "1": "No example, or the problem was someone else's to solve.",
+        "2": "Partially demonstrates reliability.",
+        "3": "A real example, what they did about it themselves, and a plan for next time."
+      },
+      "answers": [
+        {"intended": 2, "text": "Um, yeah, so my car broke down once, like on the highway, and I was supposed to open at the coffee place. I called my manager, I think it was maybe twenty minutes before, and told her. She was okay about it. I got my cousin to drive me after, so I was like an hour late but I still did the shift."},
+        {"intended": 3, "text": "Last winter the bus I take just didn't come, twice in one week, it was the snow. After the second time I looked up the earlier bus, the 5:10, and I started taking that one even though it gets me there like forty minutes early. I just sit in the break room. I also put my supervisor's number in my phone so I could text if it happened again. It didn't."},
+        {"intended": 1, "text": "I'm pretty much always on time honestly. I mean, there was one time the alarm didn't go off, but that was my roommate's fault because she unplugged it for her charger. Most places I've worked didn't really care about five, ten minutes anyway."}
+      ]
+    },
+    {
+      "id": "Q2",
+      "text": "This job means lifting cases of up to 40 pounds for most of an eight-hour night, mostly on your own. Tell me about work you've done that was physical and repetitive.",
+      "anchors": {
+        "1": "Has not done physical work, or did not like it.",
+        "2": "Some physical work, partly comparable.",
+        "3": "Sustained physical work over full shifts, says what made it manageable."
+      },
+      "answers": [
+        {"intended": 3, "text": "I did eight months at a distribution center, unloading trucks. Ten hour shifts, four days. First two weeks my back was killing me, not gonna lie. The lead showed me to lift with my legs and keep the box close, and I started stretching before. After that it was fine. I actually like when it's just you and the work, the time goes fast if you get a rhythm."},
+        {"intended": 1, "text": "I helped my uncle move a couple of times, that was a lot of boxes. I haven't really done like a warehouse job before. I go to the gym though, so I think I'd be okay with it. I would want to know if there's breaks, because I don't really like doing the same thing for hours."},
+        {"intended": 2, "text": "At the grocery store I was a cashier mostly, but on Sundays I'd help with the produce delivery in the morning, so like the crates of potatoes and watermelons, two, three hours. That was heavy. I didn't mind it. I haven't done a whole night of it though."}
+      ]
+    },
+    {
+      "id": "Q3",
+      "text": "Tell me about a time you noticed a problem at work that nobody had asked you to fix. What did you do?",
+      "anchors": {
+        "1": "No example, or noticed it and did nothing.",
+        "2": "Raised it with someone.",
+        "3": "Took action on it."
+      },
+      "answers": [
+        {"intended": 3, "text": "There was a leak under the freezer case and water was going into the aisle. Nobody had put a sign out. I put a wet floor sign and some of the absorbent stuff from the back, then I told the closing manager so they could call someone. I just didn't want a customer to fall."},
+        {"intended": 1, "text": "Not really, I mostly just did what they told me to do. If something was broken that's kind of the manager's thing. I don't want to get in trouble for touching stuff I'm not supposed to."},
+        {"intended": 2, "borderline": true, "text": "One time the price tags on a whole shelf were wrong, like the sale ended but the tags said it was still on. I told my supervisor and she said she'd get to it. I think a couple of days later it was still wrong so I mentioned it again. I didn't change them myself because I wasn't sure I was allowed."}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+ "people": {
+  "Dana": "lenient",
+  "Jo": "aligned",
+  "Kim": "aligned",
+  "Luis": "range_restricted",
+  "Marcus": "aligned",
+  "Priya": "aligned",
+  "Sam": "aligned"
+ },
+ "findings": [
+  [
+   "anchor_split",
+   "Q2-B"
+  ],
+  [
+   "key_mismatch",
+   "Q3-A"
+  ],
+  [
+   "middle_anchor",
+   "Q1-A,Q2-C"
+  ]
+ ],
+ "items": {
+  "Q1-A": "scattered",
+  "Q1-B": "agree",
+  "Q1-C": "outliers",
+  "Q2-A": "agree",
+  "Q2-B": "split",
+  "Q2-C": "scattered",
+  "Q3-A": "agree",
+  "Q3-B": "outliers",
+  "Q3-C": "split"
+ },
+ "live_flags": {
+  "Dana": "high",
+  "Jo": null,
+  "Kim": null,
+  "Luis": null,
+  "Marcus": null,
+  "Priya": null,
+  "Sam": "low"
+ },
+ "live_notes": {
+  "Dana": true,
+  "Jo": false,
+  "Kim": false,
+  "Luis": false,
+  "Marcus": false,
+  "Priya": false,
+  "Sam": true
+ },
+ "pressure": "follows_vacancies",
+ "_about": "What the sample must produce. Planted: Dana lenient, Luis range-restricted, the rest aligned; Q2-B anchor split between two readings; Q3-A agreed by the panel at 2 though written as a 3; scatter on the two middle answers (Q1-A, Q2-C); Q3-C a borderline splitting between neighbouring levels, which is expected. Live: Dana above the pool, Sam below it, Kim too few interviews; pass rate following open roles across six sites."
+}
