@@ -20,6 +20,7 @@
     "jonathan-sabbah":       { "name": "Jonathan Sabbah", "github": null, "company": "Fountain", "company_logo": "assets/logos/fountain.png", "photo": "assets/owners/jonathan-sabbah.png", "linkedin": "https://www.linkedin.com/in/jonathansabbah/" }
   },
   "skills": {
+    "candidate-message-sequencer": { "owner": "madelyn-rovellada", "since": "2026-11-03" },
     "recruiter-capacity-planner": { "owner": "andrea-eighme", "since": "2026-11-03" },
     "rehire-campaign-planner": { "owner": "kristi-kennebrew", "since": "2026-11-03" },
     "bias-language-checker": { "owner": "kristi-kennebrew", "since": "2026-11-03" },
@@ -32,7 +33,6 @@
     "careers-site-advisor":        { "owner": "hiyabel-tewoldemedhin", "since": "2026-10-13" },
     "time-to-hire-analyst":        { "owner": "jonathan-sabbah",       "since": "2026-10-13" },
     "turnover-analyst":            { "owner": "will-jensen",           "since": "2026-10-13" },
-    "candidate-message-sequencer": { "owner": "will-jensen",           "since": "2026-10-13" },
     "schedule-photo-to-roster":    { "owner": "will-jensen",           "since": "2026-10-15" },
     "document-expiry-radar":       { "owner": "will-jensen",           "since": "2026-10-15" },
     "pay-competitiveness-checker": { "owner": "emily-paik",           "since": "2026-11-03" },

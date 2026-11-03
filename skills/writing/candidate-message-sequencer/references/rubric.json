@@ -1,12 +1,21 @@
 {
-  "$comment": "The rules check_sequence.py enforces. Every one of them is something SKILL.md already promises, so the checker cannot drift away from the skill: if a rule here is not in the skill, one of the two is wrong. The sequence-level rules are the point -- a set of individually reasonable messages can still be harassment.",
-  "schema_version": 1,
+  "$comment": "The rules scripts/sequencer.py enforces. Every one of them is something SKILL.md already promises, so the checker cannot drift away from the skill: if a rule here is not in the skill, one of the two is wrong. The sequence-level rules are the point: a set of individually reasonable messages can still be harassment.",
+  "schema_version": 2,
 
   "channel_limits": {
     "sms":      {"chars": 160, "max_messages": 4, "needs_opt_out": true},
     "whatsapp": {"chars": 700, "max_messages": 4, "needs_opt_out": true},
     "email":    {"chars": 1200, "max_messages": 5, "needs_opt_out": false}
   },
+
+  "sms_encoding": {
+    "gsm_single": 160, "gsm_part": 153,
+    "unicode_single": 70, "unicode_part": 67,
+    "$comment": "One character outside the GSM-7 alphabet (a curly apostrophe, an em dash, an emoji) switches the whole text to Unicode and drops the limit from 160 to 70."
+  },
+
+  "placeholder_chars": 12,
+  "link_chars": 23,
 
   "cadence": {
     "min_hours_between": 20,
@@ -19,14 +28,14 @@
 
   "opt_out_markers": [
     "stop to opt out", "reply stop", "text stop", "opt out",
-    "unsubscribe", "reply end"
+    "opt-out", "unsubscribe", "reply end"
   ],
 
   "sensitive_asks": [
     "national insurance", "social security", "ssn", "sort code",
-    "account number", "bank details", "iban", "date of birth",
+    "account number", "routing number", "bank details", "iban", "date of birth",
     "passport number", "driving licence number", "driver's license number",
-    "right to work document", "visa number", "photo of your id"
+    "right to work document", "visa number", "photo of your id", "picture of your id"
   ],
 
   "false_urgency": [
@@ -46,5 +55,22 @@
   "long_sentence_words": 22,
   "max_exclamations_per_message": 1,
   "max_emoji_per_message": 1,
-  "shouting_min_run": 4
+  "shouting_min_run": 4,
+
+  "blocking": [
+    "no_stop_condition", "too_many_messages", "too_fast", "window_too_long", "quiet_hours",
+    "no_opt_out", "opt_out_not_first", "asks_for_sensitive_data", "false_urgency",
+    "too_long", "unicode_sms", "duplicate_message", "unidentified", "no_call_to_action",
+    "empty_message", "out_of_order"
+  ],
+
+  "log": {
+    "act_window_days": 7,
+    "leak_grace_minutes": 60,
+    "leak_flag_lower": 0.02,
+    "quiet_flag_share": 0.10,
+    "min_candidates_per_sequence": 30,
+    "min_candidates_per_step": 30,
+    "min_candidates": 50
+  }
 }

@@ -1,0 +1,9 @@
+stage: interview booked, no confirmation yet
+channel: sms
+stop_when: the candidate confirms or cancels
+
+[day 0, 10:00]
+Hi {first_name}, it's {employer}. Your interview is booked for {date} at the visitor entrance. Reply YES to confirm. Reply STOP to opt out.
+
+[day 1, 12:00]
+{first_name}, {employer} here. In context: the visitor car park is behind the store. Reply YES if you still plan to make it.

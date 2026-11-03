@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**13 ready now. 29 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**14 ready now. 28 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -29,6 +29,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | [`career-site-builder`](skills/sourcing/career-site-builder/) | Redesigns a careers page for an hourly, multi-site employer as a polished, on-brand landing page with job search, from a single request such as "redo our careers page", and checks it for search, AI visibility, accessibility and honesty before handover. | no data needed, 79 KB |
 | [`pay-competitiveness-checker`](skills/sourcing/pay-competitiveness-checker/) | Places every posted hourly rate on the local wage ladder for the same job, from official US government wage data, and shows which postings pay less than most employers in that metro, what it would cost to fix, and where your own sites pay differently for the same job. | no data needed, 0.4 MB |
 | [`rehire-campaign-planner`](skills/sourcing/rehire-campaign-planner/) | Turns your own past applicants and former workers into a re-engagement campaign. Settles who you may contact first, sorts every record into a segment or a named reason it is out, sizes waves to the replies someone can actually answer, and checks the three messages before they go. | needs a CSV export, 0.3 MB |
+| [`candidate-message-sequencer`](skills/writing/candidate-message-sequencer/) | Builds short SMS, WhatsApp and email nudge sequences for applicants who stall between applying and their first shift, grades the whole sequence against a written rubric before you send, and reads the send log for which message earns its place and whether the stop condition actually works. | no data needed, 80 KB |
 | [`job-ad-writer`](skills/writing/job-ad-writer/) | Writes high-volume hourly job ads that work on a phone, with a variant for each channel you post to. | no data needed, 16 KB |
 
 ## Sample datasets
@@ -49,7 +50,6 @@ Written, not yet through their gate. They ship when they pass it.
 **Writing — the words that go out**
 
 - `attendance-policy-writer` — Writes no-call/no-show, lateness and break policies in language hourly teams and site managers actually follow, structured so the same event produces the same outcome at every site.
-- `candidate-message-sequencer` — Builds short SMS, WhatsApp and email nudge sequences for applicants who stall between applying and their first shift, timed to the stage they stalled at.
 - `manager-comms-writer` — Writes the daily messages a district or store manager sends — shift coverage asks, interview reminders, day-one instructions, schedule changes — in the voice of someone the reader sees every day.
 - `offer-letter-drafter` — Drafts conditional offers, start-date confirmations and contingency wording for hourly roles, with the shift pattern and first-shift logistics in the same message.
 

@@ -1,0 +1,13 @@
+stage: applied, no screening call booked
+channel: sms
+stop_when: the candidate books a screening call, or replies STOP
+employer: Northline
+
+[day 0, 10:00]
+Hi {first_name}, it's Northline. Thanks for applying for night stocker at {site}. Pick a 10-min call: {link}. Reply STOP to opt out.
+
+[day 2, 17:30]
+{first_name}, Northline again. Night stocker pays $17.50 an hour, plus $1.50 for nights. Book a call: {link}
+
+[day 5, 12:00]
+Hi {first_name}. Hard to fit a call in? Text us a good time and Northline will ring you.
