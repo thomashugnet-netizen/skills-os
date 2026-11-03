@@ -4,7 +4,7 @@
   "people": {
     "thomas-hugnet":         { "name": "Thomas Hugnet",         "github": "thomashugnet-netizen" },
     "coleman-coffey":        { "name": "Coleman Coffey",        "github": null, "role": "HR Expert", "photo": "assets/owners/coleman-coffey.png", "linkedin": "https://www.linkedin.com/in/coleman-coffey/" },
-    "emily-paik":            { "name": "Emily Paik",            "github": null, "role": "HR Expert", "linkedin": null },
+    "emily-paik":            { "name": "Emily Paik",            "github": null, "role": "HR Expert", "photo": "assets/owners/emily-paik.png", "linkedin": "https://www.linkedin.com/in/emilypaik/" },
     "madelyn-rovellada":     { "name": "Madelyn Rovellada",     "github": null, "role": "HR Expert", "photo": "assets/owners/madelyn-rovellada.png", "linkedin": "https://www.linkedin.com/in/madelynrovellada/" },
     "kristi-kennebrew":     { "name": "Kristi Kennebrew",     "github": null, "role": "HR Expert", "linkedin": "https://www.linkedin.com/in/kristi-kennebrew/" },
     "andrea-eighme":        { "name": "Andrea Michelle Eighme","github": null, "role": "HR Expert", "linkedin": "https://www.linkedin.com/in/andreaeighme/" },
