@@ -1,0 +1,917 @@
+{
+ "about": "Each case damages references/sample/northline_script.json in one way. The check must block it with the expected message, or refuse it as malformed. Paths step into lists by section id or by index.",
+ "cases": [
+  {
+   "name": "no booking section",
+   "expect": "No 'booking' section",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "sections",
+      "booking"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "no availability section",
+   "expect": "No 'availability' section",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "sections",
+      "availability"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "availability asked after travel",
+   "expect": "availability straight after the opener",
+   "ops": [
+    {
+     "op": "move",
+     "path": [
+      "sections",
+      1
+     ],
+     "to": 3
+    }
+   ]
+  },
+  {
+   "name": "availability checked against the form",
+   "expect": "gets a yes from everybody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "availability",
+      "questions",
+      0,
+      "text"
+     ],
+     "value": "Is your availability on the form still correct?"
+    }
+   ]
+  },
+  {
+   "name": "availability with no day or time",
+   "expect": "names no day or time",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "availability",
+      "questions",
+      0,
+      "text"
+     ],
+     "value": "Can you work the shifts we need?"
+    }
+   ]
+  },
+  {
+   "name": "one availability question for two gaps",
+   "expect": "1 availability question(s) for 2",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "sections",
+      "availability",
+      "questions",
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "no rota gaps",
+   "expect": "No rota_gaps",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "rota_gaps"
+     ],
+     "value": []
+    }
+   ]
+  },
+  {
+   "name": "no availability gate",
+   "expect": "No availability question is a gate",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "availability",
+      "questions",
+      0,
+      "gate"
+     ],
+     "value": false
+    },
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "availability",
+      "questions",
+      1,
+      "gate"
+     ],
+     "value": false
+    }
+   ]
+  },
+  {
+   "name": "travel asked as can you",
+   "expect": "ask how they would get here",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "travel",
+      "questions",
+      0,
+      "text"
+     ],
+     "value": "Can you get here for a 10pm start?"
+    }
+   ]
+  },
+  {
+   "name": "experience as a prerequisite",
+   "expect": "is not a minimum age",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections",
+      "prerequisites",
+      "questions"
+     ],
+     "value": {
+      "text": "Do you have warehouse experience?",
+      "gate": true
+     }
+    }
+   ]
+  },
+  {
+   "name": "behavioural question in a screen",
+   "expect": "assesses",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections",
+      "questions",
+      "questions"
+     ],
+     "value": {
+      "text": "Tell me about a time you dealt with a difficult customer."
+     }
+    }
+   ]
+  },
+  {
+   "name": "strengths question",
+   "expect": "assesses",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "start_date",
+      "questions",
+      0,
+      "text"
+     ],
+     "value": "What are your greatest strengths?"
+    }
+   ]
+  },
+  {
+   "name": "childcare question",
+   "expect": "strays into family",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections",
+      "start_date",
+      "questions"
+     ],
+     "value": {
+      "text": "Do you have childcare sorted for nights?"
+     }
+    }
+   ]
+  },
+  {
+   "name": "age asked as how old",
+   "expect": "strays into age",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "prerequisites",
+      "questions",
+      0,
+      "text"
+     ],
+     "value": "How old are you?"
+    }
+   ]
+  },
+  {
+   "name": "citizenship question",
+   "expect": "strays into citizenship",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "prerequisites",
+      "questions",
+      1,
+      "text"
+     ],
+     "value": "Are you a US citizen?"
+    }
+   ]
+  },
+  {
+   "name": "pay history question",
+   "expect": "strays into pay history",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections",
+      "start_date",
+      "questions"
+     ],
+     "value": {
+      "text": "What was your last pay rate?"
+     }
+    }
+   ]
+  },
+  {
+   "name": "health question",
+   "expect": "strays into health",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections",
+      "preview",
+      "questions"
+     ],
+     "value": {
+      "text": "Any injuries that stop you lifting?"
+     }
+    }
+   ]
+  },
+  {
+   "name": "preview over thirty seconds",
+   "expect": "over thirty seconds",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "preview",
+      "say"
+     ],
+     "value": "The honest picture: it is overnight, on your feet the whole shift, lifting cases up to 40 pounds, and the back room is cold in winter. You will work with a small team of five, mostly unloading two trucks a night, then filling the shelves aisle by aisle, then facing everything before the doors open at seven. Breaks are at midnight and three. The supervisor walks the floor at two. Pay is $17.50 an hour, plus $1.50 an hour for nights, paid every week, and there is overtime most weeks in November and December."
+    }
+   ]
+  },
+  {
+   "name": "preview says nothing",
+   "expect": "says nothing about the job",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "preview",
+      "say"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "preview not followed by a gate",
+   "expect": "not followed by a gate",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "preview",
+      "questions"
+     ],
+     "value": []
+    }
+   ]
+  },
+  {
+   "name": "a gate on start date",
+   "expect": "Gates in start_date",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "start_date",
+      "questions",
+      0,
+      "gate"
+     ],
+     "value": true
+    }
+   ]
+  },
+  {
+   "name": "no wording for a no on the preview",
+   "expect": "polite no on preview",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "sections",
+      "decision",
+      "no",
+      "preview"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "no wording for a no on prerequisites",
+   "expect": "polite no on prerequisite",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "sections",
+      "decision",
+      "no",
+      "prerequisite"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "no redirect",
+   "expect": "No redirect",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "sections",
+      "decision",
+      "redirect"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "a no that promises to be in touch",
+   "expect": "promises to be in touch",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "decision",
+      "no",
+      "availability"
+     ],
+     "value": "Thanks, we'll be in touch if anything changes."
+    }
+   ]
+  },
+  {
+   "name": "one slot offered",
+   "expect": "offer two specific slots",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "booking",
+      "say"
+     ],
+     "value": "I can do {{slot_1}} at the store. Does that work?"
+    }
+   ]
+  },
+  {
+   "name": "when suits you",
+   "expect": "offer two specific slots",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "booking",
+      "say"
+     ],
+     "value": "When suits you for an interview?"
+    }
+   ]
+  },
+  {
+   "name": "booking handed to someone else",
+   "expect": "hands the candidate",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "booking",
+      "say"
+     ],
+     "value": "Great. Someone will call you to set up the interview at {{slot_1}} or {{slot_2}}."
+    }
+   ]
+  },
+  {
+   "name": "no confirmation text",
+   "expect": "no confirmation text",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "sections",
+      "booking",
+      "confirmation"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "confirmation without where",
+   "expect": "does not say where",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "booking",
+      "confirmation"
+     ],
+     "value": "Northline: you're booked for {{slot}}. Ask for {{interviewer}}."
+    }
+   ]
+  },
+  {
+   "name": "confirmation without who",
+   "expect": "does not name who",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "booking",
+      "confirmation"
+     ],
+     "value": "Northline: you're booked for {{slot}} at {{address}}."
+    }
+   ]
+  },
+  {
+   "name": "confirmation without when",
+   "expect": "does not say when",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "booking",
+      "confirmation"
+     ],
+     "value": "Northline: you're booked at {{address}}. Ask for {{interviewer}}."
+    }
+   ]
+  },
+  {
+   "name": "pay never stated",
+   "expect": "Pay is never stated",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "pay"
+     ]
+    },
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "preview",
+      "say"
+     ],
+     "value": "The honest picture: it is overnight, on your feet the whole shift, lifting cases up to 40 pounds, and the back room is cold in winter."
+    }
+   ]
+  },
+  {
+   "name": "over five minutes",
+   "expect": "seconds read aloud",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "questions",
+      "say"
+     ],
+     "value": "Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs. Let me tell you a bit more about the store, the team, the trucks and how the night runs."
+    }
+   ]
+  },
+  {
+   "name": "opener of four sentences",
+   "expect": "more than two sentences",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "opener",
+      "say"
+     ],
+     "value": "Hi. This is Northline. It takes five minutes. Is now good?"
+    }
+   ]
+  },
+  {
+   "name": "opener without a length",
+   "expect": "how long the call takes",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "opener",
+      "say"
+     ],
+     "value": "Hi, this is {{caller}} from Northline about the overnight stocker job."
+    }
+   ]
+  },
+  {
+   "name": "opener asks them to talk about themselves",
+   "expect": "burns ninety seconds",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "opener",
+      "say"
+     ],
+     "value": "Hi, Northline here, five minutes. Tell me about yourself?"
+    }
+   ]
+  },
+  {
+   "name": "no voicemail",
+   "expect": "No voicemail",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "voicemail"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "voicemail over twenty seconds",
+   "expect": "over twenty seconds",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "voicemail"
+     ],
+     "value": "Hi, it's {{caller}} from Northline about the overnight stocker job at our Dayton store. We would really love to talk to you about it when you have a moment. We would really love to talk to you about it when you have a moment. We would really love to talk to you about it when you have a moment. We would really love to talk to you about it when you have a moment. Reply to the text I send."
+    }
+   ]
+  },
+  {
+   "name": "voicemail with no way back",
+   "expect": "gives no way back",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "voicemail"
+     ],
+     "value": "Hi, it's {{caller}} from Northline about the overnight stocker job at our Dayton store. Please give us a call."
+    }
+   ]
+  },
+  {
+   "name": "voicemail without the company",
+   "expect": "does not name the company",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "voicemail"
+     ],
+     "value": "Hi, it's {{caller}} about the overnight stocker job at the Dayton store. Reply to my text."
+    }
+   ]
+  },
+  {
+   "name": "no text after the voicemail",
+   "expect": "No text after the voicemail",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "follow_up_text"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "text without an opt-out",
+   "expect": "has no opt-out",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "follow_up_text"
+     ],
+     "value": "Northline here about the overnight stocker job. Book a call: {{booking_link}}"
+    }
+   ]
+  },
+  {
+   "name": "text with no way to reply",
+   "expect": "no way to reply or book",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "follow_up_text"
+     ],
+     "value": "Northline here about the overnight stocker job. Sorry we missed you. STOP to opt out."
+    }
+   ]
+  },
+  {
+   "name": "text over two segments",
+   "expect": "characters",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "follow_up_text"
+     ],
+     "value": "Northline here about the overnight stocker job in Dayton. Northline here about the overnight stocker job in Dayton. Northline here about the overnight stocker job in Dayton. Northline here about the overnight stocker job in Dayton. Northline here about the overnight stocker job in Dayton. Northline here about the overnight stocker job in Dayton. Book: {{booking_link}}. Reply STOP to opt out."
+    }
+   ]
+  },
+  {
+   "name": "every attempt in the afternoon",
+   "expect": "at least two different",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "attempts",
+      "dayparts"
+     ],
+     "value": [
+      "afternoon",
+      "afternoon",
+      "afternoon"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "eight attempts",
+   "expect": "between 2 and 5",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "attempts",
+      "max"
+     ],
+     "value": 8
+    }
+   ]
+  },
+  {
+   "name": "no stop rule",
+   "expect": "No stop rule",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "attempts",
+      "stop"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "no callback script",
+   "expect": "inbound callback",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "callback"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "seven capture fields",
+   "expect": "7 capture fields",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capture"
+     ],
+     "value": [
+      "Nights",
+      "Start",
+      "Travel",
+      "Gates",
+      "Slot",
+      "Previous employer",
+      "Hobbies"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "unknown section",
+   "expect": "unknown section",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections"
+     ],
+     "value": {
+      "id": "small_talk",
+      "say": "How's your day going?"
+     }
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "no sections",
+   "expect": "sections",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections"
+     ],
+     "value": []
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "no company",
+   "expect": "\"company\" is needed",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "company"
+     ]
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "questions not a list",
+   "expect": "must be a list",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "sections",
+      "travel",
+      "questions"
+     ],
+     "value": "how?"
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "a question with no text",
+   "expect": "needs \"text\"",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections",
+      "travel",
+      "questions"
+     ],
+     "value": {
+      "gate": true
+     }
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "a section twice",
+   "expect": "appears twice",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections"
+     ],
+     "value": {
+      "id": "booking",
+      "say": "{{slot_1}} or {{slot_2}}?"
+     }
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "a section that is not an object",
+   "expect": "every section is an object",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "sections"
+     ],
+     "value": "booking"
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "rota gaps as a number",
+   "expect": "rota_gaps",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "rota_gaps"
+     ],
+     "value": 2
+    }
+   ],
+   "refuse": true
+  },
+  {
+   "name": "capture fields that are not text",
+   "expect": "short line of text",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "capture"
+     ],
+     "value": [
+      "Nights",
+      {
+       "x": 1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
