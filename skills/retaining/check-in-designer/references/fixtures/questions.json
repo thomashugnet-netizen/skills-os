@@ -1,0 +1,43 @@
+{
+ "risky": [
+  "Is the schedule ok with your kids?",
+  "Do you have childcare sorted for nights?",
+  "How's your back pain with the lifting?",
+  "Are you taking any medication that makes nights hard?",
+  "Is your husband ok with you working nights?",
+  "Where are you from originally?",
+  "Do you have your papers sorted?",
+  "Will this clash with your church on Sunday?",
+  "Are you expecting, is the lifting ok?",
+  "How old are you, if you don't mind?",
+  "Is your family ok with the hours?",
+  "Do you pray at a set time we should know about?",
+  "Any health condition you have that we should know about?",
+  "Is your mom ok watching the kids?",
+  "Are you a citizen?",
+  "Is ur daycare ok with these hours?",
+  "How are the kids coping with your nights?",
+  "Does your partner drive you in?",
+  "Are you on any meds?",
+  "Is it a problem for you to work during Ramadan or do you pray during shifts?",
+  "What year were you born?"
+ ],
+ "safe": [
+  "Did a customer's kids get in your way in the aisle?",
+  "Do you know where the first aid kit is?",
+  "Did you get your break tonight?",
+  "Is the lifting what you expected?",
+  "Is your schedule the one you agreed to?",
+  "Are there days you can't work that we should know about?",
+  "Did anything feel unsafe tonight?",
+  "Was your first pay right, hours and rate?",
+  "Did the store's medical aisle restock go ok?",
+  "Do you know the church parking lot next door is off limits?",
+  "Do these shift times still work for you?",
+  "Did a shopper's child get lost tonight?",
+  "Do you know where the family restroom is?",
+  "Did you find the prayer room by the break area?",
+  "Do you know where the first aid kit is on your aisle?",
+  "Did you restock the baby aisle on your shift?"
+ ]
+}

@@ -1,0 +1,102 @@
+{
+  "role": "Northline overnight stocker",
+  "site_can_fix": ["swap a shift", "change a start time", "move a break", "issue kit", "swap ppe size",
+                   "assign a buddy", "repeat a training module", "fix a locker", "parking permit"],
+  "escalation_owners": {"24h": "Site lead", "week": "Site lead", "grievance": "HR business partner"},
+  "touchpoints": [
+    {
+      "day": 1,
+      "when": "end of the first shift, before they leave",
+      "owner": "Overnight shift lead",
+      "fallback": "Duty manager",
+      "opening": "Quick check before you head home, two minutes.",
+      "closing": "Thanks. If anything comes up before your next shift, call the shift lead line.",
+      "questions": [
+        {"text": "Did you get boots, gloves and a vest that fit?",
+         "probe": "Anything you had to borrow or go without?",
+         "routes": [{"answer": "No kit, or wrong-size boots or gloves", "tier": "24h", "to": "Overnight shift lead",
+                     "fix": "swap ppe size", "action": "Swap the size from the cage before their next shift"}]},
+        {"text": "Do you know when your next shift starts?",
+         "routes": [{"answer": "Does not know their next shift or has no schedule", "tier": "24h", "to": "Site lead",
+                     "fix": "escalate", "action": "Send the schedule by text before they sleep"}]},
+        {"text": "Did you get your break tonight?",
+         "routes": [{"answer": "No break taken", "tier": "24h", "to": "Site lead", "fix": "move a break",
+                     "action": "Set the break time for the next shift and tell the shift lead"}]},
+        {"text": "Do you know who to call if you can't make a shift?",
+         "routes": [{"answer": "Does not know the call-out number", "tier": "week", "to": "Overnight shift lead",
+                     "fix": "escalate", "action": "Add the number to their phone now"}]},
+        {"text": "Did anything feel unsafe tonight?",
+         "probe": "Where was it, and what happened?",
+         "routes": [{"answer": "Something felt unsafe or someone got hurt", "tier": "24h", "to": "Site lead",
+                     "fix": "escalate", "action": "Walk the area with them before the next shift"},
+                    {"answer": "Someone's conduct towards them", "tier": "grievance", "to": "HR business partner",
+                     "action": "Hand over the same day; do not investigate in the check-in"}]}
+      ]
+    },
+    {
+      "day": 7,
+      "when": "start of the sixth or seventh shift, in the first ten minutes",
+      "owner": "Overnight supervisor",
+      "fallback": "Overnight shift lead",
+      "opening": "One week in. Three minutes on how it's really going.",
+      "closing": "Thanks. Anything we said we'd fix, you'll hear back on within a week.",
+      "questions": [
+        {"text": "Is the work what you expected when you said yes?",
+         "probe": "What's different from what you were told?",
+         "routes": [{"answer": "The work is not what they were told", "tier": "week", "to": "Site lead",
+                     "fix": "escalate", "action": "Talk it through; tell the recruiter what the ad got wrong"},
+                    {"answer": "A theme across new hires", "tier": "log"}]},
+        {"text": "Is your schedule the one you agreed to?",
+         "routes": [{"answer": "Schedule differs from what was agreed", "tier": "week", "to": "Site lead",
+                     "fix": "swap a shift", "action": "Swap the shift back before it becomes a pattern"}]},
+        {"text": "How long is your trip in, and is it still working?",
+         "routes": [{"answer": "The trip no longer works because the shift changed", "tier": "24h",
+                     "to": "Site lead", "fix": "change a start time",
+                     "action": "Change the start time or the shift before the next week's schedule goes out"},
+                    {"answer": "Long trip, still working", "tier": "log"}]},
+        {"text": "Has anything happened that you didn't know how to handle?",
+         "probe": "Who did you ask?",
+         "routes": [{"answer": "A training gap", "tier": "week", "to": "Overnight shift lead",
+                     "fix": "repeat a training module", "action": "Book the module on their next shift"},
+                    {"answer": "Someone treated them badly or harassed them", "tier": "grievance",
+                     "to": "HR business partner", "action": "Hand over the same day"}]},
+        {"text": "Do you have a buddy you can ask on shift?",
+         "routes": [{"answer": "No buddy, or the buddy is never on", "tier": "week", "to": "Overnight shift lead",
+                     "fix": "assign a buddy", "action": "Assign someone on the same nights"}]}
+      ]
+    },
+    {
+      "day": 30,
+      "when": "the week after the first payday",
+      "owner": "Site lead",
+      "fallback": "Neighbouring site lead",
+      "opening": "A month in. Three minutes, and nothing you say goes back to your supervisor without your say.",
+      "closing": "Thanks. You'll hear back within a week on anything we can change.",
+      "questions": [
+        {"text": "Was your first pay right, hours and rate?",
+         "routes": [{"answer": "Pay wrong or missing", "tier": "24h", "to": "Site lead", "fix": "escalate",
+                     "action": "Raise it with payroll today and tell them when it will be fixed"}]},
+        {"text": "Are your hours what you expected?",
+         "routes": [{"answer": "Fewer or more hours than agreed", "tier": "week", "to": "Site lead",
+                     "fix": "swap a shift", "action": "Adjust next month's schedule"}]},
+        {"text": "Is anything from your first week still not sorted?",
+         "routes": [{"answer": "Something raised on day 1 or day 7 is still open", "tier": "24h", "to": "Site lead",
+                     "fix": "escalate", "action": "Close it, or tell them today why it can't be"}]},
+        {"text": "Would you like more hours, fewer, or the same?",
+         "routes": [{"answer": "Wants more or fewer hours", "tier": "week", "to": "Site lead", "fix": "swap a shift",
+                     "action": "Offer open shifts or trim the schedule"}]},
+        {"text": "Is there anything about how you're managed we should know?",
+         "routes": [{"answer": "A concern about their supervisor's conduct", "tier": "grievance",
+                     "to": "HR business partner", "action": "Hand over the same day"},
+                    {"answer": "A wish about how shifts are run", "tier": "log"}]}
+      ]
+    }
+  ],
+  "close_the_loop": {
+    "within_days": 7,
+    "done": "You mentioned your boots didn't fit. The new pair is in your locker.",
+    "in_progress": "You asked about your start time. I've asked the site lead and you'll have an answer by Friday.",
+    "declined": "You asked to move to days. We can't this month because days are full; I've put you first on the list."
+  },
+  "capture": "site, hire id, day, date done, tier if something came back, two-word theme"
+}

@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**8 ready now. 34 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**9 ready now. 33 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -22,6 +22,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | [`interview-panel-calibrator`](skills/interviewing/interview-panel-calibrator/) | Gets several interviewers onto the same bar. Builds a twenty-minute calibration exercise from your own anchors, then reads the scores to say whether each disagreement comes from the anchor wording or from a person, and which person is lenient, severe or not separating strong answers from weak ones. | no data needed, 27 KB |
 | [`structured-interview-guide`](skills/interviewing/structured-interview-guide/) | Builds a fifteen-minute frontline interview a store or site manager can run the same way every time, without training, and checks the questions managers ask today for the ones that are a legal risk or predict nothing. | no data needed, 39 KB |
 | [`schedule-photo-to-roster`](skills/operating/schedule-photo-to-roster/) | Turns a photo or screenshot of a shift schedule into a clean roster, then shows where the week is short-staffed, who is heading into overtime, who closes and opens with too little rest, and which hours could move. | no data needed, 0.2 MB |
+| [`check-in-designer`](skills/retaining/check-in-designer/) | Writes the day 1, day 7 and day 30 check-ins that catch a new hourly hire before they quit, each under three minutes, with every possible answer routed to an action, an escalation or a logged theme, and checks the plan in code before anyone runs it. Then reads the one-line log supervisors keep to show which sites are not running them and which answers nobody acted on. | no data needed, 27 KB |
 | [`career-site-builder`](skills/sourcing/career-site-builder/) | Redesigns a careers page for an hourly, multi-site employer as a polished, on-brand landing page with job search, from a single request such as "redo our careers page", and checks it for search, AI visibility, accessibility and honesty before handover. | no data needed, 79 KB |
 | [`pay-competitiveness-checker`](skills/sourcing/pay-competitiveness-checker/) | Places every posted hourly rate on the local wage ladder for the same job, from official US government wage data, and shows which postings pay less than most employers in that metro, what it would cost to fix, and where your own sites pay differently for the same job. | no data needed, 0.4 MB |
 | [`job-ad-writer`](skills/writing/job-ad-writer/) | Writes high-volume hourly job ads that work on a phone, with a variant for each channel you post to. | no data needed, 16 KB |
@@ -88,7 +89,6 @@ Written, not yet through their gate. They ship when they pass it.
 
 **Retaining — after the first shift**
 
-- `check-in-designer` — Writes day 1, day 7 and day 30 check-in scripts for new hourly hires, with escalation rules for whatever comes back.
 - `coverage-risk-scorer` — Scores which locations are likely to be short-staffed next week from an attendance and headcount export, and says whether each one is a hiring or a reliability problem. *(needs a CSV export)*
 - `early-attrition-diagnostic` — Diagnoses the mechanism behind 30-day quits and traces each one back to the hiring decision that caused it. *(needs a CSV export)*
 - `exit-reason-analyst` — Clusters free-text exit responses into a stable set of causes you can act on, weighted by how many people they actually affect. *(needs a CSV export)*
