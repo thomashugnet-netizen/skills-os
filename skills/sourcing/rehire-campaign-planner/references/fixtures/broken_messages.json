@@ -1,0 +1,124 @@
+{
+ "_about": "Each case breaks the first sample segment's messages in one way; the check must fail for the named reason.",
+ "cases": [
+  {
+   "name": "no opt-out",
+   "ops": [
+    {
+     "op": "set",
+     "day": 0,
+     "text": "Hi {{first_name}}, it's Northline. You applied in {{applied_month}}. Book here: {{booking_link}}"
+    }
+   ],
+   "expect": "no way to opt out"
+  },
+  {
+   "name": "asks to apply again",
+   "ops": [
+    {
+     "op": "set",
+     "day": 0,
+     "text": "Hi {{first_name}}, it's Northline. You applied in {{applied_month}}. Please re-apply here: {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "apply again"
+  },
+  {
+   "name": "unfilled bracket field",
+   "ops": [
+    {
+     "op": "set",
+     "day": 0,
+     "text": "Hi {{first_name}}, it's Northline. You applied in {{applied_month}}. We're hiring at [SITE]. {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "merge field 'SITE'"
+  },
+  {
+   "name": "unknown merge field",
+   "ops": [
+    {
+     "op": "set",
+     "day": 1,
+     "text": "Northline: pay is now ${{pay_rate}}/hr at {{site}}. {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "merge field 'pay_rate'"
+  },
+  {
+   "name": "no sender",
+   "ops": [
+    {
+     "op": "set",
+     "day": 1,
+     "text": "Pay at {{site}} is now ${{rate}}/hr. {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "does not say who is writing"
+  },
+  {
+   "name": "day 0 without the reason",
+   "ops": [
+    {
+     "op": "set",
+     "day": 0,
+     "text": "Hi {{first_name}}, Northline is hiring {{role}} at {{site}}. {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "does not say why"
+  },
+  {
+   "name": "day 1 with no news",
+   "ops": [
+    {
+     "op": "set",
+     "day": 1,
+     "text": "Northline here again, just checking in about the job at {{site}}. {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "no news"
+  },
+  {
+   "name": "day 3 not marked last",
+   "ops": [
+    {
+     "op": "set",
+     "day": 3,
+     "text": "Northline: still interested in {{role}} at {{site}}? {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "not marked as the last"
+  },
+  {
+   "name": "a fourth message",
+   "ops": [
+    {
+     "op": "drop",
+     "day": 3
+    }
+   ],
+   "expect": "three, on day 0"
+  },
+  {
+   "name": "too long for a text",
+   "ops": [
+    {
+     "op": "set",
+     "day": 0,
+     "text": "Hi {{first_name}}, it's Northline. You applied in {{applied_month}}. We would love to talk to you again about the role because a lot has changed since then and we think you would really like it here. We would love to talk to you again about the role because a lot has changed since then and we think you would really like it here. We would love to talk to you again about the role because a lot has changed since then and we think you would really like it here. {{booking_link}} Reply STOP to opt out."
+    }
+   ],
+   "expect": "characters"
+  },
+  {
+   "name": "sender missing everywhere",
+   "ops": [
+    {
+     "op": "sender",
+     "text": "Acme Logistics"
+    }
+   ],
+   "expect": "name acme logistics"
+  }
+ ]
+}

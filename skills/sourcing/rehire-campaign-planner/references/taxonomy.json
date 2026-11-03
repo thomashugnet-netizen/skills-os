@@ -1,0 +1,50 @@
+{
+  "about": "How scripts/rehire.py reads an export. Every exit and separation reason maps to exactly one class; a reason not listed here is 'unreadable' and its people are left out, never guessed at. The reply rates are assumptions to replace with your own after the first wave; they are stated in the report wherever they are used.",
+  "stage_depth": {
+    "applied": 0, "signed_up": 0,
+    "screened": 1, "docs_submitted": 1,
+    "interview_scheduled": 2,
+    "interview_completed": 3, "background_clear": 3,
+    "offer_extended": 4,
+    "onboarding_started": 5,
+    "started": 6, "activated": 6, "hired": 6
+  },
+  "deep_from": 2,
+  "exit_reasons": {
+    "late_stage": ["interview_no_show", "no_show_first_shift", "no_show_first_job", "candidate_declined",
+                   "offer_declined", "unresponsive_after_offer", "took_other_offer", "unresponsive_after_clear",
+                   "never_completed_docs", "background_check_queue", "no_onboarding_slot"],
+    "screened_dropoff": ["unresponsive", "withdrew", "no_interview_slot", "recruiter_no_action", "abandoned_signup"],
+    "other_role": ["availability_mismatch", "failed_knockout", "not_qualified", "failed_vehicle_check",
+                   "failed_insurance_check"],
+    "abandoned_form": ["incomplete_application"],
+    "never": ["failed_background_check", "failed_drug_screen", "failed_dot_medical", "docs_rejected",
+              "failed_right_to_work", "right_to_work", "conduct", "misconduct", "safety", "gross_misconduct",
+              "do_not_rehire"]
+  },
+  "our_fault": ["no_interview_slot", "recruiter_no_action", "background_check_queue", "no_onboarding_slot"],
+  "separation_reasons": {
+    "good_standing": ["voluntary_quit", "found_other_job", "schedule_conflict", "relocation", "school",
+                      "seasonal_end", "end_of_season", "personal"],
+    "never": ["involuntary", "attendance", "conduct", "misconduct", "performance", "gross_misconduct",
+              "do_not_rehire", "safety"]
+  },
+  "recency_bands": [[0, 3, "0-3m"], [4, 6, "4-6m"], [7, 12, "7-12m"], [13, 999, "13m+"]],
+  "reply_rate": {
+    "about": "Assumed share of contacted people who reply across the three messages. Replace with your own after wave 1.",
+    "former_worker":    {"0-3m": 0.22, "4-6m": 0.17, "7-12m": 0.12, "13m+": 0.07},
+    "late_deep":        {"0-3m": 0.18, "4-6m": 0.13, "7-12m": 0.08, "13m+": 0.05},
+    "late_screened":    {"0-3m": 0.10, "4-6m": 0.07, "7-12m": 0.05, "13m+": 0.03},
+    "other_role":       {"0-3m": 0.09, "4-6m": 0.07, "7-12m": 0.05, "13m+": 0.03}
+  },
+  "send_windows": {
+    "about": "Local time at the site. Day 1 goes at a different time of day from day 0; day 3 closes in the late afternoon.",
+    "days":     {"day0": "10:00-11:30", "day1": "18:00-19:30", "day3": "16:00-17:00"},
+    "evenings": {"day0": "11:00-12:30", "day1": "09:30-10:30", "day3": "15:00-16:00"},
+    "nights":   {"day0": "16:30-18:00", "day1": "12:30-13:30", "day3": "16:00-17:00"}
+  },
+  "minutes_per_reply": 3,
+  "opt_out_rate": [0.01, 0.03],
+  "min_segment": 25,
+  "first_wave_cap": 400
+}
