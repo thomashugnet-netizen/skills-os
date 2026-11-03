@@ -105,6 +105,9 @@ def owner_of(slug):
     return {"name": person["name"],
             "since": entry["since"],
             "company": person.get("company"),
+            # "HR Expert" for an outside practitioner who co-brands the skill;
+            # absent for Fountain staff.
+            "role": person.get("role"),
             "linkedin": person.get("linkedin"),
             # A finished URL, like every other link in this file, so the site
             # never assembles one from a repo path.
