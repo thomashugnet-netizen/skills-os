@@ -73,13 +73,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "interview-panel-calibrator",
-      "title": "Interview Panel Calibrator",
-      "category": "interviewing",
-      "description": "Gets multiple interviewers onto the same bar and proves it with a calibration exercise, then reads the disagreement to find what actually needs fixing.",
-      "needs_dataset": false
-    },
-    {
       "slug": "phone-screen-script",
       "title": "Phone Screen Script",
       "category": "interviewing",
