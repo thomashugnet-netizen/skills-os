@@ -1,0 +1,63 @@
+{
+ "_about": "Planted in the sample library. 'own car' is copied into four ads and is lawful in the fifth, a driving job; the warehouse-type night stocker ad states no physical demand; the Spanish text message is not checked; the careers page's equal-opportunity statement lists protected characteristics and must not be flagged; the application form carries four high-severity questions and reaches the most candidates, so it is fixed first.",
+ "templates": {
+  "AD-STOCKER-NIGHT": [
+   "age_coded",
+   "flexibility",
+   "own_car",
+   "unstated_demands"
+  ],
+  "AD-STOCKER-DAY": [
+   "flexibility",
+   "own_car"
+  ],
+  "AD-CASHIER": [
+   "age_coded",
+   "appearance",
+   "own_car"
+  ],
+  "AD-WAREHOUSE": [
+   "experience_years",
+   "health_disability",
+   "own_car"
+  ],
+  "AD-DRIVER": [],
+  "AD-SUPERVISOR": [
+   "gendered_title",
+   "hype_coded",
+   "language_origin"
+  ],
+  "Q-APPLICATION": [
+   "age_question",
+   "arrest",
+   "availability_free_text",
+   "citizenship",
+   "pay_history"
+  ],
+  "SMS-INVITE": [],
+  "EMAIL-DECLINE": [
+   "culture_fit"
+  ],
+  "OFFER-STOCKER": [
+   "gendered_pronoun"
+  ],
+  "GUIDE-PHONE-SCREEN": [
+   "citizenship",
+   "family"
+  ],
+  "PAGE-CAREERS": []
+ },
+ "not_checked": [
+  "SMS-INVITE-ES"
+ ],
+ "first_fix": [
+  "age_question",
+  940
+ ],
+ "own_car_templates": [
+  "AD-STOCKER-NIGHT",
+  "AD-STOCKER-DAY",
+  "AD-CASHIER",
+  "AD-WAREHOUSE"
+ ]
+}

@@ -171,13 +171,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "bias-language-checker",
-      "title": "Bias Language Checker",
-      "category": "screening",
-      "description": "Reviews job ads and screening questions for exclusionary wording and adverse-impact risk, and rewrites the lines that carry it.",
-      "needs_dataset": false
-    },
-    {
       "slug": "knockout-logic-auditor",
       "title": "Knockout Logic Auditor",
       "category": "screening",

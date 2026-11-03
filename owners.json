@@ -20,6 +20,7 @@
     "jonathan-sabbah":       { "name": "Jonathan Sabbah", "github": null, "company": "Fountain", "company_logo": "assets/logos/fountain.png", "photo": "assets/owners/jonathan-sabbah.png", "linkedin": "https://www.linkedin.com/in/jonathansabbah/" }
   },
   "skills": {
+    "bias-language-checker": { "owner": "kristi-kennebrew", "since": "2026-11-03" },
     "source-roi-analyst": { "owner": "cathy-neal", "since": "2026-11-03" },
     "check-in-designer": { "owner": "adam-hickman", "since": "2026-11-03" },
     "interview-panel-calibrator": { "owner": "taylar-martin", "since": "2026-11-03" },
