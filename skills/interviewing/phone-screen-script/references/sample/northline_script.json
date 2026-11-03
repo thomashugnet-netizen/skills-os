@@ -1,0 +1,86 @@
+{
+  "company": "Northline",
+  "role": "Overnight stocker",
+  "site": "Dayton store",
+  "pay": "$17.50 an hour, plus $1.50 an hour for nights, paid weekly",
+  "rota_gaps": [
+    "Sunday to Wednesday nights, 10pm to 6:30am",
+    "Thursday and Friday nights, 10pm to 6:30am"
+  ],
+  "sections": [
+    {
+      "id": "opener",
+      "say": "Hi, this is {{caller}} from Northline, about the overnight stocker job you applied for at our Dayton store. It takes about five minutes, is now still a good time?"
+    },
+    {
+      "id": "availability",
+      "say": "First the shifts, because they decide everything else.",
+      "questions": [
+        {"text": "We need people Sunday to Wednesday nights, 10pm to 6:30am. Can you work those four nights?", "gate": true},
+        {"text": "We also have Thursday and Friday nights, same hours. Can you do either of those?", "gate": true}
+      ]
+    },
+    {
+      "id": "start_date",
+      "questions": [
+        {"text": "If we offered you the job this week, when could you start?"}
+      ]
+    },
+    {
+      "id": "travel",
+      "questions": [
+        {"text": "How would you get here for a 10pm start, and home again at 6:30 in the morning?"}
+      ]
+    },
+    {
+      "id": "prerequisites",
+      "questions": [
+        {"text": "Are you 18 or older?", "gate": true},
+        {"text": "Are you authorized to work in the US?", "gate": true}
+      ]
+    },
+    {
+      "id": "preview",
+      "say": "The honest picture: it is overnight, on your feet the whole shift, lifting cases up to 40 pounds, and the back room is cold in winter. Pay is $17.50 an hour, plus $1.50 an hour for nights, paid every week.",
+      "questions": [
+        {"text": "Knowing that, do you still want it?", "gate": true}
+      ]
+    },
+    {
+      "id": "questions",
+      "questions": [
+        {"text": "What would you like to ask me?"}
+      ]
+    },
+    {
+      "id": "decision",
+      "say": "Good, you're through to an interview.",
+      "no": {
+        "availability": "Thanks for being straight with me. Nights are the only shifts we have at Dayton right now, so I can't move you forward for this one. If a day role opens, I'll text you.",
+        "prerequisite": "Thanks. This job needs you to be 18 or older and authorized to work in the US, so I can't move you forward for it today.",
+        "preview": "That's fair, and better to know now than after a week of nights. Thanks for your time, and good luck."
+      },
+      "redirect": "Our Kettering store is short of weekend day shifts, Saturday and Sunday 7am to 3:30pm, same pay. If those suit you, I can book you there instead, right now."
+    },
+    {
+      "id": "booking",
+      "say": "I can do {{slot_1}} or {{slot_2}} at the store, about twenty minutes with {{interviewer}}. Which works?",
+      "confirmation": "Northline: you're booked for {{slot}} at {{address}}. Ask for {{interviewer}} at the service desk. Reply C to change the time."
+    }
+  ],
+  "voicemail": "Hi, it's {{caller}} from Northline about the overnight stocker job at our Dayton store. I'll text you straight after this: reply there, or book a time with the link. Thanks!",
+  "follow_up_text": "Northline here about the overnight stocker job in Dayton. Sorry we missed you! Book a 5-minute call: {{booking_link}} or reply with a good time. Reply STOP to opt out.",
+  "attempts": {
+    "max": 3,
+    "dayparts": ["evening", "morning", "afternoon"],
+    "stop": "After the third call with no answer, send the last-chance text and close them as unreachable. No fourth call."
+  },
+  "callback": "Thanks for calling back. You applied for overnight stocker at Northline in Dayton: do you have five minutes now? Then start at availability.",
+  "capture": [
+    "Which night blocks they can work",
+    "Start date",
+    "How they will get there",
+    "Gates passed, or the one that failed",
+    "Slot booked"
+  ]
+}
