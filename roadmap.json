@@ -122,13 +122,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "recruiter-capacity-planner",
-      "title": "Recruiter Capacity Planner",
-      "category": "operating",
-      "description": "Measures real recruiter load rather than req count, finds the load level where your process starts to slow down, and ranks automation by hours returned.",
-      "needs_dataset": true
-    },
-    {
       "slug": "stalled-applicant-triage",
       "title": "Stalled Applicant Triage",
       "category": "operating",

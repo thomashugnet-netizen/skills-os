@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**12 ready now. 30 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**13 ready now. 29 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -22,6 +22,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | [`document-expiry-radar`](skills/complying/document-expiry-radar/) | Reads a list of the licences, cards and certificates your people need to work, with their expiry dates, and shows who cannot work today, whose renewal has to start now to avoid a lapse, and which scheduled shifts that puts at risk. | no data needed, 43 KB |
 | [`interview-panel-calibrator`](skills/interviewing/interview-panel-calibrator/) | Gets several interviewers onto the same bar. Builds a twenty-minute calibration exercise from your own anchors, then reads the scores to say whether each disagreement comes from the anchor wording or from a person, and which person is lenient, severe or not separating strong answers from weak ones. | no data needed, 27 KB |
 | [`structured-interview-guide`](skills/interviewing/structured-interview-guide/) | Builds a fifteen-minute frontline interview a store or site manager can run the same way every time, without training, and checks the questions managers ask today for the ones that are a legal risk or predict nothing. | no data needed, 39 KB |
+| [`recruiter-capacity-planner`](skills/operating/recruiter-capacity-planner/) | Measures what each recruiter actually carries week by week, finds the load at which screening starts to slow down, tells a capacity problem from a process, upstream or individual one, and ranks automation by hours a month returned, so a headcount request rests on the number that survives. | needs a CSV export, 0.4 MB |
 | [`schedule-photo-to-roster`](skills/operating/schedule-photo-to-roster/) | Turns a photo or screenshot of a shift schedule into a clean roster, then shows where the week is short-staffed, who is heading into overtime, who closes and opens with too little rest, and which hours could move. | no data needed, 0.2 MB |
 | [`check-in-designer`](skills/retaining/check-in-designer/) | Writes the day 1, day 7 and day 30 check-ins that catch a new hourly hire before they quit, each under three minutes, with every possible answer routed to an action, an escalation or a logged theme, and checks the plan in code before anyone runs it. Then reads the one-line log supervisors keep to show which sites are not running them and which answers nobody acted on. | no data needed, 27 KB |
 | [`bias-language-checker`](skills/screening/bias-language-checker/) | Checks every text a candidate reads (job ads, application questions, text and email templates, offer letters, interview scripts, careers pages) for wording that excludes people you would hire or asks what you may not ask, and reads a whole template library at once to rank the fixes by how many candidates each line reaches. | no data needed, 30 KB |
@@ -95,7 +96,6 @@ Written, not yet through their gate. They ship when they pass it.
 
 - `headcount-forecaster` — Derives how many applications you need next quarter from demand, seasonality and expected attrition, and names the assumption most likely to be wrong. *(needs a CSV export)*
 - `hiring-ops-sop-builder` — Turns how-we-do-it-here into a written procedure another person can run, documenting the real process rather than the ideal one.
-- `recruiter-capacity-planner` — Measures real recruiter load rather than req count, finds the load level where your process starts to slow down, and ranks automation by hours returned. *(needs a CSV export)*
 - `stalled-applicant-triage` — Decides what to do with every applicant stuck in your pipeline — chase, re-route or close — using your own median time-in-stage to define stalled, and records a reason on every close. *(needs a CSV export)*
 - `weekly-hiring-review-pack` — Builds a weekly hiring pack of four or five leading indicators with exception reporting, plus the meeting agenda that turns it into decisions. *(needs a CSV export)*
 

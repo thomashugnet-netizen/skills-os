@@ -1,0 +1,36 @@
+{
+ "_about": "What generate.py planted, checked by the suite: the knee at 70 applications a week per available recruiter; REC-02 slow only because of the supervisor role; REC-04 buried in volume that never gets past the form; REC-05 two days slower at every load; REC-06 rescheduling 45% of bookings; REC-07 always light; the knee survives without the busiest weeks. The automation answers follow from northline_tasks.csv, whose minutes are stated there as asked of three recruiters.",
+ "knee": 70,
+ "diagnosis": {
+  "REC-01": [
+   "capacity"
+  ],
+  "REC-02": [
+   "capacity"
+  ],
+  "REC-03": [
+   "capacity"
+  ],
+  "REC-04": [
+   "upstream"
+  ],
+  "REC-05": [
+   "capacity",
+   "individual"
+  ],
+  "REC-06": [
+   "process"
+  ],
+  "REC-07": [
+   "room"
+  ]
+ },
+ "top_automation": "Send interview reminders",
+ "eliminate": [
+  "Copy each new hire into the payroll spreadsheet by hand",
+  "Monthly source report nobody opens"
+ ],
+ "unpriced": [
+  "Answer candidate questions about pay"
+ ]
+}
