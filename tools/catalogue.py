@@ -25,6 +25,8 @@ import re
 import subprocess
 import sys
 
+import skill_page
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Every download the site offers, as a URL it can use verbatim. Release assets
@@ -125,6 +127,9 @@ def owner_of(slug):
 def skills():
     paths = (sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*.md")))
              + sorted(glob.glob(os.path.join(ROOT, "skills", "*", "*", "SKILL.md"))))
+    # Every slug in the library, so a page can link to the skills it names.
+    slugs = {os.path.basename(os.path.dirname(p)) if p.endswith("SKILL.md")
+             else os.path.basename(p)[:-3] for p in paths}
     out = []
     for path in paths:
         parts = os.path.relpath(path, ROOT).split(os.sep)
@@ -139,6 +144,8 @@ def skills():
             return found.group(1).strip() if found else None
 
         heading = re.search(r"^# (.+)$", text, re.M)
+        rel = os.path.relpath(path, ROOT).replace(os.sep, "/")
+        version = field("version")
         zip_path = os.path.join(DIST, slug + ".zip")
         # "Available" means there is something to download that passed the
         # gates, not that the file exists. The gate differs by kind -- an
@@ -154,8 +161,8 @@ def skills():
             "title": heading.group(1).strip() if heading else slug,
             "category": category,
             "description": field("description") or "",
-            "version": field("version"),
-            "updated": git_date(os.path.relpath(path, ROOT).replace(os.sep, "/")),
+            "version": version,
+            "updated": git_date(rel),
             "available": available,
             "tested_code": has_engine,
             "needs_dataset": DATA_BLOCK_MARKER in text,
@@ -174,6 +181,16 @@ def skills():
             # without one. Ownership rotates, so the site shows what this says
             # at publish time and keeps no copy.
             "owner": owner_of(slug),
+            # The rest of the skill's page, read from its own files and never
+            # rewritten: what to give it, what comes back, how it runs, where
+            # it stops, an example. tools/skill_page.py says which file each
+            # block comes from. A block the skill does not have is null, and
+            # the site leaves it out.
+            "page": skill_page.page(folder if is_folder else None, text, slugs),
+            # Every version the CHANGELOG records, newest first, dated from
+            # git. The site shows the version and its history from this.
+            "changelog": skill_page.changelog(folder if is_folder else None,
+                                              rel, version),
         })
     return sorted(out, key=lambda s: (s["category"], s["slug"]))
 

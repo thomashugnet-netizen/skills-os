@@ -138,6 +138,24 @@ def check(path):
         fail.append(f"{path}: missing '## Where this stops'")
     if "## What this does" not in t:
         warn.append(f"{path}: no '## What this does'")
+    # PAGE.md feeds the skill's page on the site (tools/skill_page.py). It is
+    # optional, but if it is there it has to say both things the page shows,
+    # and the output has to open with where it came from: an example nobody
+    # can trace to a run is an advert, not an example.
+    page_md = os.path.join(os.path.dirname(path), "PAGE.md")
+    if os.path.basename(path) == "SKILL.md" and os.path.exists(page_md):
+        page_text = open(page_md, encoding="utf-8").read()
+        for heading in ("## Example prompt", "## Example output"):
+            if heading not in page_text:
+                fail.append(f"{page_md}: missing '{heading}'")
+        if "## Example output" in page_text:
+            body = page_text.split("## Example output", 1)[1].strip()
+            if not body.startswith("From "):
+                fail.append(f"{page_md}: the example output must open with a "
+                            "'From ...' line saying which run and which input it came from")
+    elif os.path.basename(path) == "SKILL.md" and os.path.isdir(
+            os.path.join(os.path.dirname(path), "scripts")):
+        warn.append(f"{path}: no PAGE.md, so its page shows no example")
 
     # Cue block may only exist on export skills, exactly once, at the end
     if has_cue:
