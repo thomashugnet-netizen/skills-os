@@ -1,0 +1,815 @@
+{
+ "$comment": "Each case changes the sample workflow (references/sample/northline_store_associate.json) and states what the checker must raise and what it must not. The must_not half is what catches a checker that flags everything. Paths: top.<field>, step.<id>.<field>, drop.<id>, add. A null value deletes the field.",
+ "cases": [
+  {
+   "name": "vague action",
+   "changes": [
+    [
+     "step.bg_check.action",
+     "Ensure the background check is handled"
+    ]
+   ],
+   "must": [
+    "VAGUE_ACTION"
+   ],
+   "must_not": [
+    "LATE",
+    "NO_OWNER",
+    "ACTION_LONG"
+   ]
+  },
+  {
+   "name": "vague definition of done",
+   "changes": [
+    [
+     "step.w4.done_when",
+     "W-4 is complete"
+    ]
+   ],
+   "must": [
+    "VAGUE_DONE"
+   ],
+   "must_not": [
+    "VAGUE_ACTION"
+   ]
+  },
+  {
+   "name": "done repeats action",
+   "changes": [
+    [
+     "step.w4.done_when",
+     "Send the hire the Form W-4 in the payroll portal"
+    ]
+   ],
+   "must": [
+    "VAGUE_DONE"
+   ]
+  },
+  {
+   "name": "missing done",
+   "changes": [
+    [
+     "step.w4.done_when",
+     null
+    ]
+   ],
+   "must": [
+    "DONE_MISSING"
+   ],
+   "must_not": [
+    "VAGUE_DONE"
+   ]
+  },
+  {
+   "name": "long action",
+   "changes": [
+    [
+     "step.w4.action",
+     "Send the hire the Form W-4 in the payroll portal along with a short explanation of each box on it"
+    ]
+   ],
+   "must": [
+    "ACTION_LONG"
+   ],
+   "must_not": [
+    "VAGUE_ACTION"
+   ]
+  },
+  {
+   "name": "team as owner",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     "HR"
+    ]
+   ],
+   "must": [
+    "NO_OWNER"
+   ],
+   "must_not": [
+    "TWO_OWNERS"
+   ]
+  },
+  {
+   "name": "empty owner",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     ""
+    ]
+   ],
+   "must": [
+    "NO_OWNER"
+   ]
+  },
+  {
+   "name": "two owners",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     "Store manager / Onboarding coordinator"
+    ]
+   ],
+   "must": [
+    "TWO_OWNERS"
+   ],
+   "must_not": [
+    "NO_OWNER"
+   ]
+  },
+  {
+   "name": "two owners joined by and",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     "Ops and HR lead"
+    ]
+   ],
+   "must": [
+    "TWO_OWNERS"
+   ]
+  },
+  {
+   "name": "a role with manager in it is one owner",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     "Operations manager"
+    ]
+   ],
+   "must_not": [
+    "NO_OWNER",
+    "TWO_OWNERS",
+    "VAGUE_ACTION"
+   ]
+  },
+  {
+   "name": "wait with no reason",
+   "changes": [
+    [
+     "step.system_access.needs",
+     null
+    ]
+   ],
+   "must": [
+    "WAIT_UNEXPLAINED"
+   ],
+   "must_not": [
+    "WAIT_TO_SAVE_EFFORT"
+   ]
+  },
+  {
+   "name": "wait to save effort",
+   "changes": [
+    [
+     "step.uniform_fit.after",
+     [
+      "bg_check"
+     ]
+    ],
+    [
+     "step.uniform_fit.needs",
+     "so we don't waste a uniform on someone who might fail the check"
+    ]
+   ],
+   "must": [
+    "WAIT_TO_SAVE_EFFORT",
+    "LATE"
+   ],
+   "must_not": [
+    "WAIT_UNEXPLAINED"
+   ]
+  },
+  {
+   "name": "late blocker",
+   "changes": [
+    [
+     "step.bg_check.duration_days",
+     9
+    ]
+   ],
+   "must": [
+    "LATE",
+    "BLOCKS_START"
+   ],
+   "must_not": [
+    "MISSING_REQUIRED",
+    "BLOCKER_AFTER_START"
+   ]
+  },
+  {
+   "name": "blocker due after the first shift",
+   "changes": [
+    [
+     "step.schedule_shifts.due_day",
+     2
+    ]
+   ],
+   "must": [
+    "BLOCKER_AFTER_START"
+   ],
+   "must_not": [
+    "LATE"
+   ]
+  },
+  {
+   "name": "blocker also tagged can follow",
+   "changes": [
+    [
+     "step.schedule_shifts.tags",
+     [
+      "blocks_first_shift",
+      "can_follow_first_shift"
+     ]
+    ]
+   ],
+   "must": [
+    "TAG_CONFLICT"
+   ]
+  },
+  {
+   "name": "after-start step not tagged",
+   "changes": [
+    [
+     "step.direct_deposit.tags",
+     [
+      "needs_hire_action"
+     ]
+    ]
+   ],
+   "must": [
+    "UNTAGGED_AFTER_START"
+   ],
+   "must_not": [
+    "NO_FALLBACK"
+   ]
+  },
+  {
+   "name": "external step with no fallback",
+   "changes": [
+    [
+     "step.uniform_fit.fallback",
+     null
+    ]
+   ],
+   "must": [
+    "NO_FALLBACK"
+   ]
+  },
+  {
+   "name": "untagged step needs no fallback",
+   "changes": [
+    [
+     "step.welcome_call.fallback",
+     null
+    ]
+   ],
+   "must_not": [
+    "NO_FALLBACK"
+   ]
+  },
+  {
+   "name": "move_shift with no decider",
+   "changes": [
+    [
+     "step.i9_s1.fallback.decider",
+     null
+    ]
+   ],
+   "must": [
+    "FALLBACK_NO_DECIDER"
+   ]
+  },
+  {
+   "name": "move_shift with two deciders",
+   "changes": [
+    [
+     "step.i9_s1.fallback.decider",
+     "Store manager or District manager"
+    ]
+   ],
+   "must": [
+    "FALLBACK_NO_DECIDER"
+   ]
+  },
+  {
+   "name": "fallback alerts a team",
+   "changes": [
+    [
+     "step.uniform_fit.fallback.alert",
+     "Operations"
+    ]
+   ],
+   "must": [
+    "FALLBACK_NO_ALERT"
+   ]
+  },
+  {
+   "name": "blocker falls back to starting without it",
+   "changes": [
+    [
+     "step.safety_training.fallback.shape",
+     "conditional_start"
+    ]
+   ],
+   "must": [
+    "TAG_CONFLICT"
+   ],
+   "must_not": [
+    "FALLBACK_NO_DECIDER"
+   ]
+  },
+  {
+   "name": "vague fallback",
+   "changes": [
+    [
+     "step.uniform_fit.fallback.action",
+     "Follow up with the vendor as needed"
+    ]
+   ],
+   "must": [
+    "VAGUE_FALLBACK"
+   ]
+  },
+  {
+   "name": "fallback fires too late",
+   "changes": [
+    [
+     "step.bg_check.fallback.after_days",
+     20
+    ]
+   ],
+   "must": [
+    "FALLBACK_SLOW"
+   ],
+   "must_not": [
+    "LATE"
+   ]
+  },
+  {
+   "name": "legal step with no basis",
+   "changes": [
+    [
+     "step.bg_consent.legal_basis",
+     null
+    ]
+   ],
+   "must": [
+    "LEGAL_UNSOURCED"
+   ]
+  },
+  {
+   "name": "unknown rule id",
+   "changes": [
+    [
+     "step.w4.rule",
+     "w9"
+    ]
+   ],
+   "must": [
+    "UNKNOWN_RULE",
+    "MISSING_REQUIRED"
+   ]
+  },
+  {
+   "name": "new hire report missing",
+   "changes": [
+    [
+     "drop.new_hire_report",
+     null
+    ]
+   ],
+   "must": [
+    "MISSING_REQUIRED"
+   ],
+   "must_not": [
+    "LEGAL_LATE",
+    "LATE"
+   ]
+  },
+  {
+   "name": "I-9 Section 2 deadline too late",
+   "changes": [
+    [
+     "step.i9_s2.due_day",
+     5
+    ]
+   ],
+   "must": [
+    "LEGAL_LATE"
+   ],
+   "must_not": [
+    "LATE",
+    "LEGAL_CANNOT_FINISH"
+   ]
+  },
+  {
+   "name": "I-9 Section 2 cannot finish in time",
+   "changes": [
+    [
+     "step.i9_s2.duration_days",
+     4
+    ]
+   ],
+   "must": [
+    "LEGAL_CANNOT_FINISH",
+    "LATE"
+   ],
+   "must_not": [
+    "LEGAL_LATE"
+   ]
+  },
+  {
+   "name": "E-Verify before the I-9",
+   "changes": [
+    [
+     "step.e_verify.after",
+     [
+      "offer_accepted"
+     ]
+    ],
+    [
+     "step.e_verify.needs",
+     null
+    ]
+   ],
+   "must": [
+    "LEGAL_ORDER"
+   ],
+   "must_not": [
+    "WAIT_UNEXPLAINED"
+   ]
+  },
+  {
+   "name": "legal rule but untagged",
+   "changes": [
+    [
+     "step.w4.tags",
+     [
+      "needs_hire_action"
+     ]
+    ]
+   ],
+   "must": [
+    "LEGAL_UNTAGGED"
+   ]
+  },
+  {
+   "name": "E-Verify missing when used",
+   "changes": [
+    [
+     "drop.e_verify",
+     null
+    ]
+   ],
+   "must": [
+    "MISSING_REQUIRED"
+   ]
+  },
+  {
+   "name": "E-Verify not used",
+   "changes": [
+    [
+     "drop.e_verify",
+     null
+    ],
+    [
+     "top.jurisdiction.e_verify",
+     false
+    ]
+   ],
+   "must_not": [
+    "MISSING_REQUIRED",
+    "LEGAL_ORDER"
+   ]
+  },
+  {
+   "name": "state not confirmed",
+   "changes": [
+    [
+     "top.states_verified.CA",
+     ""
+    ]
+   ],
+   "must": [
+    "STATE_UNVERIFIED"
+   ]
+  },
+  {
+   "name": "outside the US",
+   "changes": [
+    [
+     "top.jurisdiction.country",
+     "MX"
+    ]
+   ],
+   "must": [
+    "JURISDICTION_NOT_CHECKED"
+   ],
+   "must_not": [
+    "MISSING_REQUIRED",
+    "STATE_UNVERIFIED",
+    "LEGAL_UNTAGGED"
+   ]
+  },
+  {
+   "name": "one unconfirmed step",
+   "changes": [
+    [
+     "step.bg_check.validated",
+     false
+    ],
+    [
+     "step.bg_check.source",
+     "inferred"
+    ]
+   ],
+   "must": [
+    "UNVALIDATED"
+   ],
+   "must_not": [
+    "LATE"
+   ]
+  },
+  {
+   "name": "no stop rule",
+   "changes": [
+    [
+     "top.stop_rule",
+     null
+    ]
+   ],
+   "must": [
+    "NO_STOP_RULE"
+   ]
+  },
+  {
+   "name": "stop rule without a decider",
+   "changes": [
+    [
+     "top.stop_rule.decider",
+     ""
+    ]
+   ],
+   "must": [
+    "NO_STOP_RULE"
+   ]
+  },
+  {
+   "name": "dead air",
+   "changes": [
+    [
+     "drop.checkin_shifts",
+     null
+    ]
+   ],
+   "must": [
+    "DEAD_AIR"
+   ]
+  },
+  {
+   "name": "dead air within a longer limit",
+   "changes": [
+    [
+     "drop.checkin_shifts",
+     null
+    ],
+    [
+     "top.max_silence_days",
+     7
+    ]
+   ],
+   "must_not": [
+    "DEAD_AIR"
+   ]
+  },
+  {
+   "name": "shorter gap than the design allows",
+   "changes": [
+    [
+     "top.offer_to_first_shift_days",
+     6
+    ]
+   ],
+   "must": [
+    "BLOCKS_START"
+   ]
+  },
+  {
+   "name": "one-word definition of done",
+   "changes": [
+    [
+     "step.w4.done_when",
+     "Complete"
+    ]
+   ],
+   "must": [
+    "VAGUE_DONE"
+   ]
+  },
+  {
+   "name": "a team as owner",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     "Onboarding team"
+    ]
+   ],
+   "must": [
+    "NO_OWNER"
+   ],
+   "must_not": [
+    "TWO_OWNERS"
+   ]
+  },
+  {
+   "name": "a team lead is one owner",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     "Payroll team lead"
+    ]
+   ],
+   "must_not": [
+    "NO_OWNER",
+    "TWO_OWNERS"
+   ]
+  },
+  {
+   "name": "a shared inbox as owner",
+   "changes": [
+    [
+     "step.uniform_fit.owner",
+     "Onboarding inbox"
+    ]
+   ],
+   "must": [
+    "NO_OWNER"
+   ]
+  },
+  {
+   "name": "legal basis too thin",
+   "changes": [
+    [
+     "step.bg_consent.legal_basis",
+     "law"
+    ]
+   ],
+   "must": [
+    "LEGAL_UNSOURCED"
+   ]
+  },
+  {
+   "name": "stop rule decided by a group",
+   "changes": [
+    [
+     "top.stop_rule.decider",
+     "HR"
+    ]
+   ],
+   "must": [
+    "NO_STOP_RULE"
+   ]
+  },
+  {
+   "name": "stop rule told by two people",
+   "changes": [
+    [
+     "top.stop_rule.who_tells_hire",
+     "Store manager or coordinator"
+    ]
+   ],
+   "must": [
+    "NO_STOP_RULE"
+   ]
+  },
+  {
+   "name": "unknown category",
+   "changes": [
+    [
+     "step.w4.category",
+     "Payroll"
+    ]
+   ],
+   "refuse": "category"
+  },
+  {
+   "name": "loop",
+   "changes": [
+    [
+     "step.bg_consent.after",
+     [
+      "system_access"
+     ]
+    ]
+   ],
+   "refuse": "loop"
+  },
+  {
+   "name": "unknown dependency",
+   "changes": [
+    [
+     "step.w4.after",
+     [
+      "payroll_setup"
+     ]
+    ]
+   ],
+   "refuse": "unknown step"
+  },
+  {
+   "name": "duplicate id",
+   "changes": [
+    [
+     "add",
+     {
+      "id": "w4",
+      "category": "Payroll & pay setup",
+      "duration_days": 1,
+      "due_day": 0
+     }
+    ]
+   ],
+   "refuse": "duplicate"
+  },
+  {
+   "name": "reserved id",
+   "changes": [
+    [
+     "add",
+     {
+      "id": "offer_accepted",
+      "category": "Payroll & pay setup",
+      "duration_days": 1,
+      "due_day": 0
+     }
+    ]
+   ],
+   "refuse": "reserved"
+  },
+  {
+   "name": "unknown tag",
+   "changes": [
+    [
+     "step.w4.tags",
+     [
+      "urgent"
+     ]
+    ]
+   ],
+   "refuse": "tags"
+  },
+  {
+   "name": "unknown fallback shape",
+   "changes": [
+    [
+     "step.w4.fallback.shape",
+     "escalate"
+    ]
+   ],
+   "refuse": "fallback.shape"
+  },
+  {
+   "name": "bad status",
+   "changes": [
+    [
+     "top.status",
+     "done"
+    ]
+   ],
+   "refuse": "status"
+  },
+  {
+   "name": "duration as text",
+   "changes": [
+    [
+     "step.w4.duration_days",
+     "3"
+    ]
+   ],
+   "refuse": "duration_days"
+  },
+  {
+   "name": "negative gap",
+   "changes": [
+    [
+     "top.offer_to_first_shift_days",
+     -2
+    ]
+   ],
+   "refuse": "offer_to_first_shift_days"
+  },
+  {
+   "name": "step waits for itself",
+   "changes": [
+    [
+     "step.w4.after",
+     [
+      "w4"
+     ]
+    ]
+   ],
+   "refuse": "loop"
+  }
+ ]
+}

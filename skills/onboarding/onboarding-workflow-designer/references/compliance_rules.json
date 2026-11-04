@@ -1,0 +1,64 @@
+{
+  "$comment": "Federal US onboarding deadlines the checker enforces. Deadlines are in days relative to the first shift (day 0). Where the source counts business days, the checker uses the same number of calendar days, which is never later than the real deadline and can be earlier. No state rules live here on purpose: state forms, notices and new-hire deadlines differ and change, so each state in a workflow must be confirmed by the user instead. Not legal advice.",
+  "checked": "2026-11-02",
+  "rules": {
+    "i9_section_1": {
+      "title": "Form I-9, Section 1 (employee)",
+      "applies": "US",
+      "required": true,
+      "due_day_max": 0,
+      "after_rules": [],
+      "severity": "blocking",
+      "plain": "The employee completes and signs Section 1 no later than the first day of employment.",
+      "source": "https://www.uscis.gov/sites/default/files/document/forms/i-9.pdf"
+    },
+    "i9_section_2": {
+      "title": "Form I-9, Section 2 (employer review of documents)",
+      "applies": "US",
+      "required": true,
+      "due_day_max": 3,
+      "after_rules": ["i9_section_1"],
+      "severity": "blocking",
+      "plain": "The employer completes Section 2 within three business days of the date employment begins (by the first day if the job lasts under three business days).",
+      "source": "https://www.uscis.gov/i-9-central/form-i-9-resources/handbook-for-employers-m-274/40-completing-section-2-employer-review-and-verification"
+    },
+    "e_verify_case": {
+      "title": "E-Verify case",
+      "applies": "US_E_VERIFY",
+      "required": true,
+      "due_day_max": 3,
+      "after_rules": ["i9_section_2"],
+      "severity": "blocking",
+      "plain": "If you use E-Verify, create the case no later than the third business day after the employee starts work for pay, and only after Form I-9 is complete.",
+      "source": "https://www.e-verify.gov/e-verify-user-manual-20-initial-verification/22-create-a-case"
+    },
+    "w4": {
+      "title": "Form W-4 (federal withholding)",
+      "applies": "US",
+      "required": true,
+      "due_day_max": 0,
+      "after_rules": [],
+      "severity": "care",
+      "plain": "Ask every new employee for a signed Form W-4 when they start work; without one, withhold as if single.",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/hiring-employees"
+    },
+    "new_hire_report": {
+      "title": "New hire report to the state",
+      "applies": "US",
+      "required": true,
+      "due_day_max": 20,
+      "after_rules": [],
+      "severity": "blocking",
+      "plain": "Report each new hire within 20 days of the date of hire. States may set a shorter deadline; the state's deadline is the one that applies.",
+      "source": "https://www.acf.hhs.gov/css/faq/new-hire-reporting-answers-employer-questions"
+    }
+  },
+  "state_checklist": [
+    "state income tax withholding form, if the state has one",
+    "state new hire reporting deadline, if shorter than 20 days",
+    "state or city notices the employee must receive at hire (pay, leave, wage notice)",
+    "any state-required training before the first shift",
+    "any state rule on when a background check may be run in the process"
+  ],
+  "state_sources": "https://www.acf.hhs.gov/css/states-new-hire-reporting-websites"
+}
