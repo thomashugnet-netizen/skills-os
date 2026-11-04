@@ -20,6 +20,7 @@
     "jonathan-sabbah":       { "name": "Jonathan Sabbah", "github": null, "company": "Fountain", "company_logo": "assets/logos/fountain.png", "photo": "assets/owners/jonathan-sabbah.png", "linkedin": "https://www.linkedin.com/in/jonathansabbah/" }
   },
   "skills": {
+    "time-to-hire-analyst": { "owner": "kathleen-rakusin", "since": "2026-11-04" },
     "onboarding-workflow-designer": { "owner": "hernan-chiosso", "since": "2026-11-02" },
     "candidate-message-sequencer": { "owner": "madelyn-rovellada", "since": "2026-11-03" },
     "phone-screen-script": { "owner": "andrea-eighme", "since": "2026-11-03" },
@@ -33,7 +34,6 @@
     "job-ad-writer":               { "owner": "coleman-coffey",           "since": "2026-11-03" },
     "career-site-builder":         { "owner": "hiyabel-tewoldemedhin", "since": "2026-10-13" },
     "careers-site-advisor":        { "owner": "hiyabel-tewoldemedhin", "since": "2026-10-13" },
-    "time-to-hire-analyst":        { "owner": "jonathan-sabbah",       "since": "2026-10-13" },
     "turnover-analyst":            { "owner": "will-jensen",           "since": "2026-10-13" },
     "schedule-photo-to-roster":    { "owner": "will-jensen",           "since": "2026-10-15" },
     "document-expiry-radar":       { "owner": "will-jensen",           "since": "2026-10-15" },
