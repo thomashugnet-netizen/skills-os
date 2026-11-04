@@ -282,7 +282,7 @@
     }
   },
   "duration_thresholds": {
-    "$comment": "Thresholds for the cycle-time engine. Separate from 'thresholds', which governs the conversion-rate engine: a rate and a wait are not made unreliable by the same things.",
+    "$comment": "Thresholds for the cycle-time engine. Separate from 'thresholds', which governs the conversion-rate engine: a rate and a wait are not made unreliable by the same things. open_horizon: a step's waits are timed only for arrivals at least this many days before the export ends (max of the minimum and the multiple of that step's p90), so the median is not computed over the fast ones only; an open application older than that with no movement is reported as stale, not as waiting.",
     "min_completed_per_step": 100,
     "min_segment_completed": 30,
     "segment_flag_ratio": 1.8,
@@ -291,6 +291,10 @@
     "load_min_days": 1.5,
     "max_out_of_order_share": 0.02,
     "censoring_warn_share": 0.2,
-    "censoring_refuse_share": 0.6
+    "censoring_refuse_share": 0.6,
+    "open_horizon_min_days": 14,
+    "open_horizon_p90_multiple": 3,
+    "max_duplicate_id_share": 0.01,
+    "max_unreadable_date_share": 0.01
   }
 }

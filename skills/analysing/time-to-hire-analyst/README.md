@@ -1,32 +1,38 @@
 # Time to Hire Analyst
 
-> Breaks hiring cycle time down stage by stage and names the one stage actually holding the queue — separating the stage that is slow for everybody from the stage that is slow at eight sites, and both from the stage that is only slow in peak season.
+> Breaks hiring cycle time down stage by stage and names the stage actually holding the queue: the one slow for everybody, the one slow at a few sites, and the one slow only in peak season, kept apart.
 
-Maintained by [Fountain](https://www.fountain.com). Free to use, MIT licensed. Part of the [Claude Skills for HR Ops](../../../README.md) library.
+Created with Kathleen Rakusin. Maintained by [Fountain](https://www.fountain.com). Free to use, MIT licensed. Part of the [Claude Skills for HR Ops](../../../README.md) library.
 
 ## What it does
 
-You point it at a pipeline export — one row per application, with a timestamp for each stage — and ask:
+You point it at a pipeline export, one row per application with a date for each stage, and ask:
 
 > "Where is our hiring time actually going?"
 
-It builds the clock stage by stage, finds which segments carry each wait, separates delay that is structural from delay that only appears under load, tests every concentrated delay against the confounds that reliably produce false answers in hiring data, and sizes what comes off the calendar if each confirmed problem is fixed.
+It answers three questions, kept apart because they have different owners:
 
-The statistics are computed by `scripts/analyze.py`, a dependency-free Python engine, not improvised in prose. Same export, same numbers, every run.
+- **Where is the calendar going?** Every stage's median, p75 and p90 wait, ranked by the share of all waiting days it holds, not by its median.
+- **Slow for everyone, or for a few?** For each stage, which sites, regions, sources or roles hold candidates materially longer than the rest, re-tested holding each other dimension constant. What does not survive is listed as ruled out, with the reason.
+- **Slow always, or only in peak months?** Peak months come from your own volume. A stage that only stretches then is a staffing decision, not a process change.
+
+It sizes each confirmed delay in days and in the number of people who wait them, and writes a one-page report (`--md`) beside the full JSON. The arithmetic is done by `scripts/analyze.py`, a dependency-free Python engine: same export, same numbers, every run.
 
 ## Why it exists
 
-"Time to hire" is a single number describing a process that is slow in several unrelated ways at once, and it has three specific failure modes.
+"Time to hire" is one number for a process that is slow in several unrelated ways at once. On the retail sample (18,184 applications), the stage holding the most calendar time is the interview itself, four days for everybody, 26% of all waiting days. The stage you can actually fix is the one before it: eight sites out of 42 hold candidates 6.7 days longer to get an interview booked, after checks for role and source. And the run-up to the first shift is three days longer in October to December only (8 against 5), which is staffing, not process. One average reports none of the three.
 
-**It averages incompatible problems.** On the retail sample, the stage carrying the most calendar time is interview-scheduled to interview-completed — four days, for everybody, by design. The stage you can actually fix is the one before it, where eight sites out of forty-two hold candidates nearly seven days longer than the rest because they have scarce self-schedule slots. One number reports neither. Optimise the first and you have shaved a stage that is working as intended.
-
-**It is computed over the people who finished.** A median wait excludes everybody still in the queue — and they are excluded precisely because their wait is longer than the one being reported. The more of your pipeline is in flight, the more flattering the number. This engine counts them, reports how long they have already waited, and refuses the analysis outright past 60%.
-
-**It confuses a capacity problem with a process problem.** A stage that stretches three days in peak months and returns to baseline in January is a staffing decision. A stage that is long in every month is how the process is built. They have different owners and different costs; averaged together they look like one vague complaint about speed.
+It also refuses the two easy mistakes with the queue. Count everyone without a next date as "waiting" and candidates rejected months ago swell a queue that does not exist: on that same sample, 8,412 people who left at screening. Time a stage over its most recent arrivals and only the fast ones have finished. So every candidate is sorted once (moved on, left, still open and recent, still open and stale), and each stage is timed only over arrivals old enough to have finished it.
 
 ## Install
 
-**In the Claude app** — Settings → Customize → Skills → **+** → upload a `.zip` of this folder. Works on Free, Pro, Max, Team and Enterprise. Team and Enterprise owners can provision it to everyone from Organization settings → Skills.
+**1. Download** [time-to-hire-analyst.zip](https://github.com/thomashugnet-netizen/skills-os/releases/latest/download/time-to-hire-analyst.zip). Do not unzip it. The retail sample is inside.
+
+**2. Check** that **Code execution and file creation** is on in the Claude app settings. Skills need it.
+
+**3. Upload**: Settings, Customize, Skills, **+**, then choose the zip. Team and Enterprise owners can provision it to everyone from Organization settings, Skills.
+
+**4. Try it**: *"Run the time to hire demo."* Then: *"Here's our pipeline export for the last six months, pulled today. Where is our hiring time going?"*
 
 **In Claude Code, Cursor, Codex and other agents:**
 
@@ -35,44 +41,31 @@ git clone https://github.com/thomashugnet-netizen/skills-os.git
 cp -r skills-os/skills/analysing/time-to-hire-analyst ~/.claude/skills/
 ```
 
-Then ask: *"Here's our pipeline export for the last six months — where is our hiring time going?"*
+**Prerequisites:** Python 3. No packages to install.
 
-**Prerequisites:** Python 3 for the analysis engine. No packages to install — it uses the standard library only, deliberately, so it runs wherever the skill lands.
+## Where it fits
 
-## What it needs
+| Business | Fit | Why |
+|---|---|---|
+| Retail and grocery | Strong | Many sites on one process, so a slow minority of sites stands out from the rest. |
+| Quick-service restaurants | Strong | Short funnels where a two-day queue at one step is most of the cycle. |
+| Logistics and delivery (W2) | Strong | Checks before day one carry long waits; separating them from scheduling delay is the point. |
+| Gig and courier marketplaces | Strong | The five-stage activation funnel (sign-up, documents, background check, onboarding, first job) is read natively. |
+| An ATS that keeps only the current status | Does not fit | Without a date for each stage there is no wait to measure. Ask for the status-history log instead. |
+| Under 500 applications, or one site | Weak | Stage medians move days on a handful of records, and there is no minority to compare. |
 
-One row per application, at least 500 usable rows, and **at least two stage timestamps** — the analysis is arithmetic on the gaps between those dates.
-
-Worth knowing before you ask for the export: almost no ATS ships one row per application with a date column per stage. The timestamps live in a status-history log, one row per status change, so the pivot is a real step and the ask has to be explicit. `SKILL.md` covers what to request and which entry to take when a stage appears more than once.
-
-No export handy? `frontline_pipeline_sample.csv` ships in `data/`; three more are on the library page.
-
-## What it refuses
-
-| | |
-|---|---|
-| A column that looks nominative | Names, emails, addresses. Nothing here needs to know who anybody is |
-| Timestamps that contradict the stage order | Above 2%, the dates do not mean what the columns say and every median is fiction |
-| A file still mostly in flight | Past 60% waiting, the report describes the fast ones and nobody else |
-| Mixed stage vocabularies | A funnel timed against the wrong stage list is wrong in a way that still looks plausible |
-| A file under 500 usable rows | A stage median moves several days on a handful of records |
-
-## Verifying this
+## Verifying this yourself
 
 ```bash
 python3 scripts/analyze.py --test
 ```
 
-22 assertions against each sample present, plus five refusal cases. The samples carry a known timing structure, and the assertions are comparisons between effects rather than thresholds on one — the suite checks that the site effect appears at the scheduling stage *and not at the others*, that the load effect lands on a different stage than the structural one, and that five managers planted with poor retention and no timing problem are never reported as slow. The same assertions run against the gig sample on its five-stage funnel, so what passes is the method rather than a memory of one file.
+118 checks across the four synthetic samples (40 with the retail sample shipped in the zip). The samples carry a planted timing structure, and the assertions compare effects rather than test one threshold: the eight scarce sites are found at the scheduling step and not at the others; the effect survives role and source; the peak-season stretch lands on a different stage; five managers planted with poor retention and no timing problem are never reported as slow; and every closed application is counted as left, never as waiting. Then the guards: shuffled site labels must flag no site, an effect that reverses within roles must not survive, a funnel losing most people at step one must still run, and a file mostly in flight, a status-history log, spreadsheet serial dates, ambiguous day/month dates, a non-UTF-8 file, a name or email column, a thin file, crossed date columns and mixed stage vocabularies must each be refused. Before release, 5,150 randomly damaged files ran without a crash.
 
-## Where this stops
+Exit codes: 0 report written, 3 input refused, 4 the engine itself failed.
 
-It reads a file you exported, so it sees one moment and changes nothing. It cannot tell you your queue today, or whether a fix worked.
+## Who it's for
 
-It measures waiting, not work: a stage where nothing happens for four days and a stage where four days of checks happen are identical in a timestamp.
-
-And it does not claim a shorter wait means more hires. Long waits and drop-off travel together, but how much of one converts into the other is a drop-off question and a different analysis.
-
-## Licence
-
-MIT. Use it, fork it, ship it inside your own tooling.
+- **Talent acquisition leaders** asked why hiring takes as long as it does, who need to point at a stage and an owner.
+- **HR and recruiting operations** deciding between a process change, a local fix and peak-season staffing.
+- **Anyone reporting time to hire** who wants the number to come with what is behind it.

@@ -7,8 +7,11 @@ stage. Standard library only - no pandas, no numpy, no network. The same input
 always produces the same output, which is the point: the statistics in this
 skill are computed here, not improvised in prose.
 
-    analyze.py --input export.csv [--out report.json]
+    analyze.py --input export.csv [--md report.md] [--out report.json] [--as-of YYYY-MM-DD]
+    analyze.py --demo
     analyze.py --test
+
+Exit codes: 0 report written, 3 input refused, 4 the engine itself failed.
 
 The input must be mapped to the canonical schema in references/schema.json.
 Every data lane - a CSV export, an MCP, anything - maps into that schema
@@ -21,8 +24,9 @@ holds the queue, for whom, and is that stage slow always or only under load.
 
 What it refuses to do:
   - analyse a file carrying nominative columns
-  - report a median wait computed only over people who finished waiting, when
-    enough people are still waiting to move it
+  - time a stage over arrivals so recent that only the fast ones have had time
+    to finish it
+  - count a candidate who left the funnel as one still waiting
   - present a segment effect that did not survive its confound check
   - trust a set of timestamps that contradicts its own stage order
 """
@@ -34,7 +38,7 @@ import os
 import re
 import sys
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL_DIR = os.path.dirname(HERE)
@@ -68,10 +72,30 @@ LOAD_MIN_DAYS = DT["load_min_days"]
 MAX_DISORDER = DT["max_out_of_order_share"]
 CENSOR_WARN = DT["censoring_warn_share"]
 CENSOR_REFUSE = DT["censoring_refuse_share"]
+HORIZON_MIN = DT["open_horizon_min_days"]
+HORIZON_MULT = DT["open_horizon_p90_multiple"]
+MAX_DUP = DT["max_duplicate_id_share"]
+MAX_BAD_DATES = DT["max_unreadable_date_share"]
+
+EXIT_OK, EXIT_REFUSED, EXIT_FAILED = 0, 3, 4
+
+# Set once per file by load(): how slash dates are ordered, the day the export
+# ends, and what was dropped on the way in. Reset at the start of every load.
+DATE_ORDER = "ymd"
+AS_OF = None
+INGEST = {}
 MIN_ROWS = SCHEMA["thresholds"]["min_rows_total"]
 KILL_FRACTION = SCHEMA["thresholds"]["confound_kill_fraction"]
 
 SEGMENT_DIMS = ["location_id", "region", "source", "role"]
+DIM_NOUN = {"location_id": ("site", "sites"), "region": ("region", "regions"),
+            "source": ("source", "sources"), "role": ("role", "roles"),
+            "hiring_manager_id": ("manager", "managers")}
+
+
+def noun(dim, n):
+    one, many = DIM_NOUN.get(dim, (dim, dim))
+    return one if n == 1 else many
 
 
 def _skill_version():
@@ -111,7 +135,7 @@ def detect_profile(rows):
     An export that mixes vocabularies is refused rather than guessed at. A
     cycle time measured against the wrong stage list is wrong in a way that
     still looks plausible, which is the worst kind of wrong."""
-    seen = {(r.get("stage_reached") or "").strip() for r in rows}
+    seen = {(r.get("stage_reached") or "").strip().lower() for r in rows}
     seen.discard("")
     if not seen:
         raise Refusal("No stage_reached values found. There is no funnel to time.")
@@ -139,14 +163,65 @@ bind_profile("hire")
 
 # --------------------------------------------------------------- primitives
 
+_ISO = re.compile(r"^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})(?=$|[T\s])")
+_SLASH = re.compile(r"^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})(?=$|[T\s,])")
+
+
 def parse_date(value):
+    """A calendar date from an ISO date or datetime, or a day-first or
+    month-first date once the file has shown which it uses. Anything else is
+    None, and load() refuses a file where that happens to more than a sliver
+    of a column rather than timing the rows it could read. A time and a UTC
+    offset are dropped: the local calendar date is what a candidate waited."""
     if not value:
         return None
+    v = value.strip()
     try:
-        parts = value.strip()[:10].split("-")
-        return date(int(parts[0]), int(parts[1]), int(parts[2]))
-    except (ValueError, IndexError):
+        m = _ISO.match(v)
+        if m:
+            y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        else:
+            m = _SLASH.match(v)
+            if not m or DATE_ORDER == "ymd":
+                return None
+            a, b, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
+            d, mo = (a, b) if DATE_ORDER == "dmy" else (b, a)
+        if not 2000 <= y <= 2100:
+            return None
+        return date(y, mo, d)
+    except ValueError:
         return None
+
+
+def detect_date_order(rows, cols):
+    """Day-first or month-first, decided from the file, never assumed. A file
+    where every slash date has both parts at 12 or under could be either, and
+    reading it the wrong way moves dates by months without an error."""
+    dmy = mdy = slash = 0
+    for row in rows:
+        for col in cols:
+            m = _SLASH.match((row.get(col) or "").strip())
+            if not m:
+                continue
+            slash += 1
+            a, b = int(m.group(1)), int(m.group(2))
+            dmy += a > 12
+            mdy += b > 12
+    if not slash:
+        return "ymd"
+    if dmy and mdy:
+        raise Refusal(
+            "The stage dates mix day-first and month-first formats (some read as "
+            "31/01, others as 01/31). Re-export them as YYYY-MM-DD; a date read "
+            "the wrong way is wrong by months and looks fine.")
+    if dmy:
+        return "dmy"
+    if mdy:
+        return "mdy"
+    raise Refusal(
+        f"{slash:,} stage dates are written like 03/04/2026, and none of them "
+        "shows whether that is 3 April or 4 March. Re-export the dates as "
+        "YYYY-MM-DD; guessing would move them by months without an error.")
 
 
 def quantile(values, q):
@@ -184,7 +259,7 @@ def spread(values):
 
 
 def stage_ix(row):
-    return STAGE_IX.get((row.get("stage_reached") or "").strip())
+    return STAGE_IX.get((row.get("stage_reached") or "").strip().lower())
 
 
 def ratio(a, b):
@@ -216,11 +291,20 @@ def check_columns(columns):
             "analysis needs to know who anybody is.")
 
 
-def load(path):
-    with open(path, newline="", encoding="utf-8-sig") as fh:
-        reader = csv.DictReader(fh)
-        columns = list(reader.fieldnames or [])
-        rows = list(reader)
+def load(path, as_of=None):
+    global DATE_ORDER, AS_OF, INGEST
+    DATE_ORDER, AS_OF, INGEST = "ymd", None, {}
+    try:
+        with open(path, newline="", encoding="utf-8-sig") as fh:
+            reader = csv.DictReader(fh)
+            columns = [c.strip().lower() for c in (reader.fieldnames or [])]
+            reader.fieldnames = columns
+            rows = list(reader)
+    except UnicodeDecodeError:
+        raise Refusal("That file is not UTF-8 text. Save it again as 'CSV UTF-8' "
+                      "and re-run.")
+    except csv.Error as err:
+        raise Refusal(f"That file could not be read as a CSV ({err}).")
     if not columns:
         raise Refusal("That file has no header row.")
     check_columns(columns)
@@ -234,6 +318,30 @@ def load(path):
     bind_profile(detect_profile(rows))
 
     kept = [r for r in rows if stage_ix(r) is not None]
+    no_id = [r for r in kept if not (r.get("application_id") or "").strip()]
+    kept = [r for r in kept if (r.get("application_id") or "").strip()]
+    INGEST["rows_without_id"] = len(no_id)
+
+    # One row per application. A raw status-history log has one row per status
+    # change, so the same id comes back once per stage: timing it would count
+    # every candidate several times, and at different stages.
+    seen, dupes, unique = set(), 0, []
+    for r in kept:
+        key = r["application_id"].strip()
+        if key in seen:
+            dupes += 1
+            continue
+        seen.add(key)
+        unique.append(r)
+    if kept and dupes / len(kept) > MAX_DUP:
+        raise Refusal(
+            f"{dupes:,} of {len(kept):,} rows repeat an application_id already "
+            "seen. That is the shape of a status-history log (one row per status "
+            "change), not one row per application. Pivot it first: one row per "
+            "application, one date column per stage, taking the first time each "
+            "stage was reached.")
+    INGEST["duplicate_rows_dropped"] = dupes
+    kept = unique
     if len(kept) < MIN_ROWS:
         raise Refusal(
             f"Only {len(kept):,} usable rows. Below {MIN_ROWS:,} a stage median "
@@ -248,6 +356,32 @@ def load(path):
             "to measure. A cycle-time analysis needs the date a candidate arrived "
             "at each stage, not just the stage they are in now. The stage columns "
             "for this funnel are: " + ", ".join(STAGE_DATE) + ".")
+
+    DATE_ORDER = detect_date_order(kept, present_dates)
+    INGEST["date_order"] = DATE_ORDER
+    for col in present_dates:
+        filled = [r.get(col) for r in kept if (r.get(col) or "").strip()]
+        bad = [v for v in filled if parse_date(v) is None]
+        if filled and len(bad) / len(filled) > MAX_BAD_DATES:
+            raise Refusal(
+                f"{len(bad):,} of {len(filled):,} values in {col} are not dates this "
+                f"engine can read (for example {bad[0].strip()[:20]!r}). Spreadsheet "
+                "serial numbers and text dates need converting to YYYY-MM-DD first. "
+                "Timing only the rows that parsed would time a subset nobody chose.")
+
+    latest = None
+    for r in kept:
+        for col in present_dates:
+            d = parse_date(r.get(col))
+            if d and (latest is None or d > latest):
+                latest = d
+    if as_of is not None:
+        if latest and as_of < latest:
+            raise Refusal(
+                f"--as-of {as_of.isoformat()} is before the latest date in the file "
+                f"({latest.isoformat()}). The export cannot end before its own data.")
+        latest = as_of
+    AS_OF = latest
     return columns, kept
 
 
@@ -305,50 +439,99 @@ def integrity(rows, steps):
                         for r in offenders)
             + ". Above " + f"{MAX_DISORDER:.0%}" + " this is a mapping problem, not "
             "data entry - usually two columns crossed, or a status-history pivot "
-            "that took the first timestamp per stage instead of the last. Every "
+            "that did not take the first time each stage was reached. Every "
             "median computed on these dates would be fiction, so this will not run.")
     return {"steps": report, "worst_share": round(worst, 4)}
 
 
-def censoring(rows, step):
-    """Who is still waiting at this step, and for how long already.
+CUTOFF = {}          # step index -> last arrival date that has had time to finish
 
-    This is the trap the whole engine is built around. A median computed over
-    people who finished waiting is a median over the lucky ones: everybody
-    still stuck in the queue is, by construction, having a longer wait than
-    the one being reported, and they are excluded precisely because it is
-    longer. The more people are waiting, the more the reported number flatters
-    the process. So it is measured and reported, never silently dropped."""
-    arrived = waiting = 0
-    ages = []
-    latest = None
-    for row in rows:
-        for col in STAGE_DATE:
-            d = parse_date(row.get(col))
-            if d and (latest is None or d > latest):
-                latest = d
+
+def horizon(gaps):
+    """How long a step needs before most people who will finish it have: three
+    times its p90, and never under two weeks. Arrivals later than that are
+    counted, not timed, because only their fast ones have finished yet."""
+    p90 = quantile(gaps, 0.90) if gaps else None
+    return max(HORIZON_MIN, int(-(-(p90 or 0) * HORIZON_MULT // 1)))
+
+
+def timed(row, step):
+    """The wait at one step for one row, or None. None when either date is
+    missing, when the dates run backwards (the integrity check counts those),
+    or when the row arrived at the step too recently for its wait to be fair
+    to time."""
+    g = gap(row, step)
+    if g is None or g < 0:
+        return None
+    cut = CUTOFF.get(step["index"])
+    if cut is not None and parse_date(row.get(step["from_col"])) > cut:
+        return None
+    return g
+
+
+def queue_state(rows, step, has_exit):
+    """Everyone who arrived at this step, sorted by what became of them.
+
+    The trap this avoids runs both ways. Count every candidate without the next
+    date as still waiting, and the ones who were rejected or withdrew months ago
+    swell a queue that does not exist (on the retail sample, 8,412 people
+    "waiting" 270 days to be screened). Ignore the ones still open, and the
+    median flatters the process. So: moved on; skipped (a later stage is dated,
+    this one is not); undated (stage_reached says they moved on, the date is
+    missing); left (closed with an exit reason); in flight (open, arrived inside
+    the step's horizon); stale (open, no movement for longer than the horizon).
+    Without an exit_reason column, left and open cannot be told apart, and the
+    report says so."""
+    later = [c for c in STAGE_DATE[step["index"] + 2:]]
+    cut = CUTOFF.get(step["index"])
+    counts = dict(arrived=0, completed=0, skipped=0, undated=0, left=0,
+                  in_flight=0, stale_open=0)
+    flight_ages, stale_ages = [], []
     for row in rows:
         a = parse_date(row.get(step["from_col"]))
         if a is None:
             continue
-        arrived += 1
-        if parse_date(row.get(step["to_col"])) is None:
-            waiting += 1
-            if latest:
-                ages.append((latest - a).days)
-    share = (waiting / arrived) if arrived else 0.0
-    return {
-        "arrived": arrived, "completed": arrived - waiting, "still_waiting": waiting,
-        "share_waiting": round(share, 4),
-        "age_of_waiting": spread(ages),
-        "as_of": latest.isoformat() if latest else None,
-        "biases_median": share >= CENSOR_WARN,
-    }
+        counts["arrived"] += 1
+        if parse_date(row.get(step["to_col"])) is not None:
+            counts["completed"] += 1
+            continue
+        if any(parse_date(row.get(c)) for c in later):
+            counts["skipped"] += 1
+            continue
+        ix = stage_ix(row)
+        if ix is not None and ix > step["index"]:
+            counts["undated"] += 1
+            continue
+        if has_exit and (row.get("exit_reason") or "").strip():
+            counts["left"] += 1
+            continue
+        age = (AS_OF - a).days
+        if cut is None or a > cut:
+            counts["in_flight"] += 1
+            flight_ages.append(age)
+        else:
+            counts["stale_open"] += 1
+            stale_ages.append(age)
+    arrived = counts["arrived"] or 1
+    counts.update({
+        "share_in_flight": round(counts["in_flight"] / arrived, 4),
+        "share_stale": round(counts["stale_open"] / arrived, 4),
+        "age_in_flight": spread(flight_ages),
+        "age_stale": spread(stale_ages),
+        "closure_known": has_exit,
+        "as_of": AS_OF.isoformat() if AS_OF else None,
+        "timed_arrivals_through": cut.isoformat() if cut else None,
+        # Open applications older than the horizon either left without being
+        # closed or are stuck. If they are stuck, they will finish slower than
+        # anyone timed, so a large share of them makes the median optimistic.
+        "biases_median": bool(has_exit and counts["stale_open"] / arrived >= CENSOR_WARN),
+    })
+    return counts
 
 
 # --------------------------------------------------------------- pass 1
 
-def pass1_clock(rows, steps):
+def pass1_clock(rows, steps, has_exit):
     """How long each stage takes, and what share of the whole it carries.
 
     Ranked by total days held, not by median. A stage with a four-day median
@@ -360,9 +543,13 @@ def pass1_clock(rows, steps):
         if not step["measurable"]:
             out.append(dict(step, measurable=False))
             continue
-        gaps = [g for g in (gap(r, step) for r in rows) if g is not None and g >= 0]
-        cen = censoring(rows, step)
+        raw = [g for g in (gap(r, step) for r in rows) if g is not None and g >= 0]
+        days = horizon(raw)
+        CUTOFF[step["index"]] = AS_OF - timedelta(days=days)
+        gaps = [g for g in (timed(r, step) for r in rows) if g is not None]
+        cen = queue_state(rows, step, has_exit)
         block = dict(step)
+        block["horizon_days"] = days
         block["wait"] = spread(gaps)
         block["censoring"] = cen
         block["conclusive"] = len(gaps) >= MIN_STEP
@@ -380,12 +567,18 @@ def end_to_end(rows):
     """Total elapsed time for everybody who reached the end of the funnel.
     Not the sum of the stage medians, which is a number nobody experienced."""
     first, last = STAGE_DATE[0], STAGE_DATE[-1]
-    gaps = []
+    pairs = []
     for row in rows:
         a, b = parse_date(row.get(first)), parse_date(row.get(last))
         if a and b and (b - a).days >= 0:
-            gaps.append((b - a).days)
+            pairs.append((a, (b - a).days))
+    days = horizon([g for _, g in pairs])
+    cut = AS_OF - timedelta(days=days) if AS_OF else None
+    gaps = [g for a, g in pairs if cut is None or a <= cut]
     block = spread(gaps)
+    block["finished"] = len(pairs)
+    block["horizon_days"] = days
+    block["timed_applications_through"] = cut.isoformat() if cut else None
     block["from_stage"], block["to_stage"] = STAGES[0], STAGES[-1]
     block["start_noun"] = START_NOUN
     return block
@@ -401,8 +594,8 @@ def by_segment(rows, step, dim):
         key = (row.get(dim) or "").strip()
         if not key:
             continue
-        g = gap(row, step)
-        if g is not None and g >= 0:
+        g = timed(row, step)
+        if g is not None:
             buckets[key].append(g)
 
     eligible = {k: v for k, v in buckets.items() if len(v) >= MIN_SEG}
@@ -462,16 +655,18 @@ def pass2_concentration(rows, clock):
 def peak_months(rows):
     """The months carrying materially more volume than a typical month.
     Derived from the file, because one vertical's peak is another's trough."""
+    # Calendar months, with the year: an export running September to
+    # September must not add two Septembers together and call it a peak.
     counts = defaultdict(int)
     for row in rows:
         d = parse_date(row.get(STAGE_DATE[0]))
         if d:
-            counts[d.month] += 1
+            counts[f"{d.year:04d}-{d.month:02d}"] += 1
     if len(counts) < 6:
-        return set(), {}
+        return set(), dict(sorted(counts.items()))
     typical = median(list(counts.values()))
     peak = {m for m, n in counts.items() if typical and n > typical * 1.5}
-    return peak, {str(m): n for m, n in sorted(counts.items())}
+    return peak, dict(sorted(counts.items()))
 
 
 def pass3_load(rows, clock, peak):
@@ -492,11 +687,14 @@ def pass3_load(rows, clock, peak):
             continue
         hi, lo = [], []
         for row in rows:
-            d = parse_date(row.get(STAGE_DATE[0]))
-            g = gap(row, step)
-            if d is None or g is None or g < 0:
+            # The month the candidate arrived at this step, not the month they
+            # applied: a peak in applications reaches the first-shift queue
+            # weeks later.
+            d = parse_date(row.get(step["from_col"]))
+            g = timed(row, step)
+            if d is None or g is None:
                 continue
-            (hi if d.month in peak else lo).append(g)
+            (hi if f"{d.year:04d}-{d.month:02d}" in peak else lo).append(g)
         if len(hi) < MIN_SEG or len(lo) < MIN_SEG:
             continue
         mh, ml = median(hi), median(lo)
@@ -528,9 +726,9 @@ def confound_check(rows, step, dim, segments, confounders):
     results = {}
     flagged = set(segments)
     raw_hi = [g for r in rows if (r.get(dim) or "").strip() in flagged
-              for g in [gap(r, step)] if g is not None and g >= 0]
+              for g in [timed(r, step)] if g is not None]
     raw_lo = [g for r in rows if (r.get(dim) or "").strip() not in flagged
-              for g in [gap(r, step)] if g is not None and g >= 0]
+              for g in [timed(r, step)] if g is not None]
     raw_diff = (median(raw_hi) - median(raw_lo)) if raw_hi and raw_lo else None
 
     for conf in confounders:
@@ -539,8 +737,8 @@ def confound_check(rows, step, dim, segments, confounders):
         strata = defaultdict(lambda: ([], []))
         for row in rows:
             key = (row.get(conf) or "").strip()
-            g = gap(row, step)
-            if not key or g is None or g < 0:
+            g = timed(row, step)
+            if not key or g is None:
                 continue
             bucket = strata[key]
             bucket[0 if (row.get(dim) or "").strip() in flagged else 1].append(g)
@@ -555,12 +753,14 @@ def confound_check(rows, step, dim, segments, confounders):
             weighted += d * w
             weight += w
             used += 1
-        if not weight or raw_diff is None or used < 2:
+        if not weight or not raw_diff or used < 2:
             results[conf] = {"testable": False,
                              "reason": "not enough strata with both groups present"}
             continue
         adjusted = weighted / weight
-        survived = abs(adjusted) >= abs(raw_diff) * KILL_FRACTION
+        # Same direction and at least this much of it. An effect that reverses
+        # inside the strata has not survived, however large it is.
+        survived = (adjusted / raw_diff) >= KILL_FRACTION
         results[conf] = {
             "testable": True, "strata_used": used,
             "raw_excess_days": round(raw_diff, 2),
@@ -574,7 +774,7 @@ def confound_check(rows, step, dim, segments, confounders):
 def pass4_confounds(rows, concentration):
     out = []
     for block in concentration:
-        step = {"from_col": STAGE_DATE[block["index"]],
+        step = {"index": block["index"], "from_col": STAGE_DATE[block["index"]],
                 "to_col": STAGE_DATE[block["index"] + 1]}
         for dim, data in block["by"].items():
             if not data["flagged"]:
@@ -627,7 +827,7 @@ def pass5_size(concentration, confirmed):
             "excess_days_each": round(excess, 2),
             "calendar_days_recovered": round(excess * affected, 1),
             "kind": "structural",
-            "reads": (f"{len(flagged)} {finding['dimension']} value(s) hold candidates "
+            "reads": (f"{len(flagged)} {noun(finding['dimension'], len(flagged))} hold candidates "
                       f"{excess:.1f} days longer than the rest at {finding['step']}. "
                       f"{affected:,} people waited there."),
         })
@@ -688,26 +888,35 @@ def headline(clock, concentration, structural, load_p):
     }
 
 
-def analyse(path):
-    columns, rows = load(path)
+def analyse(path, as_of=None):
+    CUTOFF.clear()
+    columns, rows = load(path, as_of)
+    if AS_OF is None:
+        raise Refusal("None of the stage dates could be read, so there is nothing "
+                      "to time.")
+    has_exit = "exit_reason" in columns
     steps = transitions(columns)
     integrity_report = integrity(rows, steps)
 
-    clock = pass1_clock(rows, steps)
+    clock = pass1_clock(rows, steps, has_exit)
 
-    worst_censoring = max((s["censoring"]["share_waiting"] for s in clock
-                           if "censoring" in s), default=0.0)
-    if worst_censoring >= CENSOR_REFUSE:
-        stuck = [s for s in clock
-                 if s.get("censoring", {}).get("share_waiting", 0) >= CENSOR_REFUSE]
+    stuck = [s for s in clock if s.get("censoring")
+             and s["censoring"]["arrived"] >= MIN_STEP
+             and s["censoring"]["share_in_flight"] >= CENSOR_REFUSE]
+    if stuck:
         raise Refusal(
             "Too much of this file is still in flight to time it: "
-            + "; ".join(f"{s['step']} has {s['censoring']['still_waiting']:,} of "
-                        f"{s['censoring']['arrived']:,} still waiting "
-                        f"({s['censoring']['share_waiting']:.0%})" for s in stuck)
-            + f". Above {CENSOR_REFUSE:.0%}, a median over the people who finished "
-            "waiting describes the fast ones and nobody else. Export a period that "
-            "has had time to complete - end the window a full cycle before today.")
+            + "; ".join(f"{s['step']} has {s['censoring']['in_flight']:,} of "
+                        f"{s['censoring']['arrived']:,} arrivals from the last "
+                        f"{s['horizon_days']} days still open "
+                        f"({s['censoring']['share_in_flight']:.0%})" for s in stuck)
+            + f". Above {CENSOR_REFUSE:.0%}, the people who have had time to finish "
+            "are too few and too early to stand for the rest. Export a longer "
+            "period, or one that ends a full cycle before today.")
+    if not any(s.get("conclusive") for s in clock):
+        raise Refusal(
+            f"No step has {MIN_STEP} or more waits old enough to time fairly, so "
+            "there is no stage median worth reporting. Export a longer period.")
 
     peak, monthly = peak_months(rows)
     concentration = pass2_concentration(rows, clock)
@@ -726,6 +935,9 @@ def analyse(path):
             "stages": STAGES,
             "rows_analysed": len(rows),
             "source_file": os.path.basename(path),
+            "as_of": AS_OF.isoformat(),
+            "exit_reason_present": has_exit,
+            "ingest": dict(INGEST),
         },
         "headline": headline(clock, concentration, structural, load_p),
         "end_to_end": end_to_end(rows),
@@ -747,6 +959,128 @@ def analyse(path):
             for c in confounds if not c["survives_all"] and c["killed_by"]
         ],
     }
+
+
+# --------------------------------------------------------------- report
+
+def _d(x):
+    """Days as a reader says them: 4, 6.7, never 4.0 or 6.67."""
+    if x is None:
+        return "-"
+    x = round(float(x), 1)
+    return str(int(x)) if x == int(x) else f"{x:.1f}"
+
+
+def _pct(x):
+    return "-" if x is None else f"{x:.0%}"
+
+
+def render_md(report):
+    """The report a person reads. Every figure is copied from the JSON; nothing
+    here computes anything, so the two can never disagree."""
+    m, h, e2e = report["meta"], report["headline"], report["end_to_end"]
+    out = [f"# Where the hiring time goes",
+           "",
+           f"{m['rows_analysed']:,} applications, {m['funnel_label'].lower()} "
+           f"({' > '.join(m['stages'])}), export ending {m['as_of']}. "
+           f"time-to-hire-analyst {m['skill_version']}.",
+           ""]
+
+    longest = h.get("stage_holding_most_time")
+    conc = h.get("stage_with_concentrated_delay")
+    out += ["## The answer", ""]
+    if longest:
+        out.append(f"- **Most of the calendar:** {longest['step']}, median "
+                   f"{_d(longest['median_days'])} days, p90 {_d(longest['p90_days'])}, "
+                   f"{_pct(longest['share_of_elapsed'])} of all the days candidates spent "
+                   "waiting between stages.")
+    if conc:
+        out.append(f"- **The delay you can fix:** {conc['step']}, where "
+                   f"{conc['segment_count']} {noun(conc['dimension'], conc['segment_count'])} hold candidates "
+                   f"{_d(conc['excess_days_each'])} days longer than everyone else, after "
+                   "the confound checks.")
+    else:
+        out.append("- **No concentrated delay survived its checks.** Where a stage is "
+                   "slow, it is slow for everybody: that is the process, not a site.")
+    if longest and conc:
+        peak_too = longest["step"] in (h.get("load_sensitive_stages") or [])
+        out.append("- These are the same stage." if h["same_stage"] else
+                   "- These are **different stages**. The first is long for everybody"
+                   + (" (and longer still in peak months)" if peak_too else "")
+                   + "; the second is a local fix.")
+    if h.get("load_sensitive_stages"):
+        out.append("- **Only slow in peak months:** " + ", ".join(h["load_sensitive_stages"])
+                   + ". That is capacity, not process.")
+    out += ["", f"End to end, {e2e['n']:,} people applied early enough to be timed to "
+            f"their {e2e['start_noun']}: median {_d(e2e['median'])} days, p90 "
+            f"{_d(e2e['p90'])}. That is not the sum of the stage medians below, which "
+            "describe larger groups.", ""]
+
+    out += ["## The clock, stage by stage", "",
+            "| Stage | Median days | p90 | Timed | Share of waiting days | Moved on | Left | Still open |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|"]
+    for st in report["clock"]:
+        if not st.get("measurable"):
+            out.append(f"| {st['step']} | not in the export | | | | | | |")
+            continue
+        c, w = st["censoring"], st["wait"]
+        flag = "" if st.get("conclusive") else " (too few to time)"
+        out.append(f"| {st['step']}{flag} | {_d(w['median'])} | {_d(w['p90'])} | "
+                   f"{w['n']:,} | {_pct(st.get('share_of_elapsed'))} | {c['completed']:,} | "
+                   f"{c['left']:,} | {c['in_flight'] + c['stale_open']:,} |")
+    out += ["", "Timed means arrived early enough to have finished: each stage is "
+            "timed over arrivals at least its horizon (three times its p90, two "
+            "weeks minimum) before the export ends.", ""]
+
+    notes = []
+    for st in report["clock"]:
+        c = st.get("censoring")
+        if not c:
+            continue
+        if c["stale_open"]:
+            notes.append(f"{c['stale_open']:,} applications at {st['step']} are still "
+                         f"open with no movement for over {st['horizon_days']} days "
+                         f"(median {_d(c['age_stale']['median'])}). Either they left "
+                         "and nobody closed them, or they are stuck."
+                         + (" Enough of them to make this stage's median optimistic."
+                            if c["biases_median"] else ""))
+        if c["skipped"] or c["undated"]:
+            notes.append(f"{c['skipped'] + c['undated']:,} candidates passed "
+                         f"{st['step']} without a date for it; they are not timed there.")
+    if not m["exit_reason_present"]:
+        notes.append("There is no exit_reason column, so a candidate who left cannot "
+                     "be told from one still open. Still open counts both.")
+
+    if report["prizes"]["structural"]:
+        out += ["## Confirmed delays", ""]
+        for p in report["prizes"]["structural"]:
+            out.append(f"- {p['reads']} About {p['calendar_days_recovered']:,.0f} "
+                       f"candidate-days in this export. Segments: "
+                       f"{', '.join(p['segments'])}.")
+        out.append("")
+    if report["prizes"]["load"]:
+        out += ["## Peak-season delays", ""]
+        for p in report["prizes"]["load"]:
+            out.append(f"- {p['reads']} Peak months: {', '.join(p['peak_months'])}.")
+        out.append("")
+    if report["discarded"]:
+        out += ["## Ruled out", ""]
+        for d in report["discarded"]:
+            out.append(f"- {d['reads']} ({', '.join(d['segments'][:6])}"
+                       + ("..." if len(d["segments"]) > 6 else "") + ")")
+        out.append("")
+    if notes:
+        out += ["## About the data", ""] + [f"- {n}" for n in notes] + [""]
+    ing = m.get("ingest", {})
+    if ing.get("duplicate_rows_dropped") or ing.get("rows_without_id"):
+        out += [f"- Dropped {ing.get('duplicate_rows_dropped', 0):,} repeated "
+                f"application ids and {ing.get('rows_without_id', 0):,} rows without one.", ""]
+    out += ["## What this does not claim", "",
+            "That a shorter wait means more hires. Long waits and drop-off travel "
+            "together, but how much of one becomes the other is a drop-off question "
+            "(funnel-drop-off-analyst). And a timestamp shows waiting, not work: four "
+            "days of checks and four days of nothing look the same.", ""]
+    return "\n".join(out)
 
 
 # --------------------------------------------------------------- test suite
@@ -952,17 +1286,26 @@ def run_suite(sample):
     c.ok("no timing claim made about the weak-retention managers",
          not (mgr_hits & WEAK_MANAGERS), ",".join(sorted(mgr_hits & WEAK_MANAGERS)) or "none")
 
-    print(f"\nH  Censoring is measured, not hidden")
-    for step in report["clock"]:
-        if not step.get("conclusive"):
-            continue
-        cen = step["censoring"]
-        c.ok(f"{step['step']}: waiting + completed accounts for everyone who arrived",
-             cen["completed"] + cen["still_waiting"] == cen["arrived"],
-             f"{cen['completed']}+{cen['still_waiting']}={cen['arrived']}")
-        break
-    c.ok("every measured step reports a censoring share",
-         all("censoring" in s for s in report["clock"] if s.get("measurable")))
+    print(f"\nH  Nobody who left is counted as waiting")
+    parts = ("completed", "skipped", "undated", "left", "in_flight", "stale_open")
+    c.ok("at every step, every arrival is accounted for exactly once",
+         all(sum(s["censoring"][k] for k in parts) == s["censoring"]["arrived"]
+             for s in report["clock"] if s.get("measurable")))
+    # Every application in these samples is either started or closed with an
+    # exit reason. The draft of this engine counted the closed ones as still
+    # waiting -- 8,412 people "queuing" 270 days on the retail file -- and would
+    # have refused any real export that loses most applicants at the first step.
+    c.ok("closed applications are counted as left, not in flight",
+         all(s["censoring"]["in_flight"] == 0 and s["censoring"]["stale_open"] == 0
+             for s in report["clock"] if s.get("measurable")),
+         str(max(s["censoring"]["in_flight"] + s["censoring"]["stale_open"]
+                 for s in report["clock"] if s.get("measurable"))))
+    first = report["clock"][0]["censoring"]
+    c.ok("the first step's losses are reported as left",
+         first["left"] > 0, f"{first['left']:,} left of {first['arrived']:,}")
+    c.ok("every step is timed only over arrivals old enough to have finished",
+         all(s["censoring"]["timed_arrivals_through"] and s["horizon_days"] >= HORIZON_MIN
+             for s in report["clock"] if s.get("measurable")))
 
     print(f"\nI  End-to-end is measured, not summed from medians")
     e2e = report["end_to_end"]
@@ -980,9 +1323,19 @@ def run_suite(sample):
          bool(stage_ns) and e2e["n"] < max(stage_ns) / 2,
          f"e2e n={e2e['n']:,} vs widest stage n={max(stage_ns):,}")
     final_step = step_by_index(report, last_step_index())
-    c.ok("end-to-end population equals the final stage's completed population",
-         final_step is not None and e2e["n"] == final_step["censoring"]["completed"],
-         f"{e2e['n']:,} vs {final_step['censoring']['completed']:,}" if final_step else "no final step")
+    c.ok("everyone who finished is counted, and only those early enough are timed",
+         final_step is not None and e2e["finished"] == final_step["censoring"]["completed"]
+         and e2e["n"] <= e2e["finished"],
+         f"timed {e2e['n']:,} of {e2e['finished']:,} finished" if final_step else "no final step")
+
+    print(f"\nJ  The readable report says what the JSON says")
+    md = render_md(report)
+    hl = report["headline"]
+    c.ok("it names the stage holding the most calendar",
+         hl["stage_holding_most_time"]["step"] in md)
+    c.ok("it names the concentrated delay when there is one",
+         not hl["stage_with_concentrated_delay"]
+         or hl["stage_with_concentrated_delay"]["step"] in md.split("## The clock")[0])
 
     print(f"\n  {len(c.passed)} passed, {len(c.failed)} failed")
     return len(c.passed), len(c.failed)
@@ -1008,7 +1361,7 @@ def _read_sample():
 
 
 def refusal_tests():
-    print(f"\n{'=' * 62}\nrefusals\n{'=' * 62}")
+    print(f"\n{'=' * 62}\nrefusals and guards\n{'=' * 62}")
     c = Checks()
     columns, rows = _read_sample()
 
@@ -1047,24 +1400,156 @@ def refusal_tests():
              "contradict the stage order" in str(stop))
     os.unlink(path)
 
-    # A file where most people are still waiting. Blanking the arrival column
-    # of the last stage for 80% of those who reached it is exactly the shape of
-    # an export cut too close to today.
-    last_col = STAGE_DATE[-1]
-    censored, hit = [], 0
-    for i, row in enumerate(rows):
-        row = dict(row)
-        if row.get(last_col) and i % 5:
-            row[last_col] = ""
-            hit += 1
-        censored.append(row)
-    path = _tmp_csv(censored, columns)
+    # An export cut too close to today: most of the people who arrived at a
+    # step did so in its last fortnight, are still open, and only the fast
+    # ones have moved on.
+    as_of = date(2026, 6, 30)
+    fresh = []
+    for i in range(1500):
+        applied = as_of - timedelta(days=(i % 10))
+        row = {k: "" for k in columns}
+        row.update(application_id=f"N{i:05d}", location_id=f"LOC-{i % 9:02d}",
+                   role="Associate", source="jobboard_a", stage_reached="applied",
+                   applied_at=applied.isoformat())
+        if i % 4 == 0:
+            row.update(stage_reached="screened",
+                       screened_at=(applied + timedelta(days=1)).isoformat())
+        fresh.append(row)
+    for i in range(300):
+        applied = as_of - timedelta(days=60 + i % 30)
+        row = {k: "" for k in columns}
+        row.update(application_id=f"O{i:05d}", location_id=f"LOC-{i % 9:02d}",
+                   role="Associate", source="jobboard_a", stage_reached="screened",
+                   applied_at=applied.isoformat(),
+                   screened_at=(applied + timedelta(days=2)).isoformat())
+        fresh.append(row)
+    path = _tmp_csv(fresh, columns)
     try:
         analyse(path)
-        c.ok("refuses a file still mostly in flight", False, f"it ran (blanked {hit})")
+        c.ok("refuses a file still mostly in flight", False, "it ran")
     except Refusal as stop:
-        c.ok("refuses a file still mostly in flight", "still in flight" in str(stop))
+        c.ok("refuses a file still mostly in flight", "still in flight" in str(stop), str(stop)[:80])
     os.unlink(path)
+
+    # The same shape, but every non-mover closed with an exit reason. Losing
+    # most applicants at the first step is normal; it is not a queue.
+    for row in fresh:
+        if not row["screened_at"]:
+            row["exit_reason"] = "withdrew"
+    path = _tmp_csv(fresh, columns)
+    try:
+        r = analyse(path)
+        st = r["clock"][0]["censoring"]
+        c.ok("a funnel that loses most people at step one is not refused",
+             st["in_flight"] == 0 and st["left"] == 1125, f"left={st['left']}")
+    except Refusal as stop:
+        c.ok("a funnel that loses most people at step one is not refused", False, str(stop)[:80])
+    os.unlink(path)
+
+    # A raw status-history log: one row per status change.
+    log = []
+    for r in rows[:1500]:
+        for stage, col in zip(STAGES, STAGE_DATE):
+            if r.get(col):
+                log.append(dict(r, stage_reached=stage))
+    path = _tmp_csv(log, columns)
+    try:
+        analyse(path)
+        c.ok("refuses a status-history log", False, "it ran")
+    except Refusal as stop:
+        c.ok("refuses a status-history log", "status-history log" in str(stop))
+    os.unlink(path)
+
+    # Spreadsheet serial numbers where dates should be.
+    serial = [dict(r) for r in rows[:2000]]
+    for r in serial[::20]:
+        if r.get("screened_at"):
+            r["screened_at"] = "46021"
+    path = _tmp_csv(serial, columns)
+    try:
+        analyse(path)
+        c.ok("refuses dates it cannot read", False, "it ran")
+    except Refusal as stop:
+        c.ok("refuses dates it cannot read", "not dates" in str(stop))
+    os.unlink(path)
+
+    # Slash dates are read the way the file proves, and never guessed.
+    def reformat(rs, fmt):
+        out = []
+        for r in rs:
+            r = dict(r)
+            for col in STAGE_DATE:
+                d = parse_date(r.get(col)) if r.get(col) else None
+                if d:
+                    r[col] = d.strftime(fmt) + ("T09:30:00-05:00" if fmt == "iso" else "")
+            out.append(r)
+        return out
+    base = analyse(SAMPLE)
+    for fmt, label in (("%d/%m/%Y", "day-first"), ("%m/%d/%Y", "month-first")):
+        path = _tmp_csv(reformat(rows, fmt), columns)
+        r = analyse(path)
+        c.ok(f"{label} dates give the same answer as ISO dates",
+             r["headline"] == base["headline"] and r["end_to_end"] == base["end_to_end"],
+             r["meta"]["ingest"]["date_order"])
+        os.unlink(path)
+    early = [r for r in rows if (parse_date(r.get("applied_at")) or date.max).day <= 12]
+    amb = reformat(early, "%d/%m/%Y")
+    for r in amb:
+        for col in STAGE_DATE:
+            if r.get(col):
+                dd, mm, yy = r[col].split("/")
+                if int(dd) > 12:
+                    r[col] = ""
+    path = _tmp_csv(amb, columns)
+    try:
+        analyse(path)
+        c.ok("refuses slash dates that could be read either way", False, "it ran")
+    except Refusal as stop:
+        c.ok("refuses slash dates that could be read either way", "3 April or 4 March" in str(stop))
+    os.unlink(path)
+
+    # Not UTF-8.
+    import tempfile
+    fh = tempfile.NamedTemporaryFile("wb", suffix=".csv", delete=False)
+    fh.write(("application_id,applied_at,stage_reached\nA1,2026-01-01,appliqu\xe9\n").encode("latin-1"))
+    fh.close()
+    try:
+        analyse(fh.name)
+        c.ok("refuses a file that is not UTF-8", False, "it ran")
+    except Refusal as stop:
+        c.ok("refuses a file that is not UTF-8", "UTF-8" in str(stop))
+    os.unlink(fh.name)
+
+    # A site effect that is pure noise. Shuffle the site labels: the planted
+    # queue now belongs to no site in particular, and none may be flagged.
+    import random
+    rng = random.Random(7)
+    labels = [r["location_id"] for r in rows]
+    rng.shuffle(labels)
+    null = [dict(r, location_id=l) for r, l in zip(rows, labels)]
+    path = _tmp_csv(null, columns)
+    r = analyse(path)
+    hits = flagged_on(r, QUEUE_STEP, "location_id")
+    c.ok("no site is flagged once the site labels are shuffled", not hits,
+         ",".join(sorted(hits)) or "none")
+    os.unlink(path)
+
+    # A site effect that reverses inside each role (Simpson's paradox): the
+    # flagged sites look slower only because they hire more of the slow role,
+    # and within each role they are faster. It must not survive.
+    step = {"index": 99, "from_col": "a_at", "to_col": "b_at"}
+    d0 = date(2026, 1, 5)
+    syn = []
+    for role, site_days, rest_days, n_site, n_rest in (("A", 1, 2, 40, 200), ("B", 4, 5, 200, 40)):
+        for k in range(n_site + n_rest):
+            site = "S" if k < n_site else f"R{k % 5}"
+            days = site_days if site == "S" else rest_days
+            syn.append({"role": role, "location_id": site, "a_at": d0.isoformat(),
+                        "b_at": (d0 + timedelta(days=days)).isoformat()})
+    res = confound_check(syn, step, "location_id", ["S"], ["role"])["role"]
+    c.ok("an effect that reverses within roles does not survive",
+         res["testable"] and not res["survived"],
+         f"raw {res.get('raw_excess_days')}, adjusted {res.get('adjusted_excess_days')}")
 
     # Stage vocabularies from both profiles in one file.
     mixed = [dict(r) for r in rows[:900]]
@@ -1111,30 +1596,54 @@ def run_tests():
 def main():
     ap = argparse.ArgumentParser(description="Cycle-time engine.")
     ap.add_argument("--input", help="CSV mapped to the canonical schema")
-    ap.add_argument("--out", help="write the JSON report here instead of stdout")
+    ap.add_argument("--out", help="write the JSON report here")
+    ap.add_argument("--md", help="write the readable report here")
+    ap.add_argument("--as-of", dest="as_of",
+                    help="the day the export ends (YYYY-MM-DD); default: the latest date in the file")
+    ap.add_argument("--demo", action="store_true", help="run on the bundled sample")
     ap.add_argument("--test", action="store_true", help="run the regression suite")
     args = ap.parse_args()
 
     if args.test:
         return run_tests()
+    if args.demo:
+        args.input = SAMPLE
     if not args.input:
-        ap.error("one of --input or --test is required")
+        ap.error("one of --input, --demo or --test is required")
 
+    as_of = None
+    if args.as_of:
+        try:
+            as_of = date.fromisoformat(args.as_of)
+        except ValueError:
+            print(json.dumps({"refused": True, "reason": "--as-of must be YYYY-MM-DD."}))
+            return EXIT_REFUSED
     try:
-        report = analyse(args.input)
+        report = analyse(args.input, as_of)
     except Refusal as stop:
         print(json.dumps({"refused": True, "reason": str(stop)}, indent=2))
-        return 2
+        return EXIT_REFUSED
+    except FileNotFoundError:
+        print(json.dumps({"refused": True, "reason": f"No file at {args.input}."}))
+        return EXIT_REFUSED
+    except Exception as err:   # the engine's fault, never the reader's
+        print(json.dumps({"failed": True, "reason": f"{type(err).__name__}: {err}"}))
+        return EXIT_FAILED
 
     text = json.dumps(report, indent=2, default=str)
+    md = render_md(report)
     if args.out:
         with open(args.out, "w", encoding="utf-8") as fh:
             fh.write(text)
-        print(f"report written to {args.out}  ({report['meta']['rows_analysed']:,} rows, "
-              f"skill v{SKILL_VERSION})")
+    if args.md:
+        with open(args.md, "w", encoding="utf-8") as fh:
+            fh.write(md)
+    if not args.out and not args.md:
+        print(md if args.demo else text)
     else:
-        print(text)
-    return 0
+        print(f"report written ({report['meta']['rows_analysed']:,} rows, "
+              f"skill v{SKILL_VERSION})")
+    return EXIT_OK
 
 
 if __name__ == "__main__":
