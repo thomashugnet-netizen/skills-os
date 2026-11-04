@@ -6,9 +6,14 @@ whether the version you are running is the current one.
 
 The version you have is in `SKILL.md`'s frontmatter.
 
+## 1.0.1
+
+Credit line updated. Nothing in how the skill works has changed, so there is no need to
+reinstall.
+
 ## 1.0.0
 
-First release, created with Taylar Ashleigh Martin.
+First release, created with Taylar Martin.
 
 - Builds and checks a calibration pack: three answers per question at different levels,
   one deliberate borderline, shuffled. Prints a scoring sheet that never shows the

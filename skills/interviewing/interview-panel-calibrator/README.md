@@ -2,7 +2,7 @@
 
 > Gets several interviewers onto the same bar, and says whether each disagreement comes from the anchor wording or from a person.
 
-Created with Taylar Ashleigh Martin. Maintained by [Fountain](https://www.fountain.com). Free to use, MIT licensed. Part of the [Claude Skills for HR Ops](../../../README.md) library.
+Created with Taylar Martin. Maintained by [Fountain](https://www.fountain.com). Free to use, MIT licensed. Part of the [Claude Skills for HR Ops](../../../README.md) library.
 
 ## What it does
 
