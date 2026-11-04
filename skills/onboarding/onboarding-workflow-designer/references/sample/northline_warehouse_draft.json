@@ -1,0 +1,430 @@
+{
+  "workflow": "Northline Goods: warehouse associate, US (NV) (draft cloned from store associate)",
+  "status": "draft",
+  "role_family": "Store associate",
+  "jurisdiction": {
+    "country": "US",
+    "states": [
+      "NV"
+    ],
+    "e_verify": true
+  },
+  "states_verified": {},
+  "offer_to_first_shift_days": 10,
+  "max_silence_days": 3,
+  "fallback_alert": {
+    "rate": 0.15,
+    "min_hires": 20,
+    "min_site_hires": 10
+  },
+  "stop_rule": {
+    "when": "Background result cannot be cleared under the hiring policy, or a moved first shift is missed",
+    "decider": "District manager",
+    "who_tells_hire": "Store manager"
+  },
+  "steps": [
+    {
+      "id": "welcome_call",
+      "action": "Call the hire to confirm the first-shift date",
+      "done_when": "Call logged on the hire record with the confirmed date",
+      "category": "Connection & engagement",
+      "owner": "Store manager",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 1,
+      "due_day": -8,
+      "tags": [],
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "bg_consent",
+      "action": "Send the background check disclosure and authorization form",
+      "done_when": "Signed authorization stored on the hire record",
+      "category": "Work authorization & legal filings",
+      "owner": "Onboarding coordinator",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 1,
+      "due_day": -8,
+      "tags": [
+        "legally_required",
+        "needs_hire_action"
+      ],
+      "legal_basis": "Written authorization before ordering a consumer report; confirmed by Northline legal on 2026-10-30",
+      "fallback": {
+        "shape": "chase",
+        "after_days": 1,
+        "alert": "Onboarding coordinator",
+        "action": "Text the hire the form link again with the deadline"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "bg_check",
+      "action": "Order the background check from the screening vendor",
+      "done_when": "Vendor portal shows a final result for the hire",
+      "category": "Work authorization & legal filings",
+      "owner": "Onboarding coordinator",
+      "after": [
+        "bg_consent"
+      ],
+      "needs": "the signed authorization, which the vendor requires before running the check",
+      "duration_days": 5,
+      "due_day": -2,
+      "tags": [
+        "external_dependency",
+        "blocks_first_shift"
+      ],
+      "fallback": {
+        "shape": "chase",
+        "after_days": 4,
+        "alert": "Onboarding coordinator",
+        "action": "Send the vendor a second request quoting the order number"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "system_access",
+      "action": "Create the hire's register login and staff badge",
+      "done_when": "Login opens the till on the store test terminal",
+      "category": "Access & identity",
+      "owner": "IT service desk",
+      "after": [
+        "bg_check"
+      ],
+      "needs": "a cleared background result before anyone gets till access",
+      "duration_days": 2,
+      "due_day": -1,
+      "tags": [
+        "blocks_first_shift"
+      ],
+      "fallback": {
+        "shape": "substitute",
+        "after_days": 1,
+        "alert": "Store manager",
+        "action": "Pair the hire with a trained cashier, no till access on shift one"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "i9_s1",
+      "action": "Send the hire the Form I-9 Section 1 link",
+      "done_when": "Section 1 signed and dated in the I-9 system",
+      "category": "Work authorization & legal filings",
+      "owner": "Onboarding coordinator",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 3,
+      "due_day": 0,
+      "tags": [
+        "legally_required",
+        "needs_hire_action",
+        "blocks_first_shift"
+      ],
+      "rule": "i9_section_1",
+      "fallback": {
+        "shape": "move_shift",
+        "after_days": 2,
+        "alert": "Onboarding coordinator",
+        "action": "Call the hire; if Section 1 cannot be signed by day 0, move the shift",
+        "decider": "Store manager"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "i9_s2",
+      "action": "Examine the hire's original documents and sign Section 2",
+      "done_when": "Section 2 signed in the I-9 system with document details",
+      "category": "Work authorization & legal filings",
+      "owner": "Store manager",
+      "after": [
+        "i9_s1"
+      ],
+      "needs": "the hire's signed Section 1",
+      "not_before_day": 0,
+      "duration_days": 1,
+      "due_day": 3,
+      "tags": [
+        "legally_required",
+        "needs_hire_action",
+        "can_follow_first_shift"
+      ],
+      "rule": "i9_section_2",
+      "fallback": {
+        "shape": "chase",
+        "after_days": 1,
+        "alert": "Onboarding coordinator",
+        "action": "Ask the hire to bring the missing document to their next shift"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "e_verify",
+      "action": "Create the E-Verify case from the finished Form I-9",
+      "done_when": "E-Verify case number saved on the hire record",
+      "category": "Work authorization & legal filings",
+      "owner": "Onboarding coordinator",
+      "after": [
+        "i9_s2"
+      ],
+      "needs": "the finished Form I-9, which E-Verify reads",
+      "duration_days": 1,
+      "due_day": 3,
+      "tags": [
+        "legally_required",
+        "can_follow_first_shift"
+      ],
+      "rule": "e_verify_case",
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "w4",
+      "action": "Send the hire the Form W-4 in the payroll portal",
+      "done_when": "Payroll portal shows the W-4 as submitted",
+      "category": "Payroll & pay setup",
+      "owner": "Payroll specialist",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 3,
+      "due_day": 0,
+      "tags": [
+        "legally_required",
+        "needs_hire_action"
+      ],
+      "rule": "w4",
+      "fallback": {
+        "shape": "chase",
+        "after_days": 2,
+        "alert": "Payroll specialist",
+        "action": "Text the hire the portal link and the day-0 deadline"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "new_hire_report",
+      "action": "Submit the new hire report to the state agency",
+      "done_when": "State confirmation number saved in payroll",
+      "category": "Work authorization & legal filings",
+      "owner": "Payroll specialist",
+      "after": [
+        "w4"
+      ],
+      "needs": "the hire's legal name, address and SSN from the W-4",
+      "not_before_day": 1,
+      "duration_days": 1,
+      "due_day": 14,
+      "tags": [
+        "legally_required",
+        "can_follow_first_shift"
+      ],
+      "rule": "new_hire_report",
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "direct_deposit",
+      "action": "Send the hire the direct deposit form in the payroll portal",
+      "done_when": "Payroll portal shows the deposit account verified",
+      "category": "Payroll & pay setup",
+      "owner": "Payroll specialist",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 3,
+      "due_day": 7,
+      "tags": [
+        "needs_hire_action",
+        "can_follow_first_shift"
+      ],
+      "fallback": {
+        "shape": "conditional_start",
+        "after_days": 3,
+        "alert": "Payroll specialist",
+        "action": "Issue the first wages on a pay card; switch at the next cycle"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "handbook_ack",
+      "action": "Send the handbook and attendance policy for e-signature",
+      "done_when": "Signed acknowledgement stored in the hire's file",
+      "category": "Policy acknowledgements",
+      "owner": "Onboarding coordinator",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 3,
+      "due_day": 0,
+      "tags": [
+        "needs_hire_action"
+      ],
+      "fallback": {
+        "shape": "conditional_start",
+        "after_days": 3,
+        "alert": "Store manager",
+        "action": "Hire signs the paper copy in the first ten minutes of shift one"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "safety_training",
+      "action": "Assign the 45-minute store safety module",
+      "done_when": "Learning system shows the module passed",
+      "category": "Required training & certification",
+      "owner": "Store manager",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 4,
+      "due_day": -1,
+      "tags": [
+        "needs_hire_action",
+        "blocks_first_shift"
+      ],
+      "fallback": {
+        "shape": "move_shift",
+        "after_days": 3,
+        "alert": "Store manager",
+        "action": "Book the module as paid time and move the first shift by one day",
+        "decider": "District manager"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "ladder_cert",
+      "action": "Assign the ladder safety sign-off to stockroom hires",
+      "done_when": "Signed ladder sign-off stored in the hire's file",
+      "category": "Required training & certification",
+      "owner": "Store manager",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 5,
+      "due_day": 14,
+      "tags": [
+        "needs_hire_action",
+        "can_follow_first_shift"
+      ],
+      "fallback": {
+        "shape": "conditional_start",
+        "after_days": 5,
+        "alert": "Store manager",
+        "action": "Keep the hire off ladder tasks until the sign-off is filed"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "schedule_shifts",
+      "action": "Enter the hire's first two weeks of shifts in the rota",
+      "done_when": "Shifts visible in the hire's scheduling app",
+      "category": "Scheduling & first shift readiness",
+      "owner": "Store manager",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 2,
+      "due_day": -3,
+      "tags": [
+        "blocks_first_shift"
+      ],
+      "fallback": {
+        "shape": "substitute",
+        "after_days": 2,
+        "alert": "District manager",
+        "action": "Text the hire the shift times directly from the paper rota"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "uniform_fit",
+      "action": "Order the uniform in the size the hire gave at offer",
+      "done_when": "Order confirmation number saved on the hire record",
+      "category": "Equipment & logistics",
+      "owner": "Store manager",
+      "after": [
+        "offer_accepted"
+      ],
+      "duration_days": 5,
+      "due_day": -1,
+      "tags": [
+        "external_dependency"
+      ],
+      "fallback": {
+        "shape": "substitute",
+        "after_days": 4,
+        "alert": "Store manager",
+        "action": "Issue a uniform from store stock on day one"
+      },
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "checkin_shifts",
+      "action": "Text the hire their first-week shift times",
+      "done_when": "Text shows delivered in the messaging tool",
+      "category": "Connection & engagement",
+      "owner": "Store manager",
+      "after": [
+        "schedule_shifts"
+      ],
+      "needs": "the shifts entered in the rota",
+      "not_before_day": -7,
+      "duration_days": 0,
+      "due_day": -6,
+      "tags": [],
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "checkin_cleared",
+      "action": "Tell the hire the check cleared and which documents to bring",
+      "done_when": "Text shows delivered in the messaging tool",
+      "category": "Connection & engagement",
+      "owner": "Onboarding coordinator",
+      "after": [
+        "bg_check"
+      ],
+      "needs": "the vendor's final result",
+      "duration_days": 0,
+      "due_day": -2,
+      "tags": [],
+      "source": "cloned",
+      "validated": false
+    },
+    {
+      "id": "day_before",
+      "action": "Text the hire tomorrow's start time, parking and who to ask for",
+      "done_when": "Text shows delivered in the messaging tool",
+      "category": "Connection & engagement",
+      "owner": "Store manager",
+      "after": [
+        "schedule_shifts"
+      ],
+      "needs": "the confirmed first-shift time",
+      "not_before_day": -1,
+      "duration_days": 0,
+      "due_day": -1,
+      "tags": [],
+      "source": "cloned",
+      "validated": false
+    }
+  ],
+  "cloned_from": "Northline Goods: store associate, US (CA, TX)"
+}

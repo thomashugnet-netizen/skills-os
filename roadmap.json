@@ -94,13 +94,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "onboarding-workflow-designer",
-      "title": "Onboarding Workflow Designer",
-      "category": "onboarding",
-      "description": "Designs the offer-to-first-shift workflow for hourly roles, with a named owner, a deadline and a fallback on every step that can stall.",
-      "needs_dataset": false
-    },
-    {
       "slug": "headcount-forecaster",
       "title": "Headcount Forecaster",
       "category": "operating",
