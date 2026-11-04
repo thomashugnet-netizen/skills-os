@@ -30,6 +30,10 @@ DIST = os.path.join(ROOT, "dist")
 SAMPLES = ["data/frontline_pipeline_sample.csv", "data/sourcing_spend_sample.csv"]
 DATA_BLOCK_MARKER = "**If your file contains a column that looks nominative"
 SKIP = {"__pycache__", ".DS_Store"}
+# Written for the skill's page on the site (an example prompt and output), read
+# by tools/catalogue.py. Not part of the skill, so not in the zip: editing it
+# never changes what anyone downloads, and never needs a version bump.
+SITE_ONLY = {"PAGE.md"}
 
 
 def discover():
@@ -57,7 +61,8 @@ def files_for(slug, skill_md, folder):
         for dirpath, dirs, names in os.walk(folder):
             dirs[:] = [d for d in dirs if d not in SKIP]
             for name in sorted(names):
-                if name in SKIP or name == "SKILL.md" or name.startswith("."):
+                if (name in SKIP or name in SITE_ONLY or name == "SKILL.md"
+                        or name.startswith(".")):
                     continue
                 full = os.path.join(dirpath, name)
                 out.append((f"{slug}/{os.path.relpath(full, folder)}", full))
