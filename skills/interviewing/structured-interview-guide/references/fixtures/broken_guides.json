@@ -1,0 +1,603 @@
+{
+  "about": "Each case breaks the sample guide in one way. The checker must fail it (or warn) for that reason, and report exactly one finding. 'refused' cases are guides in the wrong shape: the checker must refuse them with a message naming the field, never crash.",
+  "cases": [
+    {
+      "name": "too_few",
+      "blocking": true,
+      "expect": "3 questions",
+      "set": [
+        [
+          "questions.5",
+          "__delete__"
+        ],
+        [
+          "questions.4",
+          "__delete__"
+        ],
+        [
+          "questions.3",
+          "__delete__"
+        ],
+        [
+          "decision.advance_at",
+          8
+        ],
+        [
+          "decision.reject_below",
+          5
+        ]
+      ]
+    },
+    {
+      "name": "no_availability",
+      "blocking": true,
+      "expect": "no 'availability' question",
+      "set": [
+        [
+          "questions.2.purpose",
+          "role_behaviour"
+        ]
+      ]
+    },
+    {
+      "name": "five_point_scale",
+      "blocking": true,
+      "expect": "anchors must be exactly 1, 2 and 3",
+      "set": [
+        [
+          "questions.0.anchors.4",
+          "Better than three in every way possible."
+        ],
+        [
+          "questions.0.anchors.5",
+          "The best answer anyone has ever given."
+        ]
+      ]
+    },
+    {
+      "name": "thin_anchor",
+      "blocking": true,
+      "expect": "every anchor needs",
+      "set": [
+        [
+          "questions.1.anchors.3",
+          "Good."
+        ]
+      ]
+    },
+    {
+      "name": "illegal_question",
+      "blocking": true,
+      "expect": "asks about marriage",
+      "set": [
+        [
+          "questions.4.text",
+          "Do you have kids at home at night?"
+        ]
+      ]
+    },
+    {
+      "name": "illegal_probe",
+      "blocking": true,
+      "expect": "probe",
+      "set": [
+        [
+          "questions.0.probes",
+          [
+            "Is that because of your kids?"
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "double_barrel",
+      "blocking": true,
+      "expect": "two questions in one",
+      "set": [
+        [
+          "questions.3.text",
+          "How would you get here? And how would you get home?"
+        ]
+      ]
+    },
+    {
+      "name": "over_time",
+      "blocking": true,
+      "expect": "questions take",
+      "set": [
+        [
+          "questions.0.minutes",
+          5
+        ],
+        [
+          "questions.1.minutes",
+          5
+        ]
+      ]
+    },
+    {
+      "name": "decision_out_of_range",
+      "blocking": true,
+      "expect": "decision rule: reject below",
+      "set": [
+        [
+          "decision.advance_at",
+          18
+        ]
+      ]
+    },
+    {
+      "name": "no_middle",
+      "blocking": true,
+      "expect": "say what happens",
+      "set": [
+        [
+          "decision.middle",
+          ""
+        ]
+      ]
+    },
+    {
+      "name": "missing_opening",
+      "blocking": true,
+      "expect": "missing 'opening'",
+      "set": [
+        [
+          "opening",
+          "__delete__"
+        ]
+      ]
+    },
+    {
+      "name": "risky_alternative",
+      "blocking": true,
+      "expect": "itself risky",
+      "set": [
+        [
+          "do_not_ask.0.instead",
+          "Do you have childcare sorted for nights?"
+        ]
+      ]
+    },
+    {
+      "name": "vague_red_flag",
+      "blocking": false,
+      "expect": "is an impression",
+      "set": [
+        [
+          "red_flags.0",
+          "Seems lazy."
+        ]
+      ]
+    },
+    {
+      "name": "not_risky_dna",
+      "blocking": false,
+      "expect": "is not a risky question",
+      "set": [
+        [
+          "do_not_ask.1.question",
+          "Can you lift boxes?"
+        ]
+      ]
+    },
+    {
+      "name": "jargon",
+      "blocking": false,
+      "expect": "reads at grade",
+      "set": [
+        [
+          "questions.4.text",
+          "Characterise your methodology for prioritising concurrent operational safety responsibilities?"
+        ]
+      ]
+    },
+    {
+      "name": "no_probe",
+      "blocking": false,
+      "expect": "add a follow-up probe",
+      "set": [
+        [
+          "questions.4.probes",
+          []
+        ]
+      ]
+    },
+    {
+      "name": "empty_text",
+      "blocking": true,
+      "expect": "has no text",
+      "set": [
+        [
+          "questions.4.text",
+          ""
+        ]
+      ]
+    },
+    {
+      "name": "whitespace_text",
+      "blocking": true,
+      "expect": "has no text",
+      "set": [
+        [
+          "questions.4.text",
+          "   "
+        ]
+      ]
+    },
+    {
+      "name": "whitespace_opening",
+      "blocking": true,
+      "expect": "missing 'opening'",
+      "set": [
+        [
+          "opening",
+          "   "
+        ]
+      ]
+    },
+    {
+      "name": "whitespace_role",
+      "blocking": true,
+      "expect": "missing 'role'",
+      "set": [
+        [
+          "role",
+          " "
+        ]
+      ]
+    },
+    {
+      "name": "decision_float",
+      "blocking": true,
+      "expect": "whole numbers",
+      "set": [
+        [
+          "decision.advance_at",
+          12.9
+        ]
+      ]
+    },
+    {
+      "name": "reject_floor",
+      "blocking": true,
+      "expect": "lowest possible total",
+      "set": [
+        [
+          "decision.reject_below",
+          5
+        ]
+      ]
+    },
+    {
+      "name": "anchors_same_but_punctuation",
+      "blocking": true,
+      "expect": "two anchors say the same thing",
+      "set": [
+        [
+          "questions.0.anchors.2",
+          "No example, or an example where being late was common and they did not change anything!"
+        ],
+        [
+          "questions.0.anchors.1",
+          "No example, or an example where being late was common and they did not change anything."
+        ]
+      ]
+    },
+    {
+      "name": "filler_anchor",
+      "blocking": true,
+      "expect": "every anchor needs",
+      "set": [
+        [
+          "questions.0.anchors.1",
+          "bad bad bad bad"
+        ]
+      ]
+    },
+    {
+      "name": "risky_anchor",
+      "blocking": true,
+      "expect": "q1 anchor 1: mentions marriage",
+      "set": [
+        [
+          "questions.0.anchors.1",
+          "Has kids at home, so probably unreliable at nights."
+        ]
+      ]
+    },
+    {
+      "name": "risky_red_flag",
+      "blocking": true,
+      "expect": "red flags 'Mentions having young kids",
+      "set": [
+        [
+          "red_flags.0",
+          "Mentions having young kids at home."
+        ]
+      ]
+    },
+    {
+      "name": "risky_decision",
+      "blocking": true,
+      "expect": "decision rule: mentions",
+      "set": [
+        [
+          "decision.middle",
+          "8 to 11: if they have kids, reject; otherwise a trial shift."
+        ]
+      ]
+    },
+    {
+      "name": "risky_role",
+      "blocking": true,
+      "expect": "the role title",
+      "set": [
+        [
+          "role",
+          "Overnight Stocker (young people only)"
+        ]
+      ]
+    },
+    {
+      "name": "not_english",
+      "blocking": true,
+      "expect": "not in English",
+      "set": [
+        [
+          "questions.4.text",
+          "¿Cuántos hijos tiene usted y quién los cuida por la noche?"
+        ]
+      ]
+    },
+    {
+      "name": "too_long",
+      "blocking": true,
+      "expect": "too long to say out loud",
+      "set": [
+        [
+          "questions.4.text",
+          "Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. Tell me about it. What did you do?"
+        ]
+      ]
+    },
+    {
+      "name": "statement",
+      "blocking": true,
+      "expect": "is a statement, not a question",
+      "set": [
+        [
+          "questions.4.text",
+          "Safety at work."
+        ]
+      ]
+    },
+    {
+      "name": "duplicate_id",
+      "blocking": true,
+      "expect": "share the id q1",
+      "set": [
+        [
+          "questions.4.id",
+          "q1"
+        ]
+      ]
+    },
+    {
+      "name": "duplicate_question",
+      "blocking": true,
+      "expect": "appears twice",
+      "set": [
+        [
+          "questions.4.text",
+          "How would you get to our Elm Street store for a 10pm start, and home again at 6:30 in the morning?"
+        ]
+      ]
+    },
+    {
+      "name": "minutes_out_of_range",
+      "blocking": true,
+      "expect": "5 to 30 minutes",
+      "set": [
+        [
+          "minutes",
+          600
+        ]
+      ]
+    },
+    {
+      "name": "empty_probe",
+      "blocking": true,
+      "expect": "one of the probes is empty",
+      "set": [
+        [
+          "questions.4.probes",
+          [
+            "  "
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "caution_probe",
+      "blocking": false,
+      "expect": "probe 'How tall are you?'",
+      "set": [
+        [
+          "questions.0.probes",
+          [
+            "How tall are you?"
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "caution_closing",
+      "blocking": false,
+      "expect": "the closing script: touches car ownership",
+      "set": [
+        [
+          "closing",
+          "Do you have a car? Thanks for coming in, we will text you within two days."
+        ]
+      ]
+    }
+  ],
+  "refused": [
+    {
+      "name": "questions_dict",
+      "expect": "'questions' must be a list",
+      "set": [
+        [
+          "questions",
+          {
+            "q1": "x"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "question_null",
+      "expect": "question 2 must be an object",
+      "set": [
+        [
+          "questions.1",
+          null
+        ]
+      ]
+    },
+    {
+      "name": "text_number",
+      "expect": "question 1 'text' must be text",
+      "set": [
+        [
+          "questions.0.text",
+          5
+        ]
+      ]
+    },
+    {
+      "name": "anchors_list",
+      "expect": "'anchors' must map",
+      "set": [
+        [
+          "questions.0.anchors",
+          [
+            "a",
+            "b",
+            "c"
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "anchor_dict",
+      "expect": "anchor 1 must be text",
+      "set": [
+        [
+          "questions.0.anchors.1",
+          {
+            "x": 1
+          }
+        ]
+      ]
+    },
+    {
+      "name": "probes_string",
+      "expect": "'probes' must be a list",
+      "set": [
+        [
+          "questions.0.probes",
+          "What happened the one time it went wrong?"
+        ]
+      ]
+    },
+    {
+      "name": "probes_numbers",
+      "expect": "'probes' must be a list",
+      "set": [
+        [
+          "questions.0.probes",
+          [
+            1
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "decision_list",
+      "expect": "'decision' must be an object",
+      "set": [
+        [
+          "decision",
+          [
+            12,
+            8
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "red_flags_string",
+      "expect": "'red_flags' must be a list",
+      "set": [
+        [
+          "red_flags",
+          "Cannot say how they will get home."
+        ]
+      ]
+    },
+    {
+      "name": "dna_no_instead",
+      "expect": "needs both a 'question' and an 'instead'",
+      "set": [
+        [
+          "do_not_ask.0.instead",
+          "__delete__"
+        ]
+      ]
+    },
+    {
+      "name": "minutes_words",
+      "expect": "'minutes' must be a number",
+      "set": [
+        [
+          "minutes",
+          "fifteen"
+        ]
+      ]
+    },
+    {
+      "name": "minutes_bool",
+      "expect": "'minutes' must be a number",
+      "set": [
+        [
+          "questions.0.minutes",
+          true
+        ]
+      ]
+    },
+    {
+      "name": "minutes_nan",
+      "expect": "'minutes' must be a number",
+      "set": [
+        [
+          "minutes",
+          "nan"
+        ]
+      ]
+    },
+    {
+      "name": "opening_list",
+      "expect": "'opening' must be text",
+      "set": [
+        [
+          "opening",
+          [
+            "Hi"
+          ]
+        ]
+      ]
+    }
+  ]
+}

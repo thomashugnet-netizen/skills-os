@@ -1,0 +1,562 @@
+{
+ "about": "The wording rules scripts/bias_check.py applies to every candidate-facing text. Each rule names its class, its severity, the kinds of text it applies to, why it matters and what to say instead. 'guards' are sentence-level patterns that switch the rule off for that sentence; 'text_guards' switch it off for the whole text (a driving job may lawfully ask for a licence). Patterns are lower-case regular expressions, matched in English only. A rule that does not match is not a clearance.",
+ "checked": "2026-11-03",
+ "severity_order": [
+  "high",
+  "medium",
+  "low"
+ ],
+ "types": [
+  "ad",
+  "question",
+  "message",
+  "offer",
+  "guide",
+  "page"
+ ],
+ "eeo_guard": "(equal (employment )?opportunity|\\beeo\\b|\\beoe\\b|without regard to|regardless of|(does|do) not discriminate|all qualified applicants|reasonable accommodation|affirmative action|we welcome applicants|protected (veteran|characteristic|status)|(will )?never ask (you )?(about|for)|we do not ask|we don't ask)",
+ "about_them": "\\b(you|your|you're|youre|yours|u|ur|applicant'?s?|candidate'?s?)\\b",
+ "others": "\\b(customer|guest|shopper|store|aisle|site|driver|team ?mate|co-?worker|visitor|patient|resident|famil(y|ies) shopping)(?:'s|s'|s)?\\s+\\w+",
+ "driving_job": "\\b(drivers?\\b(?!'s licen|s' licen| licen)|driving (job|role|position)|delivery (driver|associate|route)|deliver(ing)? (packages|orders|groceries|food)|courier|route (driver|sales)|cdl|forklift operator|drive (your|a|the) (own )?(car|vehicle|van|truck|company vehicle)|rideshare|mileage reimbursement|van route)\\b",
+ "physical_job": "\\b(warehouse|stocker|stocking|stock associate|picker|packer|loader|unloader|unload(ing)?|order selector|material handler|package handler|forklift|freezer|dishwasher|line cook|prep cook|janitor|custodian|housekeep(er|ing)|mover|movers|landscap\\w*|construction|laborer|labourer|sanitation|crew member|delivery)\\b",
+ "physical_demands": "(\\b\\d+\\s*(lbs?|pounds|kg|kilos)\\b|on your feet|standing (for|up to)|stand for|walk(ing)? (up to )?\\d|\\b\\d+[- ]hour shifts? on|bend(ing)?,|bending|kneel|climb(ing)? (ladders|stairs)|repetitive|temperatures?|freezer|cooler|cold environment|\\bheat\\b|outdoors in|noise|loud)",
+ "rules": [
+  {
+   "id": "gendered_title",
+   "class": "coded",
+   "severity": "medium",
+   "applies": "all",
+   "patterns": [
+    "\\b(sales(man|men|woman|women)|waitress(es)?|hostess(es)?|barman|barmaid|handym[ae]n|forem[ae]n|chairman|workm[ae]n|manpower|repairm[ae]n|deliverym[ae]n|delivery ?boys?|stock ?boys?|bus ?boys?|cleaning lad(y|ies)|girl friday|stewardess(es)?|bellboys?|doorm[ae]n|middlem[ae]n|cameram[ae]n)\\b"
+   ],
+   "why": "A job title with a gender in it tells half the people reading it that the job is not for them, and in hourly hiring that shows up as fewer applications, not complaints.",
+   "instead": "Use the neutral title: sales associate, server, host, handyperson, supervisor, crew, staff, porter.",
+   "replace": {
+    "salesman": "sales associate",
+    "salesmen": "sales associates",
+    "saleswoman": "sales associate",
+    "waitress": "server",
+    "waitresses": "servers",
+    "hostess": "host",
+    "barman": "bartender",
+    "barmaid": "bartender",
+    "handyman": "handyperson",
+    "foreman": "supervisor",
+    "foremen": "supervisors",
+    "workman": "worker",
+    "workmen": "workers",
+    "manpower": "staff",
+    "repairman": "technician",
+    "deliveryman": "delivery driver",
+    "delivery boy": "delivery driver",
+    "stock boy": "stocker",
+    "bus boy": "busser",
+    "busboy": "busser",
+    "cleaning lady": "cleaner",
+    "chairman": "chair",
+    "stewardess": "flight attendant",
+    "bellboy": "bellhop",
+    "doorman": "door attendant"
+   },
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "gendered_pronoun",
+   "class": "coded",
+   "severity": "low",
+   "applies": [
+    "ad",
+    "offer",
+    "page",
+    "message"
+   ],
+   "patterns": [
+    "\\b(he|she) (will|should|must|is expected|needs|has to|is responsible)\\b",
+    "\\bhis (or her )?(duties|responsibilities|role|shift)\\b",
+    "\\bhe/she\\b|\\bs/he\\b|\\bhis/her\\b"
+   ],
+   "guards": [
+    "\\b(manager|supervisor|lead|trainer|mentor|buddy),? \\w+,? (he|she)\\b",
+    "\\byou(r|'ll|'re)?\\b"
+   ],
+   "why": "Writing about the hire as 'he' assumes who the hire is.",
+   "instead": "Address the reader: 'you will', 'your shift'.",
+   "replace": {
+    "he will": "you will",
+    "she will": "you will",
+    "he must": "you must",
+    "he should": "you should",
+    "his duties": "your duties",
+    "he/she": "you",
+    "s/he": "you",
+    "his/her": "your"
+   }
+  },
+  {
+   "id": "hype_coded",
+   "class": "coded",
+   "severity": "low",
+   "applies": [
+    "ad",
+    "page",
+    "message"
+   ],
+   "patterns": [
+    "\\b(rock ?stars?|ninjas?|gurus?|superstars?|crush(ing)? it|killer instinct|work hard,? play hard|aggressive|dominant|fearless)\\b",
+    "\\bcompetitive\\b(?! (pay|pay rates?|wages?|salar(y|ies)|rates?|benefits|compensation|hourly|edge|advantage))"
+   ],
+   "why": "Masculine-coded and hype words narrow who sees themselves in the job, and describe nothing about the shift.",
+   "instead": "Say what the work is: 'you'll restock 20 aisles a night' tells people more than any label."
+  },
+  {
+   "id": "feminine_coded",
+   "class": "coded",
+   "severity": "low",
+   "applies": [
+    "ad",
+    "page",
+    "message"
+   ],
+   "patterns": [
+    "\\b(bubbly|nurturing|girly|motherly)\\b"
+   ],
+   "why": "Personality words with a gender attached narrow the pool and describe nothing you can check.",
+   "instead": "Name the behaviour: 'greets every customer within 10 seconds'."
+  },
+  {
+   "id": "culture_fit",
+   "class": "coded",
+   "severity": "low",
+   "applies": "all",
+   "patterns": [
+    "\\b(culture fit|cultural fit|fit in with (our|the) (team|crew|culture)|one of the (guys|boys|girls))\\b"
+   ],
+   "why": "'Fit' is where a decision gets made on similarity rather than the job, and written down it reads as a reason.",
+   "instead": "Name the job requirement the person did or did not meet."
+  },
+  {
+   "id": "age_coded",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\brecent (college |high school |university )?grad(uate)?s?\\b",
+    "\\bdigital natives?\\b",
+    "\\byoung(,| and| &)? (energetic|dynamic|vibrant|fresh|enthusiastic|hungry)\\b",
+    "\\b(energetic|dynamic|vibrant) young\\b",
+    "\\byouthful\\b",
+    "\\byoung (team|crew|staff|people|person|candidates?|applicants?|blood)\\b",
+    "\\bfresh blood\\b",
+    "\\b(no older than|not older than|under the age of|maximum age|max\\.? age|between the ages of|aged between)\\b",
+    "\\b(no more than|not more than|maximum( of)?|max\\.?|up to) \\d+ years?'?( of)? (experience|exp\\b)",
+    "\\boverqualified\\b",
+    "\\b(under|below) (30|35|40|45|50)( years old| yrs old)?\\b(?!\\s*(lbs?|pounds|kg|minutes|mins|hours|hrs|feet|ft|degrees|%|percent|items|cases|boxes|miles|km))"
+   ],
+   "why": "Wording that prefers younger applicants, or caps experience, deters people 40 and over, a protected group under federal law.",
+   "instead": "State what the job needs. A minimum age the law requires ('must be 18 or older') is fine.",
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "mature_coded",
+   "class": "coded",
+   "severity": "low",
+   "applies": [
+    "ad",
+    "page"
+   ],
+   "patterns": [
+    "\\b(mature|seasoned|retirees? (only|preferred))\\b"
+   ],
+   "guards": [
+    "\\bmature (attitude|approach|judg(e)?ment)\\b"
+   ],
+   "why": "Age-coded the other way: it narrows the pool and says nothing about the job.",
+   "instead": "Name the behaviour you want."
+  },
+  {
+   "id": "age_question",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\bdate of birth\\b",
+    "\\bdob\\b",
+    "\\bbirth ?(date|day|year)\\b",
+    "\\b(when|what year|which year) (were you born|did you (graduate|finish|leave))\\b",
+    "\\bgraduation (year|date)\\b",
+    "\\bhow old are (you|u)\\b",
+    "\\byour age\\b"
+   ],
+   "guards": [
+    "\\b(18|21|16|19) or (older|over)\\b"
+   ],
+   "why": "Asking for age, a birth year or a graduation year before a decision invites age discrimination claims and tells you nothing about the job.",
+   "instead": "If the role has a legal minimum age, ask 'Are you 18 or older?' and nothing more.",
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "citizenship",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\b(are|r) (you|u) an? (u\\.?s\\.? |us |american )?citizen\\b",
+    "\\b(u\\.?s\\.? |us )?citizenship (status|required|only|is required)\\b",
+    "\\bmust be an? (u\\.?s\\.? |us |american )?citizen\\b",
+    "\\bcitizens only\\b",
+    "\\bgreen card\\b",
+    "\\b(country|place) of (birth|origin)\\b",
+    "\\bwhere (are|were) (you|u) (from|born)\\b",
+    "\\bnative country\\b",
+    "\\bnationality\\b",
+    "\\b(immigration|visa) status\\b"
+   ],
+   "why": "Citizenship and origin questions route into national-origin and citizenship discrimination. What you may ask is whether the person is authorised to work.",
+   "instead": "Ask: 'Are you legally authorised to work in the United States?' Verify documents only after hire, through Form I-9.",
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "language_origin",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\bnative (english |spanish |french )?speakers?\\b",
+    "\\bnative[- ]level\\b",
+    "\\b(perfect|flawless|accent-free|unaccented) english\\b",
+    "\\b(no|without an?|neutral) accents?\\b",
+    "\\bamerican accent\\b",
+    "\\benglish only\\b",
+    "\\bmother tongue\\b",
+    "\\benglish as (a|your) first language\\b"
+   ],
+   "why": "'Native speaker' and 'no accent' are national-origin proxies. A language requirement is fine when the job needs it; the origin is not.",
+   "instead": "Describe the task: 'can follow spoken safety instructions and read a pick list in English'.",
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "health_disability",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\bable[- ]bodied\\b",
+    "\\bphysically fit\\b",
+    "\\bin (good|excellent|perfect) (physical )?(health|shape|condition)\\b",
+    "\\bno (health|medical) (problems|issues|conditions)\\b",
+    "\\bfree (of|from) (any )?(disabilit|illness|medical|injur)\\w*",
+    "\\b(perfect|20/20) (vision|eyesight|hearing)\\b",
+    "\\bno (physical |mental )?disabilit\\w*",
+    "\\bdo (you|u) have (a|any) (disabilit|medical condition|health condition|health problem)\\w*",
+    "\\bany (health|medical) (conditions?|problems|issues|history)\\b",
+    "\\bworkers'? comp(ensation)? (claims?|history)\\b",
+    "\\b(have|did) (you|u) (ever )?(been )?(filed|file) (a )?workers'? comp",
+    "\\b(what|which|any) medications?\\b",
+    "\\bhow many (sick|sick days)\\b",
+    "\\bsick days (did|have) (you|u)\\b",
+    "\\bhistory of (illness|injur|mental)\\w*",
+    "\\bmental health (history|condition|issues)\\b",
+    "\\b(list|describe|disclose|tell us about) (any|your) (disabilit|medical|health)\\w*"
+   ],
+   "why": "Health and disability questions before an offer are restricted under the ADA, and fitness wording deters disabled applicants who could do the job, with or without an accommodation.",
+   "instead": "State the task and how often: 'lift cases of up to 40 lbs, about 50 times a shift'. Ask 'Can you do this, with or without a reasonable accommodation?'",
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "family",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "about_them": true,
+   "patterns": [
+    "\\b(children|kids|child ?care|babysitter|daycare|pregnan\\w*|expecting a baby|married|marital status|maiden name|spouse|husband|wife|boyfriend|girlfriend|family plans|start(ing)? a family|plan(ning)? (to have|on having) (kids|children|a baby))\\b"
+   ],
+   "why": "Questions about children, pregnancy or marriage are used as availability screens and are evidence of sex discrimination when someone is turned down.",
+   "instead": "Ask everyone the same thing: 'Can you work the posted schedule, nights and weekends included?'",
+   "source": "https://www.eeoc.gov/pre-employment-inquiries-and-marital-status-or-number-children"
+  },
+  {
+   "id": "family_requirement",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\bno (family|childcare|child care|kids?|children) (commitments|issues|responsibilities|obligations|problems)\\b",
+    "\\bwithout (family|childcare|child care) (commitments|issues|responsibilities)\\b",
+    "\\bsingle (applicants|candidates) (only|preferred)\\b"
+   ],
+   "why": "A requirement about family is a screen on sex and caring responsibilities.",
+   "instead": "State the schedule and let people judge it.",
+   "source": "https://www.eeoc.gov/pre-employment-inquiries-and-marital-status-or-number-children"
+  },
+  {
+   "id": "religion",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\b(your|go to|attend\\w*|at) (church|mosque|temple|synagogue|services)\\b",
+    "\\breligio\\w*\\b",
+    "\\b(what|which) (religious )?holidays do (you|u) (observe|celebrate|keep)\\b",
+    "\\bsabbath\\b",
+    "\\bdo (you|u) pray\\b"
+   ],
+   "why": "Questions about religion invite discrimination claims. Days someone cannot work are an accommodation conversation, not a screening question.",
+   "instead": "Ask which days and times they can work, the same way for everyone.",
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "sex_preference",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\b(men|women|males?|females?|guys|girls|ladies|gentlemen) only\\b",
+    "\\b(male|female) (candidates|applicants|staff|workers|preferred)\\b",
+    "\\bonly (men|women|males|females)\\b"
+   ],
+   "why": "A sex preference in a job ad or screen is unlawful outside a narrow bona fide occupational qualification.",
+   "instead": "State the requirement of the job itself.",
+   "source": "https://www.eeoc.gov/prohibited-employment-policiespractices"
+  },
+  {
+   "id": "height_weight",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\b(minimum|min\\.?|maximum|max\\.?) (height|weight)\\b",
+    "\\bheight (and|&) weight\\b",
+    "\\bhow (tall|much do) (are )?(you|u)( weigh)?\\b",
+    "\\b(you|u) must (be|stand) (at least )?\\d+ ?(ft|feet|cm|'|inches) tall\\b",
+    "\\b(must|should) weigh\\b",
+    "\\byour (height|weight)\\b"
+   ],
+   "why": "Height and weight rules screen out women and some national-origin groups at higher rates, and are rarely what the job needs.",
+   "instead": "State the task: what has to be reached or lifted, and how often.",
+   "source": "https://www.eeoc.gov/pre-employment-inquiries-and-height-weight"
+  },
+  {
+   "id": "arrest",
+   "class": "protected",
+   "severity": "high",
+   "applies": "all",
+   "patterns": [
+    "\\b(have you|have u|ever|been) (ever )?(been )?arrested\\b",
+    "\\barrest (record|history)\\b"
+   ],
+   "why": "An arrest is not a conviction. Screening on arrests has a disparate impact by race and is not job-related.",
+   "instead": "Leave it out. If a conviction check is needed, run it after a conditional offer, and assess it against the job.",
+   "source": "https://www.eeoc.gov/laws/guidance/enforcement-guidance-consideration-arrest-and-conviction-records-employment-decisions"
+  },
+  {
+   "id": "criminal_history_early",
+   "class": "protected",
+   "severity": "medium",
+   "applies": [
+    "ad",
+    "question",
+    "message",
+    "guide"
+   ],
+   "patterns": [
+    "\\b(have you|have u) (ever )?been convicted\\b",
+    "\\b(criminal|conviction) (record|history|background)\\b",
+    "\\bfelon(y|ies|s)?\\b",
+    "\\bno (criminal )?record\\b",
+    "\\bclean (criminal )?(record|background)\\b"
+   ],
+   "guards": [
+    "\\b(after|following) (an? |your )?(conditional )?(job )?offer\\b",
+    "\\bpost[- ]offer\\b",
+    "\\bconditional offer\\b",
+    "\\bdriving record\\b",
+    "\\bmvr\\b"
+   ],
+   "why": "Many states and cities bar criminal-history questions on the application or before a conditional offer, and blanket exclusions have a disparate impact by race.",
+   "instead": "Move it after the conditional offer, and assess the offence, the time since and the job. Check your state and city rules.",
+   "source": "https://www.eeoc.gov/laws/guidance/enforcement-guidance-consideration-arrest-and-conviction-records-employment-decisions"
+  },
+  {
+   "id": "pay_history",
+   "class": "protected",
+   "severity": "high",
+   "applies": [
+    "question",
+    "message",
+    "guide"
+   ],
+   "patterns": [
+    "\\b(current|previous|past|last|prior) (salary|pay|wage|hourly rate|compensation|pay rate)\\b",
+    "\\b(salary|pay|wage) history\\b",
+    "\\bhow much (do|did|are) (you|u) (make|earn|making|earning|paid|getting paid)\\b",
+    "\\bwhat (do|did) (you|u) (make|earn)\\b"
+   ],
+   "why": "A growing number of states and cities ban asking for pay history, because it carries past pay gaps into the next job.",
+   "instead": "State the pay for the role, and ask whether it works for them.",
+   "source": "https://california.public.law/codes/labor_code_section_432.3"
+  },
+  {
+   "id": "own_car",
+   "class": "proxy",
+   "severity": "medium",
+   "applies": "all",
+   "text_guard": "driving_job",
+   "patterns": [
+    "\\bown (car|vehicle|transport(ation)?|ride)\\b",
+    "\\bmust have (a |your own )?(car|vehicle)\\b",
+    "\\breliable (personal )?(transportation|transport|vehicle|car) (required|is required|a must|needed|mandatory)\\b",
+    "\\b(car|vehicle) (required|is required|a must|mandatory)\\b",
+    "\\baccess to a (car|vehicle) (required|is required)\\b",
+    "\\bmust own an? (car|vehicle)\\b"
+   ],
+   "why": "Car ownership tracks income, age and disability. You probably mean 'can get here for a 5am start', which people on a bus route can do every day.",
+   "instead": "Say the start time and the location: 'Shifts start at 5am at our Dayton store (bus route 17 stops outside).'"
+  },
+  {
+   "id": "drivers_license",
+   "class": "proxy",
+   "severity": "medium",
+   "applies": "all",
+   "text_guard": "driving_job",
+   "patterns": [
+    "\\b(valid |current |clean )?driver'?s'? licen[cs]e\\b",
+    "\\bdriving licen[cs]e\\b"
+   ],
+   "guards": [
+    "\\b(or|and|any) (state |government[- ]issued )?(photo )?id\\b",
+    "\\bphoto id\\b"
+   ],
+   "why": "A licence asked for on a job with no driving filters out people who do not drive, often for reasons of income or disability, and is sometimes a stand-in for an ID.",
+   "instead": "If the job does not involve driving, drop it. If you mean an ID, say 'a government-issued photo ID'."
+  },
+  {
+   "id": "flexibility",
+   "class": "proxy",
+   "severity": "medium",
+   "applies": [
+    "ad",
+    "question",
+    "message",
+    "page"
+   ],
+   "patterns": [
+    "\\bmust be flexible\\b",
+    "\\b(open|full|total|complete|100%|unlimited|unrestricted) availability\\b",
+    "\\bavailab(le|ility) (for )?(any|all) (shifts|days|hours|times)\\b",
+    "\\bflexib(le|ility) (schedule|availability|hours)? ?(is )?(required|a must|needed|essential|mandatory)\\b",
+    "\\bavailable 24/7\\b",
+    "\\bon call at any time\\b"
+   ],
+   "why": "'Flexible' is unfalsifiable at application, filters out carers and students, and is a known reason people quit in week two when the real pattern arrives.",
+   "instead": "Publish the actual pattern: 'a rotating schedule, four shifts a week, posted two weeks ahead, including one weekend day'."
+  },
+  {
+   "id": "availability_free_text",
+   "class": "proxy",
+   "severity": "medium",
+   "applies": [
+    "question",
+    "message",
+    "guide"
+   ],
+   "patterns": [
+    "\\bany (restrictions|limitations) (on|to|in) (your )?availability\\b",
+    "\\b(is there )?anything (that )?(might|could|would|will) (prevent|stop|limit|keep) (you|u)\\b",
+    "\\breasons? (you|u) (can't|cannot|can not) work\\b",
+    "\\banything (else )?we should know about (you|u)\\b",
+    "\\bplease explain (any )?(restrictions|limitations|why)\\b"
+   ],
+   "why": "An open 'any restrictions?' invites answers about childcare, religion, health and appointments, and files them in your records.",
+   "instead": "Ask which blocks they can work, as checkboxes: weekday mornings, weekday evenings, nights, Saturdays, Sundays."
+  },
+  {
+   "id": "appearance",
+   "class": "proxy",
+   "severity": "medium",
+   "applies": "all",
+   "patterns": [
+    "\\bprofessional appearance\\b",
+    "\\bwell[- ]groomed\\b",
+    "\\bneat (and tidy )?(appearance|hair|hairstyle)\\b",
+    "\\bpresentable\\b",
+    "\\b(attractive|good[- ]looking)\\b",
+    "\\bno (dreadlocks|dreads|locs|braids|cornrows|afros?)\\b",
+    "\\bhair must be (neat|natural|conservative|professional)\\b",
+    "\\bclean[- ]shaven\\b",
+    "\\bno (facial hair|beards?)\\b",
+    "\\bbeards? (are )?not (allowed|permitted)\\b"
+   ],
+   "why": "Appearance standards route into race (hair) and religion (beards, head coverings) unless they are written as a specific, job-related standard with alternatives.",
+   "instead": "Write the standard: 'uniform provided; hair tied back or covered in food areas; respirator users need a seal, and we'll discuss alternatives'."
+  },
+  {
+   "id": "employment_gaps",
+   "class": "proxy",
+   "severity": "medium",
+   "applies": "all",
+   "patterns": [
+    "\\bno (gaps|breaks) in (your )?(employment|work history|work)\\b",
+    "\\bcontinuous (employment|work history)\\b",
+    "\\bexplain (any )?(employment |work )?gaps\\b",
+    "\\bmust be currently employed\\b",
+    "\\bcurrently employed (candidates|applicants) only\\b",
+    "\\bunemployed (candidates|applicants) (need not|will not|should not)\\b"
+   ],
+   "why": "Gaps stand in for health, disability, caring, pregnancy and criminal record. Screening on them excludes all of those at once.",
+   "instead": "Ask about recent experience of the work itself, if you need it at all."
+  },
+  {
+   "id": "immediate_start",
+   "class": "proxy",
+   "severity": "low",
+   "applies": [
+    "ad",
+    "message",
+    "page"
+   ],
+   "patterns": [
+    "\\bimmediate start only\\b",
+    "\\bmust (be able to )?start (immediately|tomorrow|today)\\b",
+    "\\bstart immediately (required|only)\\b"
+   ],
+   "why": "Most of your strongest applicants are working a notice period.",
+   "instead": "Give the real window: 'start within two weeks'."
+  },
+  {
+   "id": "experience_years",
+   "class": "requirement",
+   "severity": "low",
+   "applies": [
+    "ad",
+    "page"
+   ],
+   "patterns": [
+    "\\b\\d+\\+? (or more )?years?'? (of )?(prior |previous |relevant |related |\\w+ )?(experience|exp\\b)",
+    "\\bminimum (of )?\\d+ years?\\b",
+    "\\bat least \\d+ years?'? (of )?(experience|in)\\b"
+   ],
+   "guards": [
+    "\\b(no experience|experience not required|not required|we train|we'll train|paid training|a plus|preferred|nice to have)\\b"
+   ],
+   "why": "Years of experience on a role you train in days is the most common needless filter in frontline hiring.",
+   "instead": "Ask what happens if you hire someone without it. If the answer is 'we train them', move it to 'nice to have' or drop it."
+  },
+  {
+   "id": "tell_me_about_yourself",
+   "class": "requirement",
+   "severity": "low",
+   "applies": [
+    "question",
+    "guide"
+   ],
+   "patterns": [
+    "\\btell (us|me) about yourself\\b",
+    "\\bdescribe yourself\\b",
+    "\\bwhat makes you (unique|special)\\b"
+   ],
+   "why": "An open 'about you' surfaces protected characteristics and gets scored on fluency, which is rarely the job.",
+   "instead": "Ask about a specific situation the job contains."
+  }
+ ]
+}

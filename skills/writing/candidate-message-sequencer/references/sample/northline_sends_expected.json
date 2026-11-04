@@ -1,0 +1,25 @@
+{
+ "about": "Answers planted by generate_log.py. The engine must find them; see the docstring there.",
+ "flagged_steps": [
+  [
+   "applied_no_screen",
+   4
+  ]
+ ],
+ "leaky": [
+  "documents_missing"
+ ],
+ "after_opt_out": {
+  "screen_no_interview": 7
+ },
+ "quiet": [
+  "start_no_shift"
+ ],
+ "too_fast": {
+  "screen_no_interview": 25
+ },
+ "over_cap": {
+  "applied_no_screen": 12
+ },
+ "candidates": 2100
+}

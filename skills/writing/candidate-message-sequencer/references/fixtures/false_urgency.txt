@@ -1,0 +1,9 @@
+stage: applied, no screening call booked
+channel: sms
+stop_when: the candidate books a call
+
+[day 0, 10:00]
+Hi {first_name}, it's {employer}. Book a call for {role}: {link}. Reply STOP to opt out.
+
+[day 2, 10:00]
+{first_name}, this is your last chance to book with {employer}. Final warning before we close your application: {link}

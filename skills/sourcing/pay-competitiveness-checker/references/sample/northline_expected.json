@@ -1,0 +1,34 @@
+{
+  "about": "What the sample must produce against the bundled BLS May 2025 table. When the table is rebuilt for a new year, re-derive these by hand from the new percentiles: they are the test.",
+  "bands": {
+    "2": "at or above the median",
+    "3": "at or above the median",
+    "4": "bottom 10%",
+    "5": "at or above the median",
+    "6": "at or above the median",
+    "7": "below market",
+    "8": "below market",
+    "9": "under the median",
+    "10": "below market",
+    "11": "under the median",
+    "12": "bottom 10%",
+    "13": "under the median",
+    "14": "below market",
+    "15": "under the median",
+    "16": "below market",
+    "17": "under the median",
+    "18": "under the median",
+    "19": "under the median",
+    "20": "under the median"
+  },
+  "unresolved": [
+    21,
+    22
+  ],
+  "spreads": [
+    [
+      "Dallas-Fort Worth-Arlington, TX",
+      "Cashiers"
+    ]
+  ]
+}

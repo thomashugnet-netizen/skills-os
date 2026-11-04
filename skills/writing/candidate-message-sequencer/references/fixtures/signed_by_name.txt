@@ -1,0 +1,10 @@
+stage: applied, no screening call booked
+channel: sms
+stop_when: the candidate books a screening call
+employer: Northline
+
+[day 0, 10:00]
+Hi {first_name}, it's Northline. Thanks for applying to stock nights at our Dayton store. Book a 10-min call: {link}. Reply STOP to opt out.
+
+[day 2, 18:00]
+{first_name}, Northline again. Night stocker pay is $17.50/hr plus $1.50 for nights. Book your call: {link}

@@ -1,0 +1,10 @@
+task,data_key,per_month,minutes,automatable,effort,eliminate,note
+Book interviews by phone and text,bookings,,6,0.9,M,,minutes from asking three recruiters
+Reschedule an interview,reschedules,,9,0.8,S,,
+Send interview reminders,reminders,,2,1.0,S,,
+First screen of an application,screens,,4,0.3,L,,
+Chase offers that have gone quiet,offers,,5,0.6,M,,
+Weekly status email to each hiring manager,manager_updates,,8,0.7,M,,
+Copy each new hire into the payroll spreadsheet by hand,,60,7,,S,yes,the HRIS already sends this
+Monthly source report nobody opens,,1,90,,S,yes,
+Answer candidate questions about pay,,,,0.5,M,,no minutes known yet

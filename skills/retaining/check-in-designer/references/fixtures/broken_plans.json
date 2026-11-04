@@ -1,0 +1,483 @@
+{
+ "_about": "Each case breaks the sample plan in one way; the check must fail with a blocking message containing 'expect', or refuse the shape.",
+ "cases": [
+  {
+   "name": "day 7 missing",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "touchpoints",
+      1
+     ]
+    }
+   ],
+   "expect": "No day 7"
+  },
+  {
+   "name": "seven questions",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "touchpoints",
+      0,
+      "questions"
+     ],
+     "value": {
+      "text": "Did you find the break room?",
+      "routes": [
+       {
+        "answer": "No",
+        "tier": "log"
+       }
+      ]
+     }
+    },
+    {
+     "op": "append",
+     "path": [
+      "touchpoints",
+      0,
+      "questions"
+     ],
+     "value": {
+      "text": "Did you meet the team?",
+      "routes": [
+       {
+        "answer": "No",
+        "tier": "log"
+       }
+      ]
+     }
+    }
+   ],
+   "expect": "questions. Four to six"
+  },
+  {
+   "name": "three questions",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      4
+     ]
+    },
+    {
+     "op": "del",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      3
+     ]
+    }
+   ],
+   "expect": "Four to six"
+  },
+  {
+   "name": "too long to say",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      2,
+      "opening"
+     ],
+     "value": "A month in. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. I want to take a little time today to go through how things have been going for you so far, because we really do care about how your experience has been here. "
+    }
+   ],
+   "expect": "seconds read aloud"
+  },
+  {
+   "name": "question over one breath",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      0,
+      "text"
+     ],
+     "value": "Thinking back to the interview and the job ad and everything you were told, is the work you have been doing this week what you expected?"
+    }
+   ],
+   "expect": "One breath"
+  },
+  {
+   "name": "two questions in one",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      1,
+      "text"
+     ],
+     "value": "Is your schedule right? Is the journey ok?"
+    }
+   ],
+   "expect": "two questions in one"
+  },
+  {
+   "name": "fallback is owner",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      0,
+      "fallback"
+     ],
+     "value": "overnight shift lead"
+    }
+   ],
+   "expect": "fallback is the owner"
+  },
+  {
+   "name": "day 30 same owner as day 7",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      2,
+      "owner"
+     ],
+     "value": "Overnight supervisor"
+    }
+   ],
+   "expect": "same owner as day 7"
+  },
+  {
+   "name": "asks about kids",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      1,
+      "text"
+     ],
+     "value": "Is your schedule working with your kids?"
+    }
+   ],
+   "expect": "family and caring"
+  },
+  {
+   "name": "asks about health in a probe",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      0,
+      "probe"
+     ],
+     "value": "Is your back pain ok with the lifting?"
+    }
+   ],
+   "expect": "health"
+  },
+  {
+   "name": "asks where they are from",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      0,
+      "questions",
+      3,
+      "text"
+     ],
+     "value": "Where are you from originally?"
+    }
+   ],
+   "expect": "immigration"
+  },
+  {
+   "name": "conduct logged as a theme",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      2,
+      "questions",
+      4,
+      "routes",
+      0,
+      "tier"
+     ],
+     "value": "log"
+    }
+   ],
+   "expect": "conduct"
+  },
+  {
+   "name": "pay only logged",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      2,
+      "questions",
+      0,
+      "routes",
+      0,
+      "tier"
+     ],
+     "value": "log"
+    }
+   ],
+   "expect": "pay"
+  },
+  {
+   "name": "safety not in 24h",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      0,
+      "questions",
+      4,
+      "routes",
+      0,
+      "tier"
+     ],
+     "value": "week"
+    }
+   ],
+   "expect": "about safety"
+  },
+  {
+   "name": "kit not in 24h",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      0,
+      "questions",
+      0,
+      "routes",
+      0,
+      "tier"
+     ],
+     "value": "week"
+    }
+   ],
+   "expect": "about kit"
+  },
+  {
+   "name": "question with no route",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      4,
+      "routes"
+     ],
+     "value": []
+    }
+   ],
+   "expect": "no answer is routed"
+  },
+  {
+   "name": "unknown tier",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      4,
+      "routes",
+      0,
+      "tier"
+     ],
+     "value": "urgent"
+    }
+   ],
+   "expect": "not one of"
+  },
+  {
+   "name": "routed to nobody",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      4,
+      "routes",
+      0,
+      "to"
+     ],
+     "value": ""
+    }
+   ],
+   "expect": "goes to nobody"
+  },
+  {
+   "name": "a fix the site cannot authorise",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      2,
+      "questions",
+      1,
+      "routes",
+      0,
+      "fix"
+     ],
+     "value": "raise the hourly rate"
+    }
+   ],
+   "expect": "not something the site can do without permission"
+  },
+  {
+   "name": "no fix named",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "touchpoints",
+      1,
+      "questions",
+      4,
+      "routes",
+      0,
+      "fix"
+     ]
+    }
+   ],
+   "expect": "has no fix"
+  },
+  {
+   "name": "no declined line",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "close_the_loop",
+      "declined"
+     ],
+     "value": ""
+    }
+   ],
+   "expect": "declined"
+  },
+  {
+   "name": "loop closed in 14 days",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "close_the_loop",
+      "within_days"
+     ],
+     "value": 14
+    }
+   ],
+   "expect": "within_days"
+  },
+  {
+   "name": "no grievance owner",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "escalation_owners",
+      "grievance"
+     ]
+    }
+   ],
+   "expect": "no \"grievance\" owner"
+  },
+  {
+   "name": "day 1 twice",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      1,
+      "day"
+     ],
+     "value": 1
+    }
+   ],
+   "expect": "appears twice"
+  },
+  {
+   "name": "shape: question without text",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "touchpoints",
+      0,
+      "questions",
+      0,
+      "text"
+     ]
+    }
+   ],
+   "expect": "",
+   "refuse": true
+  },
+  {
+   "name": "shape: no touchpoints",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints"
+     ],
+     "value": []
+    }
+   ],
+   "expect": "",
+   "refuse": true
+  },
+  {
+   "name": "shape: day as text",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "touchpoints",
+      0,
+      "day"
+     ],
+     "value": "one"
+    }
+   ],
+   "expect": "",
+   "refuse": true
+  }
+ ]
+}

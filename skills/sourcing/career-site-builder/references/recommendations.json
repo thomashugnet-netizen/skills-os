@@ -1,0 +1,618 @@
+{
+  "$comment": "The advice an agent pushes to an employer about its careers site. Every recommendation serves the employer: more of the right applicants, less legal exposure, less wasted work. Tiers: must (legal exposure or excluded from search), should (measured effect on applications), could (differentiation). A recommendation fires when any of its triggers is true: a failed check from check_site.py, or a fact the employer gave. A fact that was never given cannot fire anything; it becomes a question instead. Shared word for word by career-site-builder and careers-site-advisor.",
+  "schema_version": 1,
+  "reviewed": "2026-10",
+  "data": {
+    "pay_posting_states": [
+      "CA",
+      "CO",
+      "DC",
+      "HI",
+      "IL",
+      "MA",
+      "MD",
+      "MN",
+      "NJ",
+      "NY",
+      "VT",
+      "WA"
+    ],
+    "benefits_description_states": [
+      "CA",
+      "MD",
+      "NY",
+      "WA"
+    ]
+  },
+  "facts": {
+    "states": "US states or DC where the employer posts jobs, as two-letter codes",
+    "apply_minutes": "how long the application takes on a phone, in minutes",
+    "account_required": "whether candidates must create an account to apply",
+    "resume_required_hourly": "whether hourly candidates must upload a resume",
+    "jobs_feed": "how open jobs reach the careers site: manual or automatic",
+    "tracks_source": "whether the apply link carries the traffic source into the applicant tracking system",
+    "e_verify": "whether the employer participates in E-Verify",
+    "federal_contractor": "whether the employer is a US federal contractor",
+    "languages": "languages other than English that a meaningful share of candidates prefer",
+    "photos": "the photography on the site: real, stock or none",
+    "job_alerts": "whether candidates can sign up to hear when a matching job opens",
+    "accessibility_audit": "whether a person has audited the site with a keyboard and a screen reader in the last year",
+    "eu": "whether the employer hires in the European Union"
+  },
+  "recommendations": [
+    {
+      "id": "pay-on-every-job",
+      "tier": "must",
+      "impact": 3,
+      "title": "Show pay as a number on every job",
+      "why": "A dozen states and several cities require a pay range in job postings, and on Indeed postings with an employer-provided salary drew 3.8 times more applications.",
+      "how": "Add pay_min, pay_max and pay_unit to every job in the jobs feed, and show them above the fold and in the structured data.",
+      "owner": "Recruiting",
+      "effort": "S",
+      "source": "https://www.indeed.com/news/releases/pay-transparency-across-high-earning-sectors",
+      "triggers": [
+        {
+          "check": "conv.pay_shown"
+        },
+        {
+          "fact": "states",
+          "op": "intersects",
+          "data": "pay_posting_states"
+        }
+      ],
+      "facts_only_without_job_pages": true
+    },
+    {
+      "id": "benefits-on-every-job",
+      "tier": "must",
+      "impact": 2,
+      "title": "Describe benefits on every job page",
+      "why": "California, Maryland, New York and Washington ask for a description of benefits alongside pay in postings, and candidates compare benefits before applying.",
+      "how": "Add a benefits column to the jobs feed, or link each job page to the benefits section; check each state's wording with counsel.",
+      "owner": "Legal",
+      "effort": "S",
+      "source": "https://coggno.com/blog/pay-transparency-laws-by-state-2026-employer-compliance/",
+      "triggers": [
+        {
+          "check": "conv.benefits_on_job"
+        },
+        {
+          "fact": "states",
+          "op": "intersects",
+          "data": "benefits_description_states"
+        }
+      ],
+      "facts_only_without_job_pages": true
+    },
+    {
+      "id": "candidate-privacy-notice",
+      "tier": "must",
+      "impact": 3,
+      "title": "Link a candidate privacy notice from every page and the application",
+      "why": "California's CCPA covers job applicants and requires a notice at or before collection; a careers site without one is an easy finding in any review.",
+      "how": "Publish an applicant notice (categories, purposes, sources, disclosures, retention, rights) and link it from the footer and the application.",
+      "owner": "Legal",
+      "effort": "M",
+      "source": "https://www.littler.com/sites/default/files/2025-03/ccpa_job_applicant_notice_at_collection.pdf",
+      "triggers": [
+        {
+          "check": "legal.privacy_link"
+        }
+      ]
+    },
+    {
+      "id": "accommodations-contact",
+      "tier": "must",
+      "impact": 3,
+      "title": "Say on every page how to ask for an accommodation",
+      "why": "Hiring websites are likely covered by the ADA, and a candidate who cannot use the site needs a working alternative; suits over application portals tend to settle.",
+      "how": "Add a monitored contact for accommodations to the footer and the hiring process section, and decide who answers it and how fast.",
+      "owner": "Legal",
+      "effort": "S",
+      "source": "https://shrm.org/topics-tools/employment-law-compliance/employers-advised-to-make-careers-websites-accessible-despite-recent-ada-ruling",
+      "triggers": [
+        {
+          "check": "legal.accommodations"
+        }
+      ]
+    },
+    {
+      "id": "fix-accessibility-blockers",
+      "tier": "must",
+      "impact": 3,
+      "title": "Fix the accessibility failures the check found",
+      "why": "Website accessibility suits rose 27% in 2025 in federal courts alone, and food service is among the most-sued sectors. Each failure here is one a plaintiff's scanner also finds.",
+      "how": "Fix each listed failure: page language, image text alternatives, form labels, visible focus, colour contrast, the dialog.",
+      "owner": "IT",
+      "effort": "M",
+      "source": "https://www.adacompliancepros.com/blog/who-gets-sued-web-accessibility-filing-data",
+      "triggers": [
+        {
+          "check": "a11y.lang"
+        },
+        {
+          "check": "a11y.img_alt"
+        },
+        {
+          "check": "a11y.form_labels"
+        },
+        {
+          "check": "a11y.dialog"
+        },
+        {
+          "check": "a11y.focus_visible"
+        },
+        {
+          "check": "a11y.contrast"
+        }
+      ]
+    },
+    {
+      "id": "manual-accessibility-audit",
+      "tier": "must",
+      "impact": 2,
+      "title": "Have a person audit the site with a keyboard and a screen reader",
+      "why": "Automated checks find part of the problem. WCAG 2.2 AA is the working benchmark, and the remainder is only found by someone using the site the way a disabled candidate does.",
+      "how": "Commission a manual audit against WCAG 2.2 AA before launch and once a year, and publish an accessibility statement with a way to report a barrier.",
+      "owner": "IT",
+      "effort": "M",
+      "source": "https://shrm.org/topics-tools/employment-law-compliance/employers-advised-to-make-careers-websites-accessible-despite-recent-ada-ruling",
+      "triggers": [
+        {
+          "fact": "accessibility_audit",
+          "op": "not_true"
+        }
+      ]
+    },
+    {
+      "id": "job-markup-to-the-rules",
+      "tier": "must",
+      "impact": 3,
+      "title": "Bring the job markup in line with the search engine's rules",
+      "why": "Job markup that breaks the published guidelines (on a list page, pay in the title, data not visible on the page, missing required fields) can exclude the site's jobs from job search results.",
+      "how": "One JobPosting per job page and none on lists; title field holds the job title only; every marked-up value visible on the page; all required fields present.",
+      "owner": "IT",
+      "effort": "M",
+      "source": "https://developers.google.com/search/docs/appearance/structured-data/job-posting",
+      "triggers": [
+        {
+          "check": "seo.jobposting_required"
+        },
+        {
+          "check": "seo.jobposting_placement"
+        },
+        {
+          "check": "seo.jobposting_title"
+        },
+        {
+          "check": "seo.jobposting_matches_page"
+        }
+      ]
+    },
+    {
+      "id": "take-filled-jobs-down",
+      "tier": "must",
+      "impact": 3,
+      "title": "Take filled jobs down the day they close",
+      "why": "Leaving an expired job marked up breaks the search engine's guidelines, and every application to a filled job is a candidate you then have to reject.",
+      "how": "Set a past closing date, return a 404 or 410, or remove the markup, and show similar open jobs on the page instead.",
+      "owner": "Recruiting",
+      "effort": "S",
+      "source": "https://developers.google.com/search/docs/appearance/structured-data/job-posting",
+      "triggers": [
+        {
+          "check": "seo.jobposting_expired"
+        }
+      ]
+    },
+    {
+      "id": "e-verify-notices",
+      "tier": "must",
+      "impact": 2,
+      "title": "Display the E-Verify participation and Right to Work notices",
+      "why": "E-Verify participants must clearly display both notices, in English and Spanish, where applicants will see them; online display is allowed.",
+      "how": "Link both notices from the careers site footer and the application.",
+      "owner": "Legal",
+      "effort": "S",
+      "source": "https://www.e-verify.gov/e-verify-user-manual-introduction/15-user-rules-and-responsibilities",
+      "triggers": [
+        {
+          "fact": "e_verify",
+          "op": "true"
+        }
+      ]
+    },
+    {
+      "id": "confirm-every-claim",
+      "tier": "must",
+      "impact": 2,
+      "title": "Confirm or remove every claim marked for confirmation",
+      "why": "A statistic, benefit or timing on a careers site is a statement the employer makes to every candidate; an unconfirmed one is a promise nobody checked.",
+      "how": "Have the owner of each fact confirm it or remove it before launch; the check report lists every one.",
+      "owner": "Brand",
+      "effort": "S",
+      "source": "",
+      "triggers": [
+        {
+          "check": "content.unverified_claim"
+        },
+        {
+          "report": "to_confirm"
+        }
+      ]
+    },
+    {
+      "id": "no-unfinished-content",
+      "tier": "must",
+      "impact": 3,
+      "title": "Remove placeholder text and fix links that go nowhere",
+      "why": "Lorem ipsum, broken links and dead ends tell a candidate the site is not maintained, at the moment they decide whether to apply.",
+      "how": "Replace placeholder text and point every link at a page, a section or the application.",
+      "owner": "IT",
+      "effort": "S",
+      "source": "",
+      "triggers": [
+        {
+          "check": "content.placeholder"
+        },
+        {
+          "check": "seo.broken_links"
+        },
+        {
+          "check": "conv.dead_ends"
+        },
+        {
+          "check": "conv.apply_link"
+        }
+      ]
+    },
+    {
+      "id": "be-findable",
+      "tier": "must",
+      "impact": 3,
+      "title": "Let search engines find and index every page",
+      "why": "A missing sitemap, a robots.txt that blocks the site, or pages without a title, description or single main heading keep jobs out of search results.",
+      "how": "Publish a sitemap listing every page, allow crawling, and give each page a title, a description and one h1.",
+      "owner": "IT",
+      "effort": "S",
+      "source": "https://developers.google.com/search/docs/appearance/structured-data/job-posting",
+      "triggers": [
+        {
+          "check": "seo.sitemap"
+        },
+        {
+          "check": "seo.robots"
+        },
+        {
+          "check": "seo.title"
+        },
+        {
+          "check": "seo.meta_description"
+        },
+        {
+          "check": "seo.h1"
+        }
+      ]
+    },
+    {
+      "id": "content-in-html",
+      "tier": "should",
+      "impact": 3,
+      "title": "Put the jobs and the content in the HTML",
+      "why": "In a December 2024 study none of the major AI crawlers rendered JavaScript, so a careers site painted in by JavaScript is invisible when candidates ask an assistant who is hiring nearby.",
+      "how": "Render the job list and every page's text on the server, and link every job page from a plain HTML page.",
+      "owner": "IT",
+      "effort": "M",
+      "source": "https://vercel.com/blog/the-rise-of-the-ai-crawler",
+      "triggers": [
+        {
+          "check": "ai.content_in_html"
+        },
+        {
+          "check": "ai.jobs_in_html"
+        }
+      ]
+    },
+    {
+      "id": "five-minute-apply",
+      "tier": "should",
+      "impact": 3,
+      "title": "Get the application under five minutes on a phone",
+      "why": "Applications under five minutes complete several times more often than those over fifteen, and most still take more than fifteen.",
+      "how": "Cut every question that does not decide eligibility, drop account creation and the resume upload for hourly roles, and time it on a phone.",
+      "owner": "Recruiting",
+      "effort": "M",
+      "source": "https://insights.appcast.io/7-tips-for-seasonal-hiring-success/shorten-your-apply-process",
+      "triggers": [
+        {
+          "fact": "apply_minutes",
+          "op": ">",
+          "value": 5
+        },
+        {
+          "fact": "account_required",
+          "op": "true"
+        },
+        {
+          "fact": "resume_required_hourly",
+          "op": "true"
+        }
+      ]
+    },
+    {
+      "id": "mobile-first",
+      "tier": "should",
+      "impact": 3,
+      "title": "Make the site work on a phone, with Search jobs always in reach",
+      "why": "Most frontline candidates search and apply from a phone, and apply rates drop sharply when the mobile experience is poor.",
+      "how": "Add a mobile viewport and keep a Search jobs link in the header of every page.",
+      "owner": "IT",
+      "effort": "S",
+      "source": "https://insights.appcast.io/7-tips-for-seasonal-hiring-success/shorten-your-apply-process",
+      "triggers": [
+        {
+          "check": "conv.mobile_viewport"
+        },
+        {
+          "check": "conv.search_jobs_nav"
+        }
+      ]
+    },
+    {
+      "id": "explain-the-ats-handoff",
+      "tier": "should",
+      "impact": 2,
+      "title": "Say what happens when a candidate clicks Apply",
+      "why": "When Apply opens a site that looks different, some candidates take it for a scam and leave at the last step.",
+      "how": "Next to the Apply button, say that the application continues on the employer's hiring partner's secure site and roughly how long it takes.",
+      "owner": "Recruiting",
+      "effort": "S",
+      "source": "",
+      "triggers": [
+        {
+          "check": "conv.ats_handoff"
+        }
+      ]
+    },
+    {
+      "id": "schedule-on-every-job",
+      "tier": "should",
+      "impact": 2,
+      "title": "State the schedule on every job",
+      "why": "Hours decide frontline applications as much as pay; a job without them gets fewer applicants and more early quits.",
+      "how": "One sentence per job: start times, weekends, and how far ahead the schedule is posted.",
+      "owner": "Recruiting",
+      "effort": "S",
+      "source": "",
+      "triggers": [
+        {
+          "check": "conv.schedule_shown"
+        }
+      ]
+    },
+    {
+      "id": "page-per-location",
+      "tier": "should",
+      "impact": 2,
+      "title": "Give every job and every location its own page",
+      "why": "Frontline candidates search by town and 'near me'; a page per job carries the markup that search engines list, and a page per location answers the local search.",
+      "how": "Generate a page per open job and per location from the jobs feed, linked from the job search.",
+      "owner": "IT",
+      "effort": "M",
+      "source": "https://developers.google.com/search/docs/appearance/structured-data/job-posting",
+      "triggers": [
+        {
+          "check": "seo.job_pages"
+        },
+        {
+          "check": "seo.location_pages"
+        },
+        {
+          "check": "conv.home_search"
+        }
+      ]
+    },
+    {
+      "id": "keep-jobs-current",
+      "tier": "should",
+      "impact": 3,
+      "title": "Feed open jobs to the site automatically",
+      "why": "A manually updated careers site drifts: filled jobs stay up, new ones arrive late, and pay goes stale, which costs applicants and breaks the search engine's rules.",
+      "how": "Publish open jobs from the applicant tracking system as a feed the site rebuilds from, at least daily, and use the search engine's indexing API at volume.",
+      "owner": "IT",
+      "effort": "L",
+      "source": "https://developers.google.com/search/docs/appearance/structured-data/job-posting",
+      "triggers": [
+        {
+          "fact": "jobs_feed",
+          "op": "equals",
+          "value": "manual"
+        }
+      ]
+    },
+    {
+      "id": "track-the-source",
+      "tier": "should",
+      "impact": 2,
+      "title": "Carry the traffic source into the application",
+      "why": "Without it, recruiting cannot tell which channel produced hires, so spend keeps going to the channels that produce clicks.",
+      "how": "Pass the source parameter from the careers site into the apply link and keep it on the candidate record.",
+      "owner": "IT",
+      "effort": "S",
+      "source": "",
+      "triggers": [
+        {
+          "fact": "tracks_source",
+          "op": "false"
+        }
+      ]
+    },
+    {
+      "id": "readable-by-assistants",
+      "tier": "should",
+      "impact": 1,
+      "title": "Help search engines and AI assistants summarise the site",
+      "why": "Organization and FAQ markup, a canonical URL per page and an llms.txt summary make it easier for search engines and assistants to describe the employer correctly.",
+      "how": "Add Organization markup to the home page, FAQPage markup to the FAQ, canonical URLs, and an llms.txt listing pages, jobs and pay.",
+      "owner": "IT",
+      "effort": "S",
+      "source": "https://vercel.com/blog/the-rise-of-the-ai-crawler",
+      "triggers": [
+        {
+          "check": "ai.llms_txt"
+        },
+        {
+          "check": "ai.organization"
+        },
+        {
+          "check": "ai.faq_schema"
+        },
+        {
+          "check": "seo.canonical"
+        },
+        {
+          "check": "seo.jobposting_recommended"
+        },
+        {
+          "check": "seo.title_length"
+        },
+        {
+          "check": "seo.heading_order"
+        }
+      ]
+    },
+    {
+      "id": "equal-opportunity-statement",
+      "tier": "should",
+      "impact": 1,
+      "title": "Add an equal-opportunity statement",
+      "why": "Expected of many federal contractors under Section 503 and VEVRAA, and a signal candidates look for.",
+      "how": "One sentence in the footer of every page, worded with counsel.",
+      "owner": "Legal",
+      "effort": "S",
+      "source": "https://www.fmglaw.com/employment-law-blog-us/ofccp-formally-ends-eo-11246-affirmative-action-requirements/",
+      "triggers": [
+        {
+          "check": "legal.eeo_statement"
+        },
+        {
+          "fact": "federal_contractor",
+          "op": "true"
+        }
+      ]
+    },
+    {
+      "id": "real-photos-and-stories",
+      "tier": "could",
+      "impact": 2,
+      "title": "Replace stock and placeholder imagery with real employees",
+      "why": "Candidates recognise stock photography, and it undoes the specific, honest copy around it.",
+      "how": "Photograph real employees at work with their written consent, and collect short stories in their own words.",
+      "owner": "Brand",
+      "effort": "M",
+      "source": "",
+      "triggers": [
+        {
+          "fact": "photos",
+          "op": "in",
+          "value": [
+            "stock",
+            "none"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "candidates-language",
+      "tier": "could",
+      "impact": 2,
+      "title": "Offer the key pages in the languages candidates prefer",
+      "why": "A translated home page that leads to English-only job pages loses the candidate at the moment that matters.",
+      "how": "Translate the home page, the main career areas, job pages, the FAQ and the hiring process, reviewed by a native speaker.",
+      "owner": "Brand",
+      "effort": "M",
+      "source": "",
+      "triggers": [
+        {
+          "fact": "languages",
+          "op": "nonempty"
+        }
+      ]
+    },
+    {
+      "id": "job-alerts",
+      "tier": "could",
+      "impact": 2,
+      "title": "Let candidates sign up for a job alert",
+      "why": "A search with no result is a candidate who wanted to work for the employer; an alert keeps them instead of losing them to the next site.",
+      "how": "Offer an alert from every empty search and from the talent community, by text or email, with a one-step stop.",
+      "owner": "Recruiting",
+      "effort": "M",
+      "source": "https://www.phenom.com/state-candidate-experience-report-2025",
+      "triggers": [
+        {
+          "fact": "job_alerts",
+          "op": "false"
+        }
+      ]
+    },
+    {
+      "id": "plain-specific-copy",
+      "tier": "could",
+      "impact": 1,
+      "title": "Replace slogans with specifics",
+      "why": "Phrases candidates have learned to ignore take the space where pay, hours and the actual work should be.",
+      "how": "Swap each flagged phrase for a fact: a timing, a number, what the first week looks like.",
+      "owner": "Brand",
+      "effort": "S",
+      "source": "",
+      "triggers": [
+        {
+          "check": "content.cliche"
+        }
+      ]
+    },
+    {
+      "id": "lighter-pages",
+      "tier": "could",
+      "impact": 1,
+      "title": "Make the pages lighter",
+      "why": "Heavy pages and third-party scripts are slow on the phone connections many frontline candidates use.",
+      "how": "Compress images, remove unused scripts, and keep each page's HTML, CSS and JavaScript under 500 KB.",
+      "owner": "IT",
+      "effort": "S",
+      "source": "",
+      "triggers": [
+        {
+          "check": "perf.page_weight"
+        },
+        {
+          "check": "perf.image_weight"
+        },
+        {
+          "check": "perf.third_party_scripts"
+        },
+        {
+          "check": "a11y.reduced_motion"
+        }
+      ]
+    },
+    {
+      "id": "eu-national-rules",
+      "tier": "could",
+      "impact": 1,
+      "title": "Check the national accessibility and pay-transparency rules in each EU country",
+      "why": "Whether the European Accessibility Act covers an employer's careers site is disputed and some countries go further; the EU pay transparency directive is being transposed into national law.",
+      "how": "Ask counsel in each country where the employer hires which rules apply to its careers site and job postings.",
+      "owner": "Legal",
+      "effort": "M",
+      "source": "https://lists.w3.org/Archives/Public/w3c-wai-ig/2024AprJun/0140.html",
+      "triggers": [
+        {
+          "fact": "eu",
+          "op": "true"
+        }
+      ]
+    }
+  ]
+}
