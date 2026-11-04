@@ -1,12 +1,12 @@
 ---
 name: interview-panel-calibrator
 description: Gets several interviewers onto the same bar. Builds a twenty-minute calibration exercise from your own anchors, then reads the scores to say whether each disagreement comes from the anchor wording or from a person, and which person is lenient, severe or not separating strong answers from weak ones.
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Interview Panel Calibrator
 
-Created with Taylar Ashleigh Martin.
+Created with Taylar Martin.
 
 ## What this does
 
