@@ -45,13 +45,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "interview-no-show-playbook",
-      "title": "Interview No-Show Playbook",
-      "category": "interviewing",
-      "description": "Diagnoses why booked interviews get missed from your funnel data, then writes the confirm, remind and reschedule sequence and the slot rules that fix it.",
-      "needs_dataset": true
-    },
-    {
       "slug": "day-one-readiness-checklist",
       "title": "Day-One Readiness Checklist",
       "category": "onboarding",

@@ -1,0 +1,515 @@
+[
+ {
+  "name": "confirmation without the landmark",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. ask for Dana, the store manager. Bring a photo ID. Need to move it? Reply 2. Reply STOP to opt out."
+    ]
+   }
+  ],
+  "expect": "content: missing where to go"
+ },
+ {
+  "name": "confirmation without who to ask for",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning.. Bring a photo ID. Need to move it? Reply 2. Reply STOP to opt out."
+    ]
+   }
+  ],
+  "expect": "content: missing who to ask for"
+ },
+ {
+  "name": "confirmation without STOP",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Bring a photo ID. Need to move it? Reply 2."
+    ]
+   }
+  ],
+  "expect": "content: missing how to opt out"
+ },
+ {
+  "name": "confirmation with no way to move it",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Bring a photo ID. Reply STOP to opt out."
+    ]
+   }
+  ],
+  "expect": "content: missing how to move it"
+ },
+ {
+  "name": "confirmation without the duration",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Bring a photo ID. Need to move it? Reply 2. Reply STOP to opt out."
+    ]
+   }
+  ],
+  "expect": "content: missing how long it takes"
+ },
+ {
+  "name": "confirmation without what to bring",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Need to move it? Reply 2. Reply STOP to opt out."
+    ]
+   }
+  ],
+  "expect": "content: missing what to bring"
+ },
+ {
+  "name": "confirmation sent days before, not at booking",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "when"
+     ],
+     "-72h"
+    ]
+   }
+  ],
+  "expect": "timing: the confirmation goes at the moment of booking"
+ },
+ {
+  "name": "24-hour reminder with no reply options",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      2,
+      "text"
+     ],
+     "Fernhill & Co.: see you tomorrow at {time} for your Sales Associate interview."
+    ]
+   }
+  ],
+  "expect": "content: missing two reply options"
+ },
+ {
+  "name": "24-hour reminder asking only for a yes",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      2,
+      "text"
+     ],
+     "Fernhill & Co.: see you tomorrow at {time}. Reply 1 if you are coming."
+    ]
+   }
+  ],
+  "expect": "content: missing two reply options"
+ },
+ {
+  "name": "24-hour reminder sent 6 hours before",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      2,
+      "when"
+     ],
+     "-6h"
+    ]
+   }
+  ],
+  "expect": "timing: the reply reminder goes about 24 hours before"
+ },
+ {
+  "name": "48-hour touch sent 12 hours before",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      1,
+      "when"
+     ],
+     "-12h"
+    ]
+   }
+  ],
+  "expect": "timing: the 48-hour touch goes 36 to 72 hours before"
+ },
+ {
+  "name": "day-of message at 06:30",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      3,
+      "when"
+     ],
+     "day_of 06:30"
+    ]
+   }
+  ],
+  "expect": "timing: the day-of message goes in the morning"
+ },
+ {
+  "name": "day-of message without a number to call",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      3,
+      "text"
+     ],
+     "Fernhill & Co.: today at {time}. Entrance C by the food court, the door with the green awning, ask for Dana, the store manager."
+    ]
+   }
+  ],
+  "expect": "content: missing one number to call"
+ },
+ {
+  "name": "day-of message that does not say who is writing",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      3,
+      "text"
+     ],
+     "Hi! today at {time}. Entrance C by the food court, the door with the green awning, ask for Dana, the store manager. Running late or stuck? Call 555-0117."
+    ]
+   }
+  ],
+  "expect": "content: missing who is writing"
+ },
+ {
+  "name": "re-offer four hours after the missed slot",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      4,
+      "when"
+     ],
+     "+240m"
+    ]
+   }
+  ],
+  "expect": "timing: the re-offer goes within the hour"
+ },
+ {
+  "name": "re-offer with one slot",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      4,
+      "text"
+     ],
+     "Fernhill & Co.: we missed you at {time}. Can you come at {slot_1} instead? Reply YES."
+    ]
+   }
+  ],
+  "expect": "content: missing two concrete slots"
+ },
+ {
+  "name": "re-offer that blames the candidate",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      4,
+      "text"
+     ],
+     "Fernhill & Co.: you were a no-show at {time}. Reply A for {slot_1} or B for {slot_2}."
+    ]
+   }
+  ],
+  "expect": "tone: blames the candidate"
+ },
+ {
+  "name": "second offer sent without a reply",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      5,
+      "when"
+     ],
+     "+90m"
+    ]
+   }
+  ],
+  "expect": "timing: a second offer goes only if they reply"
+ },
+ {
+  "name": "close message that shuts the door",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      6,
+      "text"
+     ],
+     "Fernhill & Co.: we have closed your Sales Associate application."
+    ]
+   }
+  ],
+  "expect": "content: missing that they can apply again"
+ },
+ {
+  "name": "asks them to log in",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Bring a photo ID. Log in to the candidate portal to move it. Reply STOP to opt out."
+    ]
+   }
+  ],
+  "expect": "no login: asks them to log in"
+ },
+ {
+  "name": "confirmation over two texts",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "text"
+     ],
+     "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Bring a photo ID. Need to move it? Reply 2. Reply STOP to opt out. Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Bring a photo ID. Need to move it? Reply 2. Reply STOP to opt out."
+    ]
+   }
+  ],
+  "expect": "length: "
+ },
+ {
+  "name": "curly apostrophe makes it Unicode",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      2,
+      "text"
+     ],
+     "Fernhill & Co.: see you tomorrow at {time} for your Sales Associate interview. Reply 1 if you’re coming, 2 if you need to move it."
+    ]
+   }
+  ],
+  "expect": "switches the text to Unicode"
+ },
+ {
+  "name": "rejects at the first miss",
+  "ops": [
+   {
+    "set": [
+     [
+      "policy",
+      "reject_on_first_miss"
+     ],
+     true
+    ]
+   }
+  ],
+  "expect": "no auto-reject"
+ },
+ {
+  "name": "closes after one silent miss",
+  "ops": [
+   {
+    "set": [
+     [
+      "policy",
+      "close_after_silent_misses"
+     ],
+     1
+    ]
+   }
+  ],
+  "expect": "stop rule: close after the second silent miss"
+ },
+ {
+  "name": "closed candidates cannot reapply",
+  "ops": [
+   {
+    "set": [
+     [
+      "policy",
+      "reapply_eligible"
+     ],
+     false
+    ]
+   }
+  ],
+  "expect": "stop rule: keep a closed candidate eligible"
+ },
+ {
+  "name": "no day-of message",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      3,
+      "id"
+     ],
+     "day_of_text"
+    ]
+   }
+  ],
+  "expect": "sequence: missing"
+ },
+ {
+  "name": "confirmation not first",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "id"
+     ],
+     "reminder_48h"
+    ]
+   },
+   {
+    "set": [
+     [
+      "touches",
+      0,
+      "when"
+     ],
+     "-48h"
+    ]
+   }
+  ],
+  "expect": "the confirmation comes first"
+ },
+ {
+  "name": "five reminders before the interview",
+  "ops": [
+   {
+    "append": [
+     [
+      "touches"
+     ],
+     {
+      "id": "reminder_48h",
+      "when": "-60h",
+      "text": "Fernhill & Co.: your Sales Associate interview is {date} at {time}, at Entrance C by the food court, the door with the green awning. Still good? Reply 2 if you need another time."
+     }
+    ]
+   },
+   {
+    "append": [
+     [
+      "touches"
+     ],
+     {
+      "id": "reminder_48h",
+      "when": "-40h",
+      "text": "Fernhill & Co.: your Sales Associate interview is {date} at {time}, at Entrance C by the food court, the door with the green awning. Still good? Reply 2 if you need another time."
+     }
+    ]
+   },
+   {
+    "append": [
+     [
+      "touches"
+     ],
+     {
+      "id": "reminder_24h",
+      "when": "-20h",
+      "text": "Fernhill & Co.: see you tomorrow at {time} for your Sales Associate interview. Reply 1 if you're coming, 2 if you need to move it."
+     }
+    ]
+   }
+  ],
+  "expect": "past three the returns are near zero"
+ },
+ {
+  "name": "empty message",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      6,
+      "text"
+     ],
+     "  "
+    ]
+   }
+  ],
+  "expect": "text: empty"
+ },
+ {
+  "name": "timing I cannot read",
+  "ops": [
+   {
+    "set": [
+     [
+      "touches",
+      2,
+      "when"
+     ],
+     "the day before"
+    ]
+   }
+  ],
+  "expect": "not a timing I can read"
+ }
+]

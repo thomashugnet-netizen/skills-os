@@ -1,0 +1,57 @@
+{
+  "facts": {
+    "company": "Fernhill & Co.",
+    "role": "Sales Associate",
+    "site": "Fernhill & Co., Brookfield Outlets (LOC-17)",
+    "landmark": "Entrance C by the food court, the door with the green awning",
+    "ask_for": "Dana, the store manager",
+    "duration_minutes": 20,
+    "bring": "a photo ID",
+    "call_number": "555-0117"
+  },
+  "touches": [
+    {
+      "id": "confirm",
+      "when": "at_booking",
+      "text": "Fernhill & Co.: you're booked for your Sales Associate interview, {date} at {time}, about 20 min. Go to Entrance C by the food court, the door with the green awning and ask for Dana, the store manager. Bring a photo ID. Need to move it? Reply 2. Reply STOP to opt out."
+    },
+    {
+      "id": "reminder_48h",
+      "when": "-48h",
+      "text": "Fernhill & Co.: your Sales Associate interview is {date} at {time}, at Entrance C by the food court, the door with the green awning. Still good? Reply 2 if you need another time."
+    },
+    {
+      "id": "reminder_24h",
+      "when": "-24h",
+      "text": "Fernhill & Co.: see you tomorrow at {time} for your Sales Associate interview. Reply 1 if you're coming, 2 if you need to move it."
+    },
+    {
+      "id": "morning_of",
+      "when": "day_of 08:00",
+      "text": "Fernhill & Co.: today at {time}. Entrance C by the food court, the door with the green awning, ask for Dana, the store manager. Running late or stuck? Call 555-0117."
+    },
+    {
+      "id": "missed",
+      "when": "+30m",
+      "text": "Fernhill & Co.: we missed you at {time}. Things happen. Want another Sales Associate interview? Reply A for {slot_1} or B for {slot_2}."
+    },
+    {
+      "id": "second_offer",
+      "when": "on_reply",
+      "text": "Fernhill & Co.: thanks for getting back to us. I can do {slot_1} or {slot_2}. Reply A or B and you're booked."
+    },
+    {
+      "id": "close",
+      "when": "after_second_miss",
+      "text": "Fernhill & Co.: we've closed this Sales Associate application for now. You're welcome to apply again whenever the timing works."
+    }
+  ],
+  "policy": {
+    "reoffers_after_first_miss": 1,
+    "second_offer_only_on_reply": true,
+    "close_after_silent_misses": 2,
+    "reapply_eligible": true,
+    "reject_on_first_miss": false,
+    "release_unconfirmed_hours_before": 3
+  }
+}

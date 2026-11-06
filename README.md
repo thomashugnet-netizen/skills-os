@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**18 ready now. 24 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**19 ready now. 23 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -22,6 +22,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | [`time-to-hire-analyst`](skills/analysing/time-to-hire-analyst/) | Breaks hiring cycle time down stage by stage and names the stage actually holding the queue, keeping apart the stage slow for everybody, the one slow at a few sites, and the one slow only in peak months. | needs a CSV export, 0.3 MB |
 | [`document-expiry-radar`](skills/complying/document-expiry-radar/) | Reads a list of the licences, cards and certificates your people need to work, with their expiry dates, and shows who cannot work today, whose renewal has to start now to avoid a lapse, and which scheduled shifts that puts at risk. | no data needed, 43 KB |
 | [`multi-state-rule-comparer`](skills/complying/multi-state-rule-comparer/) | Compares the hiring and onboarding rules of every state and city you operate in, from a list of your sites and headcounts, and shows which rules apply at your size, the strictest rule if you run one process, what changes in the next 18 months and what to research first. | no data needed, 55 KB |
+| [`interview-no-show-playbook`](skills/interviewing/interview-no-show-playbook/) | Diagnoses why booked interviews get missed from your booking log or pipeline export, testing every candidate cause inside strata, then writes the slot rules, the confirm, remind and re-offer text sequence and the reschedule path that fix it, and checks the sequence before you send it. | needs a CSV export, 0.4 MB |
 | [`interview-panel-calibrator`](skills/interviewing/interview-panel-calibrator/) | Gets several interviewers onto the same bar. Builds a twenty-minute calibration exercise from your own anchors, then reads the scores to say whether each disagreement comes from the anchor wording or from a person, and which person is lenient, severe or not separating strong answers from weak ones. | no data needed, 27 KB |
 | [`phone-screen-script`](skills/interviewing/phone-screen-script/) | Writes and checks a five-minute phone screen for an hourly role, with availability asked first and shift by shift against the real rota gaps, three gates that decide on the call, and a booked interview before hanging up, plus the voicemail, text and attempt rule; then reads the call log for what a better script cannot fix. | no data needed, 62 KB |
 | [`structured-interview-guide`](skills/interviewing/structured-interview-guide/) | Builds a fifteen-minute frontline interview a store or site manager can run the same way every time, without training, and checks the questions managers ask today for the ones that are a legal risk or predict nothing. | no data needed, 39 KB |
@@ -61,10 +62,6 @@ Written, not yet through their gate. They ship when they pass it.
 
 - `knockout-logic-auditor` — Reviews your existing screening rules against funnel data and finds the questions quietly killing your applicant flow. *(needs a CSV export)*
 - `resume-free-triage-rubric` — Builds a triage rubric for hourly roles where most applicants have no resume, scoring availability, reliability signals, travel and certifications instead of work history.
-
-**Interviewing — run by non-recruiters**
-
-- `interview-no-show-playbook` — Diagnoses why booked interviews get missed from your funnel data, then writes the confirm, remind and reschedule sequence and the slot rules that fix it. *(needs a CSV export)*
 
 **Analysing — where the numbers are**
 
