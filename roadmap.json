@@ -45,13 +45,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "multi-state-rule-comparer",
-      "title": "Multi-State Rule Comparer",
-      "category": "complying",
-      "description": "Builds a side-by-side comparison structure and research checklist for hiring and onboarding requirements across the states you operate in.",
-      "needs_dataset": false
-    },
-    {
       "slug": "interview-no-show-playbook",
       "title": "Interview No-Show Playbook",
       "category": "interviewing",

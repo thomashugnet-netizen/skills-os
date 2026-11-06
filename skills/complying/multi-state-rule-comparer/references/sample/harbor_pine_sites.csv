@@ -1,0 +1,21 @@
+site_id,state,city,county,headcount,industry,minors
+HP-NYC-01,NY,Brooklyn,Kings,140,retail,yes
+HP-NYC-02,NY,Queens,Queens,95,retail,no
+HP-ALB-01,NY,Albany,Albany,85,retail,yes
+HP-CHI-01,IL,Chicago,Cook,160,retail,yes
+HP-SEA-01,WA,Seattle,King,150,retail,no
+HP-SPK-01,WA,Spokane,Spokane,70,retail,yes
+HP-LAX-01,CA,Los Angeles,Los Angeles,180,retail,yes
+HP-LAX-02,CA,Unincorporated,Los Angeles,60,warehouse,no
+HP-DEN-01,CO,Denver,Denver,110,retail,no
+HP-HFD-01,CT,Hartford,Hartford,8,food_service,no
+HP-WIL-01,DE,Wilmington,New Castle,40,retail,no
+HP-PHL-DC1,PA,Philadelphia,Philadelphia,210,warehouse,no
+HP-ATX-01,TX,Austin,Travis,130,retail,yes
+HP-HOU-01,TX,Houston,Harris,150,retail,no
+HP-MIA-01,FL,Miami,Miami-Dade,120,retail,yes
+HP-ATL-01,GA,Atlanta,Fulton,115,retail,no
+HP-LVS-01,NV,Las Vegas,Clark,30,food_service,no
+HP-POR-01,ME,Portland,Cumberland,45,retail,yes
+HP-NOCITY-01,VA,,,60,retail,no
+HP-JC-01,NJ,Jersey City,Hudson,75,retail,yes
