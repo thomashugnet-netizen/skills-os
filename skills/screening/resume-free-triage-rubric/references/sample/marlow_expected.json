@@ -1,0 +1,27 @@
+{
+  "about": "What the engine must find on the Marlow sample (seed 20261030).",
+  "draft": {
+    "status": "advice",
+    "advice_codes": [
+      "weak_signal_heavy"
+    ],
+    "signals_earning": [
+      "shift_overlap",
+      "start_latency",
+      "travel",
+      "reliability"
+    ],
+    "signals_not_earning": [
+      "rota_experience"
+    ],
+    "travel_pays_for_nothing": [
+      "own_transport over route_with_time"
+    ],
+    "adverse_impact_flag_signal": "travel",
+    "radius_no_difference": true
+  },
+  "revised": {
+    "status": "ready",
+    "adverse_impact_flag": false
+  }
+}
