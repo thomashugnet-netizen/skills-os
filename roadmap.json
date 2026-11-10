@@ -66,13 +66,6 @@
       "needs_dataset": false
     },
     {
-      "slug": "onboarding-drop-off-diagnostic",
-      "title": "Onboarding Drop-off Diagnostic",
-      "category": "onboarding",
-      "description": "Finds where accepted offers die before the first shift, and separates the delays you created from the candidates who were never going to start.",
-      "needs_dataset": true
-    },
-    {
       "slug": "headcount-forecaster",
       "title": "Headcount Forecaster",
       "category": "operating",
