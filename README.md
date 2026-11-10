@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**19 ready now. 23 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**20 ready now. 22 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -26,6 +26,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | [`interview-panel-calibrator`](skills/interviewing/interview-panel-calibrator/) | Gets several interviewers onto the same bar. Builds a twenty-minute calibration exercise from your own anchors, then reads the scores to say whether each disagreement comes from the anchor wording or from a person, and which person is lenient, severe or not separating strong answers from weak ones. | no data needed, 27 KB |
 | [`phone-screen-script`](skills/interviewing/phone-screen-script/) | Writes and checks a five-minute phone screen for an hourly role, with availability asked first and shift by shift against the real rota gaps, three gates that decide on the call, and a booked interview before hanging up, plus the voicemail, text and attempt rule; then reads the call log for what a better script cannot fix. | no data needed, 62 KB |
 | [`structured-interview-guide`](skills/interviewing/structured-interview-guide/) | Builds a fifteen-minute frontline interview a store or site manager can run the same way every time, without training, and checks the questions managers ask today for the ones that are a legal risk or predict nothing. | no data needed, 39 KB |
+| [`onboarding-drop-off-diagnostic`](skills/onboarding/onboarding-drop-off-diagnostic/) | Finds where and why accepted hires never reach their first shift, from your onboarding log. Counts the loss honestly, reads the offer-to-first-shift gap first, shows which step people were waiting on and whose side each wait is on, tests every candidate cause inside strata, and writes the fixes the survivors call for. | needs a CSV export, 0.6 MB |
 | [`onboarding-workflow-designer`](skills/onboarding/onboarding-workflow-designer/) | Designs the offer-to-first-shift onboarding workflow for hourly roles as a short, checkable document, with one owner, a deadline and a fallback on every step that can stall, a timeline by category and owner, and the federal US filing deadlines checked in code. | no data needed, 61 KB |
 | [`recruiter-capacity-planner`](skills/operating/recruiter-capacity-planner/) | Measures what each recruiter actually carries week by week, finds the load at which screening starts to slow down, tells a capacity problem from a process, upstream or individual one, and ranks automation by hours a month returned, so a headcount request rests on the number that survives. | needs a CSV export, 0.4 MB |
 | [`schedule-photo-to-roster`](skills/operating/schedule-photo-to-roster/) | Turns a photo or screenshot of a shift schedule into a clean roster, then shows where the week is short-staffed, who is heading into overtime, who closes and opens with too little rest, and which hours could move. | no data needed, 0.2 MB |
@@ -73,7 +74,6 @@ Written, not yet through their gate. They ship when they pass it.
 - `day-one-readiness-checklist` — Builds the checklist of everything that must be true before a new hire's first shift, by role and location, with an owner and a deadline on every line.
 - `manager-ramp-plan` — Builds a first-30-days ramp plan for an hourly role that a shift manager can run in about twelve minutes a week, and hand to a shift lead.
 - `new-hire-pack-drafter` — Writes the welcome pack, first-week schedule and practical day-one instructions an hourly new hire will actually read on a phone before their first shift.
-- `onboarding-drop-off-diagnostic` — Finds where accepted offers die before the first shift, and separates the delays you created from the candidates who were never going to start. *(needs a CSV export)*
 
 **Complying — preparation, never advice**
 

@@ -1,0 +1,14 @@
+{
+  "about": "What generate.py planted in bramblewood_hires.csv and bramblewood_steps.csv, and what the read must say about it. Checked by scripts/dropoff.py --test.",
+  "count": {"accepted": 4926, "decided": 4548, "started": 3822, "withdrew": 573,
+            "no_show": 153, "lost": 726, "rescinded": 238, "pending": 119,
+            "future_withdrew": 21},
+  "survives": ["gap_long", "silence_5plus", "drug_lab", "site:LOC-11"],
+  "explained": {"vendor:vendor_b": "gap", "role:Deli Clerk": "gap"},
+  "null": ["far_commute", "source:hiring_event", "source:referral", "recruiter:REC-01",
+           "recruiter:REC-04", "site:LOC-07"],
+  "rescind_site": "LOC-07",
+  "no_show_site": "LOC-11",
+  "slow_vendor": "vendor_b",
+  "after_check_sites": ["LOC-13", "LOC-21"]
+}
