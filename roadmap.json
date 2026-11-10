@@ -129,13 +129,6 @@
       "needs_dataset": true
     },
     {
-      "slug": "resume-free-triage-rubric",
-      "title": "Resume-Free Triage Rubric",
-      "category": "screening",
-      "description": "Builds a triage rubric for hourly roles where most applicants have no resume, scoring availability, reliability signals, travel and certifications instead of work history.",
-      "needs_dataset": false
-    },
-    {
       "slug": "attendance-policy-writer",
       "title": "Attendance Policy Writer",
       "category": "writing",

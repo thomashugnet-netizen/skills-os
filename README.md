@@ -2,7 +2,7 @@
 
 Skills that make Claude useful to a frontline hiring team — high-volume hourly hiring, multi-site operations, shift work.
 
-**21 ready now. 22 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
+**22 ready now. 21 more on the way.** Every one that ships carries the code that decides what *correct* means for it, and a test suite that proves it — run them yourself, they are in the box.
 
 ## Installing one
 
@@ -33,6 +33,7 @@ Skills that make Claude useful to a frontline hiring team — high-volume hourly
 | [`strategic-leadership-diagnostic`](skills/operating/strategic-leadership-diagnostic/) | Diagnoses how an HR leader is approaching a real workforce challenge through the five values from Joey V. Price's The Power of HR, names the strengths and gaps their own account supports, and leaves them with one priority move, an executive discussion brief and an action plan. Every finding is checked in code against what they actually said. Use before an executive meeting, when an initiative stalls, or to turn workforce findings into a recommendation for the C-suite. | no data needed, 39 KB |
 | [`check-in-designer`](skills/retaining/check-in-designer/) | Writes the day 1, day 7 and day 30 check-ins that catch a new hourly hire before they quit, each under three minutes, with every possible answer routed to an action, an escalation or a logged theme, and checks the plan in code before anyone runs it. Then reads the one-line log supervisors keep to show which sites are not running them and which answers nobody acted on. | no data needed, 27 KB |
 | [`bias-language-checker`](skills/screening/bias-language-checker/) | Checks every text a candidate reads (job ads, application questions, text and email templates, offer letters, interview scripts, careers pages) for wording that excludes people you would hire or asks what you may not ask, and reads a whole template library at once to rank the fixes by how many candidates each line reaches. | no data needed, 30 KB |
+| [`resume-free-triage-rubric`](skills/screening/resume-free-triage-rubric/) | Builds and checks the rubric that decides who gets a call first, for hourly roles where most applicants have no resume. Scores shift overlap, start date, the travel plan for the earliest shift and one concrete reliability answer, never distance, gaps or tenure; bands the open queue to the calls your team can make; and, with past hires, shows which signals actually predict who stays. | no data needed, 0.1 MB |
 | [`career-site-builder`](skills/sourcing/career-site-builder/) | Redesigns a careers page for an hourly, multi-site employer as a polished, on-brand landing page with job search, from a single request such as "redo our careers page", and checks it for search, AI visibility, accessibility and honesty before handover. | no data needed, 79 KB |
 | [`pay-competitiveness-checker`](skills/sourcing/pay-competitiveness-checker/) | Places every posted hourly rate on the local wage ladder for the same job, from official US government wage data, and shows which postings pay less than most employers in that metro, what it would cost to fix, and where your own sites pay differently for the same job. | no data needed, 0.4 MB |
 | [`rehire-campaign-planner`](skills/sourcing/rehire-campaign-planner/) | Turns your own past applicants and former workers into a re-engagement campaign. Settles who you may contact first, sorts every record into a segment or a named reason it is out, sizes waves to the replies someone can actually answer, and checks the three messages before they go. | needs a CSV export, 0.3 MB |
@@ -63,7 +64,6 @@ Written, not yet through their gate. They ship when they pass it.
 **Screening — who gets through**
 
 - `knockout-logic-auditor` — Reviews your existing screening rules against funnel data and finds the questions quietly killing your applicant flow. *(needs a CSV export)*
-- `resume-free-triage-rubric` — Builds a triage rubric for hourly roles where most applicants have no resume, scoring availability, reliability signals, travel and certifications instead of work history.
 
 **Analysing — where the numbers are**
 
