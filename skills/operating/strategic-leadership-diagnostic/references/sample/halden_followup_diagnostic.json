@@ -1,0 +1,275 @@
+{
+  "as_of": "2026-12-09",
+  "context": {
+    "role": "Director of Talent Acquisition and People Operations, reporting to the CHRO; owns recruiting, onboarding and the HRIS; no line authority over stores.",
+    "challenge": "Four weeks on: the joint HR and Operations review of early turnover at the six stores is under way, with a draft problem statement and no test yet.",
+    "decision": "Whether to fund a 90-day buddy programme test at the six stores.",
+    "decider": "CHRO",
+    "by_when": "2027-01-15",
+    "stakeholders": [
+      {
+        "who": "COO",
+        "heard": true
+      },
+      {
+        "who": "CHRO",
+        "heard": true
+      },
+      {
+        "who": "District manager",
+        "heard": true
+      },
+      {
+        "who": "Store managers at the six stores",
+        "heard": false
+      },
+      {
+        "who": "Recruiting team",
+        "heard": false
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "id": "F1",
+      "kind": "result",
+      "quote": "The median wait from offer to first shift is 6 days at the six stores and 6 days at the other 40"
+    },
+    {
+      "id": "F2",
+      "kind": "result",
+      "quote": "I sent the comparison to the CHRO on 19 November"
+    },
+    {
+      "id": "F3",
+      "kind": "result",
+      "quote": "He said two of the three store managers have never had any manager training, and that new hires at those stores start on nights with no buddy"
+    },
+    {
+      "id": "F4",
+      "kind": "result",
+      "quote": "He agreed to join the review. We did not write anything down"
+    },
+    {
+      "id": "F5",
+      "kind": "result",
+      "quote": "the COO approved the joint review and held the $60,000 until January"
+    },
+    {
+      "id": "F6",
+      "kind": "result",
+      "quote": "He named the district manager as the Operations owner"
+    },
+    {
+      "id": "F7",
+      "kind": "result",
+      "quote": "I have not briefed the recruiting team"
+    },
+    {
+      "id": "F8",
+      "kind": "result",
+      "quote": "The joint review produced a one-page problem statement on 5 December"
+    },
+    {
+      "id": "F9",
+      "kind": "fact",
+      "quote": "The district manager has not signed it yet; he wants the store managers to see it first"
+    },
+    {
+      "id": "F10",
+      "kind": "fact",
+      "quote": "We have not designed the 90-day test"
+    },
+    {
+      "id": "F11",
+      "kind": "fact",
+      "quote": "The CHRO says she supports the buddy programme but wants a cost estimate first"
+    },
+    {
+      "id": "F12",
+      "kind": "fact",
+      "quote": "The three store managers have not been part of any of this"
+    },
+    {
+      "id": "F13",
+      "kind": "fact",
+      "quote": "The next check-in with the COO is on 15 January"
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "U1",
+      "question": "What do the three store managers say is driving early leavers, and what do they need?",
+      "could_change": "If they name something other than training and nights, the test design changes.",
+      "ask": "The store managers at the six stores, with the district manager"
+    },
+    {
+      "id": "U2",
+      "question": "Does the recruiting team see the same pattern in who leaves?",
+      "could_change": "Recruiters hear exit reasons first; they may confirm or contradict the nights finding.",
+      "ask": "The recruiting team, at the briefing"
+    },
+    {
+      "id": "U3",
+      "question": "What would the buddy programme cost at six stores?",
+      "could_change": "The CHRO's support depends on it.",
+      "ask": "Last year's pilot costs from the four pilot stores"
+    }
+  ],
+  "findings": [
+    {
+      "value": "Own Your Expertise",
+      "type": "strength",
+      "behavior": "You tested your own alternative explanation before the meeting and reported the answer either way: scheduling is ruled out.",
+      "evidence": [
+        "F1",
+        "F2"
+      ],
+      "next_step": "Treat the district manager's account the same way: it is his read, so check it against the data before the test is designed."
+    },
+    {
+      "value": "Be Part Coach, Part Cheerleader",
+      "type": "opportunity",
+      "behavior": "The store managers the problem statement describes have still not been part of it, and the district manager is holding his signature for that reason.",
+      "evidence": [
+        "F12",
+        "F9"
+      ],
+      "next_step": "Go with the district manager to the three store managers before asking for the signature. Ask what they need, and say what HR will put in."
+    },
+    {
+      "value": "Ignite the Spark",
+      "type": "opportunity",
+      "behavior": "The recruiting team has not heard what changed, though the review and the held budget change their next quarter.",
+      "evidence": [
+        "F7",
+        "F5"
+      ],
+      "next_step": "Brief the team this week: what was decided, what the review has found, what changes for them."
+    },
+    {
+      "value": "Bring Clarity From the Clouds",
+      "type": "strength",
+      "behavior": "The meeting decided the question you reframed: the $60,000 was held and an Operations owner was named for a joint review that now has a one-page problem statement.",
+      "evidence": [
+        "F5",
+        "F6",
+        "F8"
+      ],
+      "next_step": "Use the problem statement as the reference for every next conversation, including the one with the store managers."
+    },
+    {
+      "value": "Forward and Adaptive Beats Static and Slow",
+      "type": "opportunity",
+      "behavior": "The 90-day test has not been designed, and the buddy programme waits on a cost estimate that nobody has been asked to produce.",
+      "evidence": [
+        "F10",
+        "F11"
+      ],
+      "next_step": "Produce the cost estimate yourself this month and propose the test at the six stores for January starters."
+    }
+  ],
+  "priority_move": {
+    "value": "Be Part Coach, Part Cheerleader",
+    "action": "Meet the three store managers with the district manager before the problem statement is signed, and bring it as a draft for their correction.",
+    "why": "The signature, the test design and the store managers' support all wait on this one conversation, and a test run in stores whose managers feel described rather than asked will not hold.",
+    "authority": "needs_commitment",
+    "from": "District manager"
+  },
+  "brief": {
+    "issue": "The joint review agreed on 24 November has a draft problem statement but no test, and the $60,000 is held until January.",
+    "point_of_view": "Scheduling is ruled out: the wait from offer to first shift is the same everywhere. What the district manager reports, untrained managers and new hires on nights with no buddy, fits last year's buddy pilot and should be tested at the six stores.",
+    "evidence": [
+      "F1",
+      "F3",
+      "F13"
+    ],
+    "business_impact": "Each month without a test is another month of 30-day leavers at six stores, and the held $60,000 comes back to the table in January.",
+    "people_impact": "New hires at those stores start on nights alone, and their store managers are described in a document they have not seen.",
+    "tradeoffs": [
+      "Waiting for the store managers delays the signature by a week or two.",
+      "Funding the buddy programme takes budget the COO held for advertising."
+    ],
+    "decision": "Whether to fund a 90-day buddy programme test at the six stores for January starters.",
+    "decider": "CHRO",
+    "by_when": "2027-01-15",
+    "ask": "I recommend a 90-day buddy programme test at the six stores for January starters, costed from last year's pilot. I will bring the cost estimate and the store managers' input by 15 January, with the measure we will use: 30-day turnover for January starters against the other 40 stores."
+  },
+  "plan": [
+    {
+      "action": "Meet the three store managers with the district manager",
+      "owner": "Me",
+      "authority": "needs_commitment",
+      "from": "District manager",
+      "measure": "Meeting held; their corrections to the problem statement recorded",
+      "review": "2026-12-18"
+    },
+    {
+      "action": "Brief the recruiting team",
+      "owner": "Me",
+      "authority": "mine",
+      "measure": "Briefing held by 12 December",
+      "review": "2026-12-12"
+    },
+    {
+      "action": "Cost the buddy programme for six stores from the pilot",
+      "owner": "Me",
+      "authority": "mine",
+      "measure": "Cost estimate sent to the CHRO by 19 December",
+      "review": "2026-12-19"
+    },
+    {
+      "action": "Design the 90-day test with the district manager",
+      "owner": "Me",
+      "authority": "needs_commitment",
+      "from": "District manager",
+      "measure": "Test design presented at the 15 January check-in",
+      "review": "2027-01-15"
+    }
+  ],
+  "review": [
+    {
+      "measure": "Comparison sent to the CHRO by 20 November",
+      "result": "met",
+      "evidence": [
+        "F2",
+        "F1"
+      ]
+    },
+    {
+      "measure": "Meeting held; agreed list of what the six stores need from HR",
+      "result": "partly",
+      "evidence": [
+        "F3",
+        "F4"
+      ],
+      "adjust": "Write up what he told you as the list and send it to him for correction this week."
+    },
+    {
+      "measure": "Review agreed at the 24 November meeting, with a named Operations owner",
+      "result": "met",
+      "evidence": [
+        "F5",
+        "F6"
+      ]
+    },
+    {
+      "measure": "Team briefing held before 24 November",
+      "result": "not_met",
+      "evidence": [
+        "F7"
+      ],
+      "adjust": "Brief the team this week, and put the briefing in the plan with a date."
+    },
+    {
+      "measure": "Problem statement signed off by HR and Operations; test design presented 8 December",
+      "result": "partly",
+      "evidence": [
+        "F8",
+        "F9",
+        "F10"
+      ],
+      "adjust": "Take the statement to the three store managers before the signature, and design the test with a cost estimate for the CHRO."
+    }
+  ]
+}
