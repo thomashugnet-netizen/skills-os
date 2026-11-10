@@ -1,0 +1,161 @@
+{
+  "role": "Warehouse Associate",
+  "employer": "Marlow Freight",
+  "calls_per_week": 150,
+  "queue_days": 14,
+  "sites": {
+    "MRL-01": {
+      "earliest_shift": "21:30",
+      "gaps": [
+        {
+          "block": "sun_night",
+          "hours": 8.5,
+          "shifts": 6
+        },
+        {
+          "block": "mon_night",
+          "hours": 8.5,
+          "shifts": 6
+        },
+        {
+          "block": "tue_night",
+          "hours": 8.5,
+          "shifts": 6
+        },
+        {
+          "block": "wed_night",
+          "hours": 8.5,
+          "shifts": 6
+        },
+        {
+          "block": "sat_early",
+          "hours": 8,
+          "shifts": 4
+        }
+      ]
+    },
+    "MRL-02": {
+      "earliest_shift": "05:30",
+      "gaps": [
+        {
+          "block": "sat_early",
+          "hours": 8,
+          "shifts": 8
+        },
+        {
+          "block": "sun_early",
+          "hours": 8,
+          "shifts": 8
+        },
+        {
+          "block": "sat_late",
+          "hours": 8,
+          "shifts": 6
+        },
+        {
+          "block": "sun_late",
+          "hours": 8,
+          "shifts": 6
+        }
+      ]
+    },
+    "MRL-03": {
+      "earliest_shift": "05:30",
+      "gaps": [
+        {
+          "block": "mon_early",
+          "hours": 8,
+          "shifts": 3
+        },
+        {
+          "block": "tue_early",
+          "hours": 8,
+          "shifts": 3
+        },
+        {
+          "block": "wed_early",
+          "hours": 8,
+          "shifts": 3
+        },
+        {
+          "block": "thu_early",
+          "hours": 8,
+          "shifts": 3
+        },
+        {
+          "block": "fri_early",
+          "hours": 8,
+          "shifts": 3
+        },
+        {
+          "block": "fri_late",
+          "hours": 8,
+          "shifts": 4
+        }
+      ]
+    },
+    "MRL-04": {
+      "earliest_shift": "19:00",
+      "gaps": [
+        {
+          "block": "thu_night",
+          "hours": 10,
+          "shifts": 5
+        },
+        {
+          "block": "fri_night",
+          "hours": 10,
+          "shifts": 5
+        },
+        {
+          "block": "sat_night",
+          "hours": 10,
+          "shifts": 5
+        },
+        {
+          "block": "sun_night",
+          "hours": 10,
+          "shifts": 5
+        }
+      ]
+    }
+  },
+  "signals": {
+    "shift_overlap": {
+      "points": 30
+    },
+    "start_latency": {
+      "points": 15
+    },
+    "travel": {
+      "points": 20,
+      "question": "How would you get to the site for a 05:30 start?",
+      "levels": {
+        "own_transport": 1.0,
+        "route_with_time": 0.5,
+        "route_no_time": 0.4,
+        "no_plan": 0.0
+      }
+    },
+    "reliability": {
+      "points": 10,
+      "question": "Have you worked shifts that start before 7am?"
+    },
+    "rota_experience": {
+      "points": 15,
+      "question": "Have you worked to a shift rota before?"
+    }
+  },
+  "knockouts": [
+    {
+      "field": "age_18_plus",
+      "rule": "18 or older",
+      "question": "Are you 18 or older?"
+    },
+    {
+      "field": "work_authorized",
+      "rule": "authorized to work in the US",
+      "question": "Are you authorized to work in the US?"
+    }
+  ]
+}
