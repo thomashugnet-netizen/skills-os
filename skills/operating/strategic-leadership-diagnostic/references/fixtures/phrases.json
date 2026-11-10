@@ -1,0 +1,115 @@
+{
+ "pushback": {
+  "certainty": {
+   "must": [
+    "I already know what the problem is.",
+    "The real issue is the store managers.",
+    "I'm certain that it's pay.",
+    "Obviously this is a manager problem.",
+    "There's no doubt that the schedule is the issue."
+   ],
+   "must_not": [
+    "I don't know what they need.",
+    "I believe we need to examine the employee experience.",
+    "The problem is store leadership, not sourcing.",
+    "I'm not sure the problem is pay.",
+    "I know the store managers well."
+   ]
+  },
+  "blame": {
+   "must": [
+    "Leadership just doesn't understand HR.",
+    "The COO doesn't value the people side.",
+    "Operations doesn't care about what we do.",
+    "HR is never taken seriously here.",
+    "They don't get HR."
+   ],
+   "must_not": [
+    "One district manager told me HR is blaming the stores for a recruiting problem.",
+    "The COO doesn't understand the budget yet.",
+    "Leadership understands HR's role here.",
+    "They don't understand the new scheduling tool."
+   ]
+  },
+  "avoidance": {
+   "must": [
+    "I don't want to upset the district managers.",
+    "I've been avoiding the conversation with the COO.",
+    "I just want to keep the peace.",
+    "It's not my place to tell Operations how to run stores."
+   ],
+   "must_not": [
+    "I want to have the conversation this week.",
+    "We should avoid the peak weeks for the pilot.",
+    "I don't want to wait any longer."
+   ]
+  },
+  "perfection": {
+   "must": [
+    "We need complete data before we recommend anything.",
+    "I'd rather wait until we're certain.",
+    "We can't act until the survey is back.",
+    "Before we do anything, we need the engagement survey."
+   ],
+   "must_not": [
+    "We have full-time and part-time staff.",
+    "Let's wait until Monday to send it.",
+    "Before we launch, we'll check the numbers.",
+    "Complete the form by Friday."
+   ]
+  },
+  "approval": {
+   "must": [
+    "We got approval from the COO, so the program worked.",
+    "The CHRO signed off, so we're done.",
+    "It was a success because the board approved it.",
+    "We secured sign-off last quarter which means it succeeded."
+   ],
+   "must_not": [
+    "Leadership approved a new process, but managers and employees are not adopting it.",
+    "We got approval in October. Adoption is at 30%.",
+    "The COO approved the review and named an owner."
+   ]
+  }
+ },
+ "trait": {
+  "must": [
+   "You are a weak leader.",
+   "You're not a strategic thinker.",
+   "You lack executive presence.",
+   "You always avoid conflict.",
+   "Your leadership style is ineffective.",
+   "As a leader, you struggle with Operations.",
+   "You are a natural leader.",
+   "You're a strong leader.",
+   "You tend to back down when challenged."
+  ],
+  "must_not": [
+   "Your next step is to support that distinction with evidence.",
+   "You have a strong case.",
+   "You are in a strong position to lead the review.",
+   "You never received the schedule.",
+   "The site leaders are a strong team.",
+   "You are a member of the steering group.",
+   "You're a natural fit to own the review.",
+   "You are a strong candidate to sponsor it."
+  ]
+ },
+ "measure": {
+  "vague": [
+   "Better alignment with Operations",
+   "Stronger relationships with district managers",
+   "Improved trust",
+   "Leadership buy-in",
+   "More engagement from store managers",
+   "Greater visibility for HR"
+  ],
+  "observable": [
+   "Problem statement agreed in writing by HR and Operations",
+   "30-day turnover at the six stores below 30% for January starters",
+   "Briefing held by 12 December",
+   "Cost estimate sent to the CHRO",
+   "Two store managers attend the first session"
+  ]
+ }
+}

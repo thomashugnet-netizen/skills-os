@@ -1,0 +1,1231 @@
+{
+ "_about": "Each case starts from a sample diagnostic (halden, or the follow-up), applies the ops, and must fail for the named reason, be refused, or (READY) still pass. The README's test count comes from here.",
+ "cases": [
+  {
+   "name": "a value is missing",
+   "expect": "VALUE_MISSING",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "findings",
+      5
+     ]
+    }
+   ]
+  },
+  {
+   "name": "a value is renamed",
+   "expect": "VALUE_UNKNOWN",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      4,
+      "value"
+     ],
+     "value": "Bring Clarity"
+    }
+   ]
+  },
+  {
+   "name": "a value from another framework",
+   "expect": "VALUE_UNKNOWN",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      3,
+      "value"
+     ],
+     "value": "Executive Presence"
+    }
+   ]
+  },
+  {
+   "name": "a value written in lower case",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      4,
+      "value"
+     ],
+     "value": "bring clarity from the clouds"
+    }
+   ]
+  },
+  {
+   "name": "evidence paraphrased, not quoted",
+   "expect": "EVIDENCE_NOT_FOUND",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      1,
+      "quote"
+     ],
+     "value": "41 percent of hires at the six stores quit within a month"
+    }
+   ]
+  },
+  {
+   "name": "evidence invented",
+   "expect": "EVIDENCE_NOT_FOUND",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      4,
+      "quote"
+     ],
+     "value": "The district managers all support a joint review"
+    }
+   ]
+  },
+  {
+   "name": "evidence too short to mean anything",
+   "expect": "EVIDENCE_TOO_SHORT",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      0,
+      "quote"
+     ],
+     "value": "six stores"
+    }
+   ]
+  },
+  {
+   "name": "an opinion filed as a fact",
+   "expect": "KIND_MISMATCH",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      11,
+      "kind"
+     ],
+     "value": "fact"
+    }
+   ]
+  },
+  {
+   "name": "an intention filed as a result",
+   "expect": "KIND_MISMATCH",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      6,
+      "kind"
+     ],
+     "value": "result"
+    }
+   ]
+  },
+  {
+   "name": "an unknown evidence kind",
+   "expect": "EVIDENCE_KIND",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      0,
+      "kind"
+     ],
+     "value": "feeling"
+    }
+   ]
+  },
+  {
+   "name": "a quote with an ellipsis",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      3,
+      "quote"
+     ],
+     "value": "I sent the COO a two-page memo ... He didn't reply"
+    }
+   ]
+  },
+  {
+   "name": "a quote with a curly apostrophe",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      5,
+      "quote"
+     ],
+     "value": "I haven’t spoken to the store managers at the six stores"
+    }
+   ]
+  },
+  {
+   "name": "a strength with no evidence",
+   "expect": "FINDING_NO_EVIDENCE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      0,
+      "evidence"
+     ],
+     "value": []
+    }
+   ]
+  },
+  {
+   "name": "a gap read from silence",
+   "expect": "FINDING_NO_EVIDENCE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      3,
+      "evidence"
+     ],
+     "value": []
+    }
+   ]
+  },
+  {
+   "name": "a strength resting on a plan",
+   "expect": "STRENGTH_ON_INTENTION",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      0,
+      "evidence"
+     ],
+     "value": [
+      "E7"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "a finding with no next step",
+   "expect": "NEXT_STEP_MISSING",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "findings",
+      2,
+      "next_step"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "a finding with no behavior",
+   "expect": "BEHAVIOR_MISSING",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      2,
+      "behavior"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "not enough evidence, and no questions",
+   "expect": "NO_QUESTIONS",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      3
+     ],
+     "value": {
+      "value": "Ignite the Spark",
+      "type": "not_enough_evidence",
+      "evidence": [],
+      "questions": []
+     }
+    }
+   ]
+  },
+  {
+   "name": "not enough evidence, with questions",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      3
+     ],
+     "value": {
+      "value": "Ignite the Spark",
+      "type": "not_enough_evidence",
+      "evidence": [],
+      "questions": [
+       "How have your recruiters responded to what you told them about the six stores?"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "name": "an unknown finding type",
+   "expect": "FINDING_TYPE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      2,
+      "type"
+     ],
+     "value": "weakness"
+    }
+   ]
+  },
+  {
+   "name": "judges the person: weak leader",
+   "expect": "TRAIT_JUDGMENT",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      2,
+      "behavior"
+     ],
+     "value": "You are a weak leader when it comes to Operations."
+    }
+   ]
+  },
+  {
+   "name": "judges the person: praise",
+   "expect": "TRAIT_JUDGMENT",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      0,
+      "next_step"
+     ],
+     "value": "You are a natural leader; keep going."
+    }
+   ]
+  },
+  {
+   "name": "judges the person in the priority move",
+   "expect": "TRAIT_JUDGMENT",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "why"
+     ],
+     "value": "Because you lack executive presence with the COO."
+    }
+   ]
+  },
+  {
+   "name": "cites evidence that does not exist",
+   "expect": "BAD_REFERENCE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings",
+      2,
+      "evidence"
+     ],
+     "value": [
+      "E99"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "an unheard stakeholder nobody asks",
+   "expect": "PERSPECTIVE_MISSING",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "unknowns",
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "nothing could change the recommendation",
+   "expect": "NO_ASSUMPTIONS",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "unknowns",
+      0,
+      "could_change"
+     ],
+     "value": ""
+    },
+    {
+     "op": "set",
+     "path": [
+      "unknowns",
+      1,
+      "could_change"
+     ],
+     "value": ""
+    },
+    {
+     "op": "set",
+     "path": [
+      "unknowns",
+      2,
+      "could_change"
+     ],
+     "value": ""
+    },
+    {
+     "op": "set",
+     "path": [
+      "unknowns",
+      3,
+      "could_change"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "an open question with no source",
+   "expect": "UNKNOWN_NO_SOURCE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "unknowns",
+      0,
+      "ask"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "certainty in the account, unanswered",
+   "expect": "PUSHBACK_UNADDRESSED",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "pushback"
+     ],
+     "value": []
+    }
+   ]
+  },
+  {
+   "name": "blame in the account, unanswered",
+   "expect": "PUSHBACK_UNADDRESSED",
+   "ops": [],
+   "situation_append": "\n\nHonestly, leadership just doesn't understand HR.\n"
+  },
+  {
+   "name": "avoidance in the account, unanswered",
+   "expect": "PUSHBACK_UNADDRESSED",
+   "ops": [],
+   "situation_append": "\n\nI don't want to upset the district managers before the peak.\n"
+  },
+  {
+   "name": "waiting for certainty, unanswered",
+   "expect": "PUSHBACK_UNADDRESSED",
+   "ops": [],
+   "situation_append": "\n\nWe need complete data before we recommend anything.\n"
+  },
+  {
+   "name": "approval as success, unanswered",
+   "expect": "PUSHBACK_UNADDRESSED",
+   "ops": [],
+   "situation_append": "\n\nWe got approval for the buddy pilot last year, so it worked.\n"
+  },
+  {
+   "name": "blame in the account, answered",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "pushback"
+     ],
+     "value": {
+      "trigger": "blame",
+      "response": "Ask what the COO is weighing before deciding he does not understand."
+     }
+    }
+   ],
+   "situation_append": "\n\nHonestly, leadership just doesn't understand HR.\n"
+  },
+  {
+   "name": "a pushback type that does not exist",
+   "expect": "PUSHBACK_TYPE",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "pushback"
+     ],
+     "value": {
+      "trigger": "denial",
+      "response": "x"
+     }
+    }
+   ]
+  },
+  {
+   "name": "the priority move sits on a strength",
+   "expect": "PRIORITY_NOT_GAP",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "value"
+     ],
+     "value": "Bring Clarity From the Clouds"
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "the priority move has no why",
+   "expect": "PRIORITY_NO_WHY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "why"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "the priority move has no value",
+   "expect": "PRIORITY_NO_VALUE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "value"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "the priority move needs a stranger",
+   "expect": "COMMITMENT_FROM_UNKNOWN",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "from"
+     ],
+     "value": "Board of directors"
+    }
+   ]
+  },
+  {
+   "name": "the priority move resolves an unknown first",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "value"
+     ],
+     "value": ""
+    },
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "unknown"
+     ],
+     "value": "U1"
+    }
+   ]
+  },
+  {
+   "name": "the priority move points at a missing unknown",
+   "expect": "BAD_REFERENCE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "unknown"
+     ],
+     "value": "U9"
+    }
+   ]
+  },
+  {
+   "name": "the brief has no trade-off",
+   "expect": "NO_TRADEOFFS",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "tradeoffs"
+     ],
+     "value": []
+    }
+   ]
+  },
+  {
+   "name": "the brief forgets people",
+   "expect": "BRIEF_INCOMPLETE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "people_impact"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "the brief forgets the business",
+   "expect": "BRIEF_INCOMPLETE",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "brief",
+      "business_impact"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "the brief has no decider",
+   "expect": "NO_DECIDER",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "decider"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "the brief has no deadline",
+   "expect": "NO_DEADLINE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "by_when"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "the point of view rests on opinion",
+   "expect": "POV_UNSUPPORTED",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "evidence"
+     ],
+     "value": [
+      "E12",
+      "E15"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "the point of view overclaims",
+   "expect": "OVERCLAIM",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "evidence"
+     ],
+     "value": [
+      "E12"
+     ]
+    },
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "point_of_view"
+     ],
+     "value": "The root cause is clearly the store managers."
+    }
+   ]
+  },
+  {
+   "name": "the ask is a speech",
+   "expect": "ASK_TOO_LONG",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "brief",
+      "ask"
+     ],
+     "value": "Before we commit the $60,000 for advertising in the first quarter, I would like to recommend that HR and Operations work together over the coming two or three weeks, possibly longer depending on the holiday peak, to jointly review the early turnover we are seeing at the six stores, look again at the funnel analysis, speak to store managers and district managers, and then come back to this group with an agreed problem statement, the evidence, several options and a test."
+    }
+   ]
+  },
+  {
+   "name": "no action plan",
+   "expect": "PLAN_EMPTY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan"
+     ],
+     "value": []
+    }
+   ]
+  },
+  {
+   "name": "an action owned by HR",
+   "expect": "OWNER_VAGUE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      0,
+      "owner"
+     ],
+     "value": "HR"
+    }
+   ]
+  },
+  {
+   "name": "an action owned by we",
+   "expect": "OWNER_VAGUE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      1,
+      "owner"
+     ],
+     "value": "we"
+    }
+   ]
+  },
+  {
+   "name": "a measure nobody can see: alignment",
+   "expect": "MEASURE_VAGUE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      2,
+      "measure"
+     ],
+     "value": "Better alignment with Operations"
+    }
+   ]
+  },
+  {
+   "name": "a measure nobody can see: relationships",
+   "expect": "MEASURE_VAGUE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      1,
+      "measure"
+     ],
+     "value": "Stronger relationships with the district managers"
+    }
+   ]
+  },
+  {
+   "name": "a measure with no measure",
+   "expect": "NO_MEASURE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      0,
+      "measure"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "a review date in the past",
+   "expect": "REVIEW_DATE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      0,
+      "review"
+     ],
+     "value": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "name": "a review date in words",
+   "expect": "REVIEW_DATE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      0,
+      "review"
+     ],
+     "value": "next month"
+    }
+   ]
+  },
+  {
+   "name": "a review date half a year out",
+   "expect": "REVIEW_DATE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      4,
+      "review"
+     ],
+     "value": "2027-06-30"
+    }
+   ]
+  },
+  {
+   "name": "an action that needs a stranger",
+   "expect": "COMMITMENT_FROM_UNKNOWN",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "plan",
+      1,
+      "from"
+     ],
+     "value": "Regional finance team"
+    }
+   ]
+  },
+  {
+   "name": "an action with no authority",
+   "expect": "AUTHORITY_MISSING",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "plan",
+      0,
+      "authority"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "no role in the context",
+   "expect": "CONTEXT_MISSING",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "context",
+      "role"
+     ],
+     "value": ""
+    }
+   ]
+  },
+  {
+   "name": "no stakeholders",
+   "expect": "NO_STAKEHOLDERS",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "context",
+      "stakeholders"
+     ],
+     "value": []
+    },
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "authority"
+     ],
+     "value": "mine"
+    }
+   ]
+  },
+  {
+   "name": "return visit: an earlier measure gets no result",
+   "expect": "REVIEW_MISSING",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "review",
+      3
+     ]
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "return visit: met with no observed result",
+   "expect": "RESULT_NOT_OBSERVED",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "review",
+      0,
+      "evidence"
+     ],
+     "value": [
+      "F9"
+     ]
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "return visit: approval counted as success",
+   "expect": "APPROVAL_AS_RESULT",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "review"
+     ],
+     "value": {
+      "measure": "30-day turnover at the six stores below 30% for December starters",
+      "result": "met",
+      "evidence": [
+       "F5"
+      ]
+     }
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "return visit: approval when approval was the measure",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "review",
+      2,
+      "evidence"
+     ],
+     "value": [
+      "F5"
+     ]
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "return visit: not met, nothing to adjust",
+   "expect": "ADJUST_MISSING",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "review",
+      3,
+      "adjust"
+     ]
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "return visit: an unknown result",
+   "expect": "RESULT_TYPE",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "review",
+      0,
+      "result"
+     ],
+     "value": "done"
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "findings is not a list",
+   "expect": "REFUSED",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings"
+     ],
+     "value": "x"
+    }
+   ]
+  },
+  {
+   "name": "heard is not true or false",
+   "expect": "REFUSED",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "context",
+      "stakeholders",
+      0,
+      "heard"
+     ],
+     "value": "yes"
+    }
+   ]
+  },
+  {
+   "name": "an evidence id used twice",
+   "expect": "REFUSED",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "evidence",
+      1,
+      "id"
+     ],
+     "value": "E1"
+    }
+   ]
+  },
+  {
+   "name": "no brief at all",
+   "expect": "REFUSED",
+   "ops": [
+    {
+     "op": "del",
+     "path": [
+      "brief"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "review is not a list",
+   "expect": "REFUSED",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "review"
+     ],
+     "value": "x"
+    }
+   ],
+   "base": "followup"
+  },
+  {
+   "name": "a reported opinion filed as an observed result",
+   "expect": "READY",
+   "situation_append": "\n\nIn the ops review the COO said \"I think we just need more people applying\".\n",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "evidence"
+     ],
+     "value": {
+      "id": "E16",
+      "kind": "result",
+      "quote": "the COO said \"I think we just need more people applying\""
+     }
+    },
+    {
+     "op": "append",
+     "path": [
+      "findings",
+      4,
+      "evidence"
+     ],
+     "value": "E16"
+    }
+   ]
+  },
+  {
+   "name": "the person's own opinion filed as a fact",
+   "expect": "KIND_MISMATCH",
+   "situation_append": "\n\nI think the COO just wants a quick fix.\n",
+   "ops": [
+    {
+     "op": "append",
+     "path": [
+      "evidence"
+     ],
+     "value": {
+      "id": "E16",
+      "kind": "fact",
+      "quote": "I think the COO just wants a quick fix"
+     }
+    }
+   ]
+  },
+  {
+   "name": "a stakeholder asked for by a shorter name",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "unknowns",
+      1,
+      "ask"
+     ],
+     "value": "Ask the store managers directly"
+    }
+   ]
+  },
+  {
+   "name": "too little said for any reading: all five not enough evidence",
+   "expect": "READY",
+   "ops": [
+    {
+     "op": "set",
+     "path": [
+      "findings"
+     ],
+     "value": [
+      {
+       "value": "Own Your Expertise",
+       "type": "not_enough_evidence",
+       "evidence": [],
+       "questions": [
+        "What have you done so far that bears on Own Your Expertise?"
+       ]
+      },
+      {
+       "value": "Be Part Coach, Part Cheerleader",
+       "type": "not_enough_evidence",
+       "evidence": [],
+       "questions": [
+        "What have you done so far that bears on Be Part Coach, Part Cheerleader?"
+       ]
+      },
+      {
+       "value": "Ignite the Spark",
+       "type": "not_enough_evidence",
+       "evidence": [],
+       "questions": [
+        "What have you done so far that bears on Ignite the Spark?"
+       ]
+      },
+      {
+       "value": "Bring Clarity From the Clouds",
+       "type": "not_enough_evidence",
+       "evidence": [],
+       "questions": [
+        "What have you done so far that bears on Bring Clarity From the Clouds?"
+       ]
+      },
+      {
+       "value": "Forward and Adaptive Beats Static and Slow",
+       "type": "not_enough_evidence",
+       "evidence": [],
+       "questions": [
+        "What have you done so far that bears on Forward and Adaptive Beats Static and Slow?"
+       ]
+      }
+     ]
+    },
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "value"
+     ],
+     "value": ""
+    },
+    {
+     "op": "set",
+     "path": [
+      "priority_move",
+      "unknown"
+     ],
+     "value": "U1"
+    }
+   ]
+  }
+ ]
+}

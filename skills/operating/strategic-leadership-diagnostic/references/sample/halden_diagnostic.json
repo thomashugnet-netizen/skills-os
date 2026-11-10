@@ -1,0 +1,277 @@
+{
+  "as_of": "2026-11-11",
+  "context": {
+    "role": "Director of Talent Acquisition and People Operations, reporting to the CHRO; owns recruiting, onboarding and the HRIS; no line authority over stores.",
+    "challenge": "The COO wants twice the applicants at the six stores that keep losing new hires. HR suspects the problem is keeping hires, not finding them, but has not tested that view or built a shared plan with Operations.",
+    "decision": "Whether to fund an extra $60,000 of job advertising for Q1.",
+    "decider": "COO and CHRO",
+    "by_when": "2026-11-24",
+    "stakeholders": [
+      {
+        "who": "COO",
+        "heard": true
+      },
+      {
+        "who": "CHRO",
+        "heard": false
+      },
+      {
+        "who": "District managers",
+        "heard": true
+      },
+      {
+        "who": "Store managers at the six stores",
+        "heard": false
+      },
+      {
+        "who": "Recruiting team",
+        "heard": true
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "id": "E1",
+      "kind": "fact",
+      "quote": "Applicant volume at the six stores is flat year on year, about 140 applications a month each"
+    },
+    {
+      "id": "E2",
+      "kind": "fact",
+      "quote": "41% of hires at those six stores leave within 30 days, against 19% across the other 40 stores"
+    },
+    {
+      "id": "E3",
+      "kind": "fact",
+      "quote": "found the gap concentrated under three store managers, and it held within role"
+    },
+    {
+      "id": "E4",
+      "kind": "result",
+      "quote": "I sent the COO a two-page memo saying the problem is store leadership, not sourcing. He didn't reply"
+    },
+    {
+      "id": "E5",
+      "kind": "result",
+      "quote": "One district manager told me HR is blaming the stores for a recruiting problem"
+    },
+    {
+      "id": "E6",
+      "kind": "fact",
+      "quote": "I haven't spoken to the store managers at the six stores"
+    },
+    {
+      "id": "E7",
+      "kind": "intention",
+      "quote": "I plan to propose a manager onboarding program in Q1"
+    },
+    {
+      "id": "E8",
+      "kind": "interpretation",
+      "quote": "My recruiters are exhausted, they feel they are being asked to fill a leaking bucket"
+    },
+    {
+      "id": "E9",
+      "kind": "fact",
+      "quote": "I haven't said anything to them about what happens next"
+    },
+    {
+      "id": "E10",
+      "kind": "result",
+      "quote": "30-day turnover there fell from 33% to 21% over two quarters"
+    },
+    {
+      "id": "E11",
+      "kind": "fact",
+      "quote": "We never rolled it out"
+    },
+    {
+      "id": "E12",
+      "kind": "interpretation",
+      "quote": "I'm sure the real problem is the stores, not the job ads"
+    },
+    {
+      "id": "E13",
+      "kind": "fact",
+      "quote": "it could be a scheduling problem and not a manager problem. I haven't checked that"
+    },
+    {
+      "id": "E14",
+      "kind": "fact",
+      "quote": "The COO and the CHRO will decide whether to fund an extra $60,000 of job advertising for Q1"
+    },
+    {
+      "id": "E15",
+      "kind": "interpretation",
+      "quote": "I believe we need to examine the employee experience"
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "U1",
+      "question": "Is the wait from offer to first shift longer at the six stores than at the other 40?",
+      "could_change": "If it is, the gap may be scheduling rather than managers, and the fix moves from manager onboarding to how first shifts are booked.",
+      "ask": "Pull offer and first-shift dates from the HRIS, or rerun the funnel drop-off analysis with first-shift dates"
+    },
+    {
+      "id": "U2",
+      "question": "What do the store managers at the six stores say is driving early leavers?",
+      "could_change": "They may name something neither HR nor the COO has seen, such as hours or a site problem, which would change the plan.",
+      "ask": "The store managers at the six stores, through their district manager"
+    },
+    {
+      "id": "U3",
+      "question": "What does the COO think is behind the 41%?",
+      "could_change": "If he already suspects retention, the meeting becomes a decision on a test rather than a debate about the memo.",
+      "ask": "The COO, in a short conversation before 24 November"
+    },
+    {
+      "id": "U4",
+      "question": "Will the CHRO back reframing the request before the meeting?",
+      "could_change": "Without her, the reframing reads as HR declining the COO's request.",
+      "ask": "The CHRO, this week"
+    }
+  ],
+  "findings": [
+    {
+      "value": "Own Your Expertise",
+      "type": "strength",
+      "behavior": "You separate hiring volume from early turnover and you have the numbers that tell them apart: volume is flat, while 30-day turnover at the six stores is twice the rest and sits under three managers.",
+      "evidence": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "next_step": "Lead with those numbers and with the explanation you have not ruled out yet, rather than with a conclusion about store leadership."
+    },
+    {
+      "value": "Own Your Expertise",
+      "type": "opportunity",
+      "behavior": "Your view runs ahead of your evidence: the memo and your own account state the cause as settled, while the data so far shows where the problem is, not why.",
+      "evidence": [
+        "E12",
+        "E15",
+        "E4"
+      ],
+      "next_step": "Turn the conclusion into a hypothesis with the check that would confirm or kill it, and present it that way."
+    },
+    {
+      "value": "Be Part Coach, Part Cheerleader",
+      "type": "opportunity",
+      "behavior": "The case has gone to the COO as a verdict on store leadership, the people it is about have not been asked, and one district manager already hears it as blame.",
+      "evidence": [
+        "E4",
+        "E5",
+        "E6"
+      ],
+      "next_step": "Before 24 November, meet the district manager over the six stores. Open with the pressure those stores are under, look at the turnover numbers together, and say what HR will do to help."
+    },
+    {
+      "value": "Ignite the Spark",
+      "type": "opportunity",
+      "behavior": "A result that worked, the buddy pilot, is sitting unused, and the recruiters who would carry the next step have heard nothing about it.",
+      "evidence": [
+        "E10",
+        "E11",
+        "E8",
+        "E9"
+      ],
+      "next_step": "Put the pilot result in front of the COO as proof this is fixable, and tell the recruiting team this week what you are proposing and why."
+    },
+    {
+      "value": "Bring Clarity From the Clouds",
+      "type": "opportunity",
+      "behavior": "The meeting is set up to decide on advertising spend, but nobody has agreed whether the six stores need more applicants or fewer early leavers.",
+      "evidence": [
+        "E14",
+        "E1",
+        "E2"
+      ],
+      "next_step": "Restate the decision in one sentence before the meeting: what would it take to keep the hires these stores already make?"
+    },
+    {
+      "value": "Forward and Adaptive Beats Static and Slow",
+      "type": "opportunity",
+      "behavior": "A pilot that cut 30-day turnover was never rolled out, the one check that could change your view has not been run, and the next step on offer is a programme next quarter.",
+      "evidence": [
+        "E10",
+        "E11",
+        "E13",
+        "E7"
+      ],
+      "next_step": "Run the offer-to-first-shift check this week, and propose the buddy programme at the six stores as a 90-day test with a review date rather than a Q1 programme."
+    }
+  ],
+  "pushback": [
+    {
+      "trigger": "certainty",
+      "response": "You say you are sure the real problem is the stores. The numbers show a retention problem at six stores; they do not yet say why. The wait from offer to first shift is untested and the store managers have not been heard. Present it as the leading explanation, and say what would change it."
+    }
+  ],
+  "priority_move": {
+    "value": "Bring Clarity From the Clouds",
+    "action": "Ask the COO for thirty minutes with the district manager over the six stores before 24 November, to agree which problem the meeting is solving. Bring the volume and turnover numbers and the offer-to-first-shift check.",
+    "why": "Every other move depends on it. Until the room agrees which problem it is solving, a case about store leadership reads as blame, and $60,000 of advertising looks like the safe choice.",
+    "authority": "needs_commitment",
+    "from": "COO"
+  },
+  "brief": {
+    "issue": "Six of 46 stores lose 41% of new hires within 30 days, against 19% elsewhere, while their applicant volume is flat.",
+    "point_of_view": "The evidence points to keeping hires rather than finding more: volume has not fallen, early turnover is twice the rest, and the gap sits under three store managers. One explanation is still untested: the wait from offer to first shift.",
+    "evidence": [
+      "E1",
+      "E2",
+      "E3",
+      "E13"
+    ],
+    "business_impact": "At 41% 30-day turnover these stores re-hire most of their new seats every few months. More applicants buys more of the same churn.",
+    "people_impact": "New hires leave inside a month, store teams carry the gaps, and recruiters fill the same seats again.",
+    "tradeoffs": [
+      "Holding the $60,000 delays extra advertising into Q1 if the review finds a volume problem after all.",
+      "A joint review asks district managers for time during the holiday peak."
+    ],
+    "decision": "Whether to fund $60,000 of extra job advertising for Q1, or first run a joint HR and Operations review of early turnover at the six stores.",
+    "decider": "COO and CHRO",
+    "by_when": "2026-11-24",
+    "ask": "Before we commit the $60,000, I recommend HR and Operations jointly review early turnover at the six stores over the next two weeks. We will come back on 8 December with an agreed problem statement, the evidence behind it, and a 90-day test, including the buddy programme that cut 30-day turnover from 33% to 21% in last year's pilot."
+  },
+  "plan": [
+    {
+      "action": "Compare the wait from offer to first shift at the six stores against the other 40",
+      "owner": "Me",
+      "authority": "mine",
+      "measure": "Comparison sent to the CHRO by 20 November",
+      "review": "2026-11-20"
+    },
+    {
+      "action": "Meet the district manager over the six stores",
+      "owner": "Me",
+      "authority": "needs_commitment",
+      "from": "District managers",
+      "measure": "Meeting held; agreed list of what the six stores need from HR",
+      "review": "2026-11-21"
+    },
+    {
+      "action": "Ask the COO for a joint HR and Operations review of early turnover at the six stores",
+      "owner": "Me",
+      "authority": "needs_commitment",
+      "from": "COO",
+      "measure": "Review agreed at the 24 November meeting, with a named Operations owner",
+      "review": "2026-11-24"
+    },
+    {
+      "action": "Tell the recruiting team what is being proposed and why",
+      "owner": "Me",
+      "authority": "mine",
+      "measure": "Team briefing held before 24 November",
+      "review": "2026-11-24"
+    },
+    {
+      "action": "Return with the agreed problem statement and a 90-day test design",
+      "owner": "Me",
+      "authority": "mine",
+      "measure": "Problem statement signed off by HR and Operations; test design presented 8 December",
+      "review": "2026-12-08"
+    }
+  ]
+}
