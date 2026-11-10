@@ -1,0 +1,11 @@
+{
+  "about": "What generate.py planted in fernhill_bookings.csv, and what the read must say about it. Checked by scripts/noshow.py --test.",
+  "survives": ["wait_4plus", "weekend_wait", "hour:11:00-13:59", "one_slot",
+               "role:Stockroom Associate", "site:LOC-17"],
+  "explained": {"self_scheduled": "wait", "hour:before 10:00": "role",
+                "busy_weeks": "wait"},
+  "cannot_separate": {"interviewer:MGR-17A": "site"},
+  "null": ["far_commute", "format:video", "format:in person", "source:jobboard_b"],
+  "one_day_sites": ["LOC-04", "LOC-09", "LOC-13", "LOC-20", "LOC-22"],
+  "never_rebook_sites": ["LOC-06", "LOC-11", "LOC-15", "LOC-23"]
+}
